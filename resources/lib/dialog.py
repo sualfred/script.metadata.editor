@@ -27,6 +27,8 @@ class EditDialog(object):
         self.key_details = '%sdetails' % self.dbtype
         self.properties = eval('%s_properties' % self.dbtype)
 
+        winprop('SelectDialogPreselect', clear=True)
+
         self.init()
 
     def init(self):
@@ -42,13 +44,17 @@ class EditDialog(object):
         self.field_dialog()
 
     def field_dialog(self):
-        self.entrydialog = DIALOG.select(xbmc.getLocalizedString(14241), self.modeselect, useDetails=True)
+        preselect = winprop('SelectDialogPreselect')
+        if not preselect:
+            preselect = -1
+
+        self.entrydialog = DIALOG.select(xbmc.getLocalizedString(14241), self.modeselect, preselect=int(preselect), useDetails=True)
+
         if self.entrydialog == -1:
+            winprop('SelectDialogPreselect', clear=True)
             return
 
-        nfo_path = self.details.get('file')
-        if self.dbtype == 'tvshow':
-            nfo_path = os.path.join(nfo_path,'tvshow.nfo')
+        winprop('SelectDialogPreselect', str(self.entrydialog))
 
         write_db(value_type=self.typelist[self.entrydialog],
                  dbid=self.dbid,
@@ -57,7 +63,7 @@ class EditDialog(object):
                  preset=self.presetlist[self.entrydialog],
                  xml=self.xmllist[self.entrydialog],
                  details=self.details,
-                 file=nfo_path,
+                 file=self.details.get('file'),
                  update_nfo=self.nfo_support
                  )
 
@@ -66,8 +72,7 @@ class EditDialog(object):
     def get_details(self):
         json_query = json_call(self.method_details,
                                properties=self.properties,
-                               params={self.param: int(self.dbid)},
-                               debug=True
+                               params={self.param: int(self.dbid)}
                                )
         try:
             result = json_query['result'][self.key_details]

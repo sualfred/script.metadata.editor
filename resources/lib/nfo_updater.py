@@ -9,10 +9,9 @@ from resources.lib.helper import *
 
 class UpdateNFO():
     def __init__(self,file,xml,value):
-        self.file = file
         self.xml = xml
         self.value = value
-        self.targetfile = file.replace(os.path.splitext(file)[1], '.nfo')
+        self.targetfile = file
 
         if xbmcvfs.exists(self.targetfile):
             self.root = self.read_file()
@@ -23,18 +22,18 @@ class UpdateNFO():
                 else:
                     self.add_elem()
 
-                self.write_nfo()
+                self.write_file()
 
     def read_file(self):
         file = xbmcvfs.File(self.targetfile)
-        cur_buffer = []
+        cur_buf = []
         content = ''
 
         while True:
             buf = file.read(1024)
-            cur_buffer.append(buf)
+            cur_buf.append(buf)
             if not buf:
-                content = ''.join(cur_buffer)
+                content = ''.join(cur_buf)
                 break
 
         file.close()
@@ -43,6 +42,14 @@ class UpdateNFO():
             tree = ET.ElementTree(ET.fromstring(content))
             root = tree.getroot()
             return root
+
+    def write_file(self):
+        xml_prettyprint(self.root)
+        content = ET.tostring(self.root, encoding='UTF-8')
+
+        file = xbmcvfs.File(self.targetfile, 'w')
+        file.write(content)
+        file.close()
 
     def add_elem(self):
         for elem in self.root.findall(self.xml):
@@ -83,11 +90,3 @@ class UpdateNFO():
         if value:
             elem = ET.SubElement(self.root, elem_name)
             elem.text = value
-
-    def write_nfo(self):
-        xml_prettyprint(self.root)
-        content = ET.tostring(self.root, encoding='UTF-8')
-
-        file = xbmcvfs.File(self.targetfile, 'w')
-        file.write(content)
-        file.close()

@@ -17,22 +17,22 @@ def write_db(value_type,dbid,dbtype,string,preset,xml,details,file,update_nfo):
         library = 'Video'
 
     if value_type == 'array':
-        value = write_array(preset)
+        value = set_array(preset)
 
     elif value_type == 'string':
-        value = write_string(preset)
+        value = set_string(preset)
 
     elif value_type == 'integer':
-        value = write_integer(preset)
+        value = set_integer(preset)
 
     elif value_type == 'float':
-        value = write_float(preset)
+        value = set_float(preset)
 
     elif value_type == 'date':
-        value = write_date(preset)
+        value = set_date(preset)
 
     elif value_type.startswith('uniqueid'):
-        value = write_string(preset)
+        value = set_string(preset)
         if not value:
             value = None
         value = {value_type[9:]: value}
@@ -42,11 +42,21 @@ def write_db(value_type,dbid,dbtype,string,preset,xml,details,file,update_nfo):
               debug=True
               )
 
-    if update_nfo:
-        UpdateNFO(file,xml,value)
+    if update_nfo and file:
+        if dbtype == 'tvshow':
+            write_nfo(os.path.join(file,'tvshow.nfo'), xml, value)
+        else:
+            write_nfo(file.replace(os.path.splitext(file)[1], '.nfo'), xml, value)
+
+        if dbtype == 'movie':
+            write_nfo(file.replace(os.path.basename(file), 'movie.nfo'), xml, value)
 
 
-def write_array(preset):
+def write_nfo(path,xml,value):
+    UpdateNFO(path,xml,value)
+
+
+def set_array(preset):
     keyboard = xbmc.Keyboard(preset)
     keyboard.doModal()
 
@@ -66,7 +76,7 @@ def write_array(preset):
     return eval(values)
 
 
-def write_integer(preset):
+def set_integer(preset):
     value = xbmcgui.Dialog().numeric(0, xbmc.getLocalizedString(16028), str(preset))
 
     if not value:
@@ -75,7 +85,7 @@ def write_integer(preset):
     return int(value)
 
 
-def write_float(preset):
+def set_float(preset):
     preset = float(preset)
     preset = round(preset,1)
     keyboard = xbmc.Keyboard(str(preset))
@@ -88,12 +98,12 @@ def write_float(preset):
             return value
 
         except Exception:
-            write_float(preset)
+            set_float(preset)
 
     return preset
 
 
-def write_date(preset):
+def set_date(preset):
     try:
         conv = time.strptime(preset,'%Y-%m-%d')
         conv = time.strftime('%d/%m/%Y',conv)
@@ -112,7 +122,7 @@ def write_date(preset):
     else:
         return preset
 
-def write_string(preset):
+def set_string(preset):
     keyboard = xbmc.Keyboard(preset)
     keyboard.doModal()
 
