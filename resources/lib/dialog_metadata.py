@@ -187,7 +187,7 @@ class EditDialog(object):
             self._create_list('IMDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'imdb'), type='uniqueid_imdb')
             self._create_list('TMDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'tmdb'), type='uniqueid_tmdb')
             self._create_list('TVDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'tvdb'), type='uniqueid_tvdb')
-            self._create_list(xbmc.getLocalizedString(570), 'dateadded', value=details.get('dateadded'), type='string')
+            self._create_list(xbmc.getLocalizedString(570), 'dateadded', value=details.get('dateadded'), type='datetime')
 
         elif self.dbtype == 'episode':
             '''
@@ -228,7 +228,7 @@ class EditDialog(object):
             self._create_list('IMDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'imdb'), type='uniqueid_imdb')
             self._create_list('TMDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'tmdb'), type='uniqueid_tmdb')
             self._create_list('TVDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'tvdb'), type='uniqueid_tvdb')
-            self._create_list(xbmc.getLocalizedString(570), 'dateadded', value=details.get('dateadded'), type='string')
+            self._create_list(xbmc.getLocalizedString(570), 'dateadded', value=details.get('dateadded'), type='datetime')
 
         elif self.dbtype == 'artist':
             '''
@@ -361,7 +361,7 @@ class EditDialog(object):
             self._create_list(xbmc.getLocalizedString(563), 'rating', value=str(get_rounded_value(details.get('rating'))), type='float')
             self._create_list(xbmc.getLocalizedString(554), 'track', value=str(details.get('track')), type='integer')
             self._create_list(ADDON.getLocalizedString(32001), 'userrating', value=details.get('userrating'), type='integer')
-            self._create_list(xbmc.getLocalizedString(570), 'dateadded', value=details.get('dateadded'), type='string')
+            self._create_list(xbmc.getLocalizedString(570), 'dateadded', value=details.get('dateadded'), type='datetime')
 
 
     def _create_list(self,label,key,type,value,xml=None):
