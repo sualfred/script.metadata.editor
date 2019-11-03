@@ -97,11 +97,15 @@ class SelectValue(object):
 
         selectdialog = DIALOG.multiselect(ADDON.getLocalizedString(32002), self.all_values, preselect=preselectlist)
 
-        if selectdialog == -1 or not selectdialog:
+        if selectdialog == -1:
             self.modified = []
-        else:
+
+        elif selectdialog is not None:
             for index in selectdialog:
                 self.modified.append(self.all_values[index])
+
+        else:
+            self.modified = self.values
 
     def update_data(self):
         json_call(self.method_setdetails,
@@ -109,7 +113,7 @@ class SelectValue(object):
                   )
 
         if self.nfo_support and self.file:
-            write_nfo(self.file, self.dbkey, F, self.dbtype)
+            write_nfo(self.file, self.dbkey, self.modified, self.dbtype)
 
     def _json_query(self,library=None,type=None):
         if library is None:
