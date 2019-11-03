@@ -9,7 +9,7 @@ from resources.lib.nfo_updater import *
 ########################
 
 def write_db(value_type,dbid,dbtype,string,preset,xml,details,file,update_nfo):
-    preset = preset.replace('N/A','')
+    preset = preset.replace('n/a','')
 
     if dbtype in ['song', 'album', 'artist']:
         library = 'Audio'
@@ -43,17 +43,21 @@ def write_db(value_type,dbid,dbtype,string,preset,xml,details,file,update_nfo):
               )
 
     if update_nfo and file:
-        if dbtype == 'tvshow':
-            write_nfo(os.path.join(file,'tvshow.nfo'), xml, value)
-        else:
-            write_nfo(file.replace(os.path.splitext(file)[1], '.nfo'), xml, value)
-
-        if dbtype == 'movie':
-            write_nfo(file.replace(os.path.basename(file), 'movie.nfo'), xml, value)
+        write_nfo(file, xml, value, dbtype)
 
 
-def write_nfo(path,xml,value):
+def write_nfo(file,xml,value,dbtype):
+    if dbtype == 'tvshow':
+        path = os.path.join(file,'tvshow.nfo')
+    else:
+        path = file.replace(os.path.splitext(file)[1], '.nfo')
+
     UpdateNFO(path,xml,value)
+
+    # support for additional movie.nfo
+    if dbtype == 'movie':
+        path = file.replace(os.path.basename(file), 'movie.nfo')
+        UpdateNFO(path,xml,value)
 
 
 def set_array(preset):

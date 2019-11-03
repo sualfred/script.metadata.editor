@@ -6,7 +6,7 @@
 import xbmc
 import sys
 
-from resources.lib.dialog_metadata import *
+from resources.lib.dialog_selectvalue import *
 
 #################################################################################################
 
@@ -14,4 +14,4 @@ if __name__ == "__main__":
     listitem = sys.listitem.getVideoInfoTag()
     dbid = listitem.getDbId()
     dbtype = listitem.getMediaType()
-    EditDialog({'dbid': dbid, 'type': dbtype})
+    SelectValue({'dbid': dbid, 'type': dbtype, 'key': 'genre'})

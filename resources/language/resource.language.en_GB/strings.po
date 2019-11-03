@@ -18,3 +18,23 @@ msgstr ""
 msgctxt "#32000"
 msgid "Metadata editor"
 msgstr ""
+
+#: /resources/lib/dialog.py
+msgctxt "#32001"
+msgid "User rating"
+msgstr ""
+
+#: /resources/lib/dialog_videogenres.py
+msgctxt "#32002"
+msgid "Available entries"
+msgstr ""
+
+#: /addon.xml
+msgctxt "#32003"
+msgid "Add to available tags"
+msgstr ""
+
+#: /addon.xml
+msgctxt "#32004"
+msgid "Add to available genres"
+msgstr ""
