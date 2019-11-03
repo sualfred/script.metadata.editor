@@ -26,6 +26,10 @@ def write_db(value_type,dbid,dbtype,key,preset,elem,details,file,update_nfo):
     elif value_type == 'integer':
         value = set_integer(preset)
 
+        # votes are stored as string
+        if key == 'votes':
+            value = str(value)
+
     elif value_type == 'float':
         value = set_float(preset)
 
@@ -113,7 +117,10 @@ def set_array(preset,dbid,dbtype,key):
 
 
 def set_integer(preset):
-    value = xbmcgui.Dialog().numeric(0, xbmc.getLocalizedString(16028), str(preset))
+    if int(preset) == 0:
+        preset = ''
+
+    value = xbmcgui.Dialog().numeric(0, xbmc.getLocalizedString(16028), preset)
 
     if not value:
         return 0
