@@ -38,7 +38,7 @@ class EditDialog(object):
         self.keylist = []
         self.presetlist = []
         self.typelist = []
-        self.xmllist = []
+        self.elemlist = []
 
         self.generate_list()
         self.field_dialog()
@@ -59,9 +59,9 @@ class EditDialog(object):
         write_db(value_type=self.typelist[self.editdialog],
                  dbid=self.dbid,
                  dbtype=self.dbtype,
-                 string=self.keylist[self.editdialog],
+                 key=self.keylist[self.editdialog],
                  preset=self.presetlist[self.editdialog],
-                 xml=self.xmllist[self.editdialog],
+                 elem=self.elemlist[self.editdialog],
                  details=self.details,
                  file=self.details.get('file'),
                  update_nfo=self.nfo_support
@@ -142,7 +142,7 @@ class EditDialog(object):
             self._create_list(xbmc.getLocalizedString(13409), 'top250', value=str(details.get('top250')), type='integer')
             self._create_list('IMDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'imdb'), type='uniqueid_imdb')
             self._create_list('TMDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'tmdb'), type='uniqueid_tmdb')
-            self._create_list(xbmc.getLocalizedString(570), 'dateadded', value=details.get('dateadded'), type='string')
+            self._create_list(xbmc.getLocalizedString(570), 'dateadded', value=details.get('dateadded'), type='datetime')
 
         elif self.dbtype == 'tvshow':
             '''
@@ -367,7 +367,13 @@ class EditDialog(object):
     def _create_list(self,label,key,type,value,xml=None):
         value = 'n/a' if not value else value
         xml = key if not xml else xml
-        icon = type if not type.startswith('uniqueid') else 'string'
+
+        if type.startswith('uniqueid'):
+            icon = 'string'
+        elif type.startswith('date'):
+            icon = 'date'
+        else:
+            icon = type
 
         li_item = xbmcgui.ListItem(label=label, label2=value)
         li_item.setArt({'icon': 'special://home/addons/script.metadata.editor/resources/media/%s.png' % icon})
@@ -375,7 +381,7 @@ class EditDialog(object):
         self.modeselect.append(li_item)
         self.keylist.append(key)
         self.typelist.append(type)
-        self.xmllist.append(xml)
+        self.elemlist.append(xml)
 
         if value:
             self.presetlist.append(value)

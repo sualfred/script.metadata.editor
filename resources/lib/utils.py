@@ -9,7 +9,7 @@ from resources.lib.dialog_selectvalue import *
 
 ########################
 
-def write_db(value_type,dbid,dbtype,string,preset,xml,details,file,update_nfo):
+def write_db(value_type,dbid,dbtype,key,preset,elem,details,file,update_nfo):
     preset = preset.replace('n/a','')
 
     if dbtype in ['song', 'album', 'artist']:
@@ -18,7 +18,7 @@ def write_db(value_type,dbid,dbtype,string,preset,xml,details,file,update_nfo):
         library = 'Video'
 
     if value_type == 'array':
-        value = set_array(preset, dbid, dbtype, string)
+        value = set_array(preset, dbid, dbtype, key)
 
     elif value_type == 'string':
         value = set_string(preset)
@@ -32,59 +32,45 @@ def write_db(value_type,dbid,dbtype,string,preset,xml,details,file,update_nfo):
     elif value_type == 'date':
         value = set_date(preset)
 
+    elif value_type == 'datetime':
+        preset = preset.split(' ') if preset else ['', '']
+        date = set_date(preset[0])
+        time = set_time(preset[1][:-3])
+        value = date + ' ' + time + ':00'
+
     elif value_type.startswith('uniqueid'):
         value = set_string(preset)
         if not value:
             value = None
         value = {value_type[9:]: value}
 
-    if value:
-        json_call('%sLibrary.Set%sDetails' % (library, dbtype.capitalize()),
-                  params={'%s' % string: value, '%sid' % dbtype: int(dbid)},
-                  debug=True
-                )
+    json_call('%sLibrary.Set%sDetails' % (library, dbtype.capitalize()),
+              params={'%s' % key: value, '%sid' % dbtype: int(dbid)},
+              debug=True
+              )
 
-        if update_nfo and file:
-            write_nfo(file, xml, value, dbtype)
+    if update_nfo and file:
+        write_nfo(file, elem, value, dbtype)
 
 
-def write_nfo(file,xml,value,dbtype):
+def write_nfo(file,elem,value,dbtype):
     if dbtype == 'tvshow':
         path = os.path.join(file,'tvshow.nfo')
     else:
         path = file.replace(os.path.splitext(file)[1], '.nfo')
 
-    UpdateNFO(path,xml,value)
+    UpdateNFO(path, elem, value)
 
     # support for additional movie.nfo
     if dbtype == 'movie':
         path = file.replace(os.path.basename(file), 'movie.nfo')
-        UpdateNFO(path,xml,value)
+        UpdateNFO(path, elem, value)
 
 
-def set_array2(preset):
-    keyboard = xbmc.Keyboard(preset)
-    keyboard.doModal()
-
-    if keyboard.isConfirmed():
-        array = keyboard.getText()
-    else:
-        array = preset
-
-    array = array.replace('; ',';').split(';')
-
-    for item in array:
-        if not item:
-            array.remove(item)
-
-    values = json.dumps(array)
-
-    return eval(values)
-
-def set_array(preset,dbid,dbtype,string):
+def set_array(preset,dbid,dbtype,key):
     actionlist = [ADDON.getLocalizedString(32005), ADDON.getLocalizedString(32006)]
 
-    if string in ['genre', 'tag']:
+    if key in ['genre', 'tag']:
         actionlist.append(ADDON.getLocalizedString(32007))
 
     array_action = DIALOG.select(xbmc.getLocalizedString(14241), actionlist)
@@ -104,8 +90,7 @@ def set_array(preset,dbid,dbtype,string):
             if new_item not in array:
                 array.append(new_item)
 
-        values = json.dumps(remove_empty(array))
-        return eval(values)
+        return remove_empty(array)
 
     elif array_action == 1:
         keyboard = xbmc.Keyboard(preset)
@@ -117,14 +102,15 @@ def set_array(preset,dbid,dbtype,string):
             array = preset
 
         array = array.replace('; ',';').split(';')
-        values = json.dumps(remove_empty(array))
-        return eval(values)
+
+        return remove_empty(array)
 
     elif array_action == 2:
-        array = SelectValue(params={'dbid': dbid, 'type': dbtype, 'key': string},
+        array = SelectValue(params={'dbid': dbid, 'type': dbtype, 'key': key},
                             editor=True)
 
         return eval(str(array))
+
 
 def set_integer(preset):
     value = xbmcgui.Dialog().numeric(0, xbmc.getLocalizedString(16028), str(preset))
@@ -169,8 +155,17 @@ def set_date(preset):
         value = time.strftime('%Y-%m-%d',value)
         return value
 
-    else:
-        return preset
+    return preset
+
+
+def set_time(preset):
+    value = xbmcgui.Dialog().numeric(2, xbmc.getLocalizedString(16028), preset)
+
+    if value:
+        return value
+
+    return preset
+
 
 def set_string(preset):
     keyboard = xbmc.Keyboard(preset)

@@ -8,8 +8,8 @@ from resources.lib.helper import *
 ########################
 
 class UpdateNFO():
-    def __init__(self,file,xml,value):
-        self.xml = xml
+    def __init__(self,file,elem,value):
+        self.elem = elem
         self.value = value
         self.targetfile = file
 
@@ -17,7 +17,7 @@ class UpdateNFO():
             self.root = self.read_file()
 
             if self.root:
-                if xml == 'uniqueid':
+                if self.elem == 'uniqueid':
                     self.add_uniqueid()
                 else:
                     self.add_elem()
@@ -52,16 +52,16 @@ class UpdateNFO():
         file.close()
 
     def add_elem(self):
-        for elem in self.root.findall(self.xml):
+        for elem in self.root.findall(self.elem):
             self.root.remove(elem)
 
         if isinstance(self.value, list):
             for item in self.value:
-                elem = ET.SubElement(self.root, self.xml)
+                elem = ET.SubElement(self.root, self.elem)
                 elem.text = item
 
         else:
-            elem = ET.SubElement(self.root, self.xml)
+            elem = ET.SubElement(self.root, self.elem)
             elem.text = str(self.value)
 
     def add_uniqueid(self):
@@ -75,7 +75,7 @@ class UpdateNFO():
                 self.root.remove(elem)
 
         if value:
-            elem = ET.SubElement(self.root, self.xml)
+            elem = ET.SubElement(self.root, self.elem)
             elem.set('type', id_type)
             elem.text = value
             if id_type == 'imdb':
