@@ -38,3 +38,18 @@ msgstr ""
 msgctxt "#32004"
 msgid "Add to available genres"
 msgstr ""
+
+#: /resources/lib/utils.py
+msgctxt "#32005"
+msgid "Add new item"
+msgstr ""
+
+#: /resources/lib/utils.py
+msgctxt "#32006"
+msgid "Modify current list"
+msgstr ""
+
+#: /resources/lib/utils.py
+msgctxt "#32007"
+msgid "Select from available items"
+msgstr ""

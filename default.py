@@ -4,7 +4,7 @@
 
 from resources.lib.helper import *
 from resources.lib.dialog_metadata import *
-from resources.lib.dialog_tag import *
+from resources.lib.dialog_selectvalue import *
 
 ########################
 

@@ -5,6 +5,7 @@
 
 from resources.lib.helper import *
 from resources.lib.nfo_updater import *
+from resources.lib.dialog_selectvalue import *
 
 ########################
 
@@ -17,7 +18,7 @@ def write_db(value_type,dbid,dbtype,string,preset,xml,details,file,update_nfo):
         library = 'Video'
 
     if value_type == 'array':
-        value = set_array(preset)
+        value = set_array(preset, dbid, dbtype, string)
 
     elif value_type == 'string':
         value = set_string(preset)
@@ -37,13 +38,14 @@ def write_db(value_type,dbid,dbtype,string,preset,xml,details,file,update_nfo):
             value = None
         value = {value_type[9:]: value}
 
-    json_call('%sLibrary.Set%sDetails' % (library, dbtype.capitalize()),
-              params={'%s' % string: value, '%sid' % dbtype: int(dbid)},
-              debug=True
-              )
+    if value:
+        json_call('%sLibrary.Set%sDetails' % (library, dbtype.capitalize()),
+                  params={'%s' % string: value, '%sid' % dbtype: int(dbid)},
+                  debug=True
+                )
 
-    if update_nfo and file:
-        write_nfo(file, xml, value, dbtype)
+        if update_nfo and file:
+            write_nfo(file, xml, value, dbtype)
 
 
 def write_nfo(file,xml,value,dbtype):
@@ -60,7 +62,7 @@ def write_nfo(file,xml,value,dbtype):
         UpdateNFO(path,xml,value)
 
 
-def set_array(preset):
+def set_array2(preset):
     keyboard = xbmc.Keyboard(preset)
     keyboard.doModal()
 
@@ -79,6 +81,50 @@ def set_array(preset):
 
     return eval(values)
 
+def set_array(preset,dbid,dbtype,string):
+    actionlist = [ADDON.getLocalizedString(32005), ADDON.getLocalizedString(32006)]
+
+    if string in ['genre', 'tag']:
+        actionlist.append(ADDON.getLocalizedString(32007))
+
+    array_action = DIALOG.select(xbmc.getLocalizedString(14241), actionlist)
+
+    if array_action == -1:
+        return
+
+    if array_action == 0:
+        array = preset.replace('; ',';').split(';')
+
+        keyboard = xbmc.Keyboard()
+        keyboard.doModal()
+
+        if keyboard.isConfirmed():
+            new_item = keyboard.getText()
+
+            if new_item not in array:
+                array.append(new_item)
+
+        values = json.dumps(remove_empty(array))
+        return eval(values)
+
+    elif array_action == 1:
+        keyboard = xbmc.Keyboard(preset)
+        keyboard.doModal()
+
+        if keyboard.isConfirmed():
+            array = keyboard.getText()
+        else:
+            array = preset
+
+        array = array.replace('; ',';').split(';')
+        values = json.dumps(remove_empty(array))
+        return eval(values)
+
+    elif array_action == 2:
+        array = SelectValue(params={'dbid': dbid, 'type': dbtype, 'key': string},
+                            editor=True)
+
+        return eval(str(array))
 
 def set_integer(preset):
     value = xbmcgui.Dialog().numeric(0, xbmc.getLocalizedString(16028), str(preset))

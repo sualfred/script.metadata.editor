@@ -9,10 +9,11 @@ from resources.lib.utils import *
 ########################
 
 class SelectValue(object):
-    def __init__(self,params):
+    def __init__(self,params,editor=False):
         self.dbid = params.get('dbid')
         self.dbtype = params.get('type')
         self.dbkey = params.get('key')
+        self.editor = editor
 
         if self.dbtype in ['movie', 'tvshow', 'season', 'episode', 'musicvideo']:
             self.library = 'Video'
@@ -32,6 +33,9 @@ class SelectValue(object):
 
         self.init()
 
+    def __str__(self):
+        return str(self.modified)
+
     def init(self):
         if self.dbkey == 'genre':
             if self.dbtype in ['movie', 'tvshow', 'season', 'episode']:
@@ -47,7 +51,9 @@ class SelectValue(object):
 
         self.current_values()
         self.select_dialog()
-        self.update_data()
+
+        if not self.editor:
+            self.update_data()
 
     def current_values(self):
         result = json_call(self.method_details,
@@ -103,7 +109,7 @@ class SelectValue(object):
                   )
 
         if self.nfo_support and self.file:
-            write_nfo(self.file, self.dbkey, self.modified, self.dbtype)
+            write_nfo(self.file, self.dbkey, F, self.dbtype)
 
     def _json_query(self,library=None,type=None):
         if library is None:

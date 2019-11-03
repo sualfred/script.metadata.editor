@@ -97,6 +97,12 @@ def get_date(date_time):
 
     return date_obj
 
+def remove_empty(array):
+    for item in array:
+        if not item:
+            array.remove(item)
+
+    return array
 
 def execute(cmd):
     log('Execute: %s' % cmd, DEBUG)
