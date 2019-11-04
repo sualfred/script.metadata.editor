@@ -16,7 +16,7 @@ msgstr ""
 
 #: /addon.xml
 msgctxt "#32000"
-msgid "Metadata editor"
+msgid "Metadata Editor"
 msgstr ""
 
 #: /resources/lib/dialog.py
@@ -31,12 +31,12 @@ msgstr ""
 
 #: /addon.xml
 msgctxt "#32003"
-msgid "Add to available tags"
+msgid "Add/remove available tags"
 msgstr ""
 
 #: /addon.xml
 msgctxt "#32004"
-msgid "Add to available genres"
+msgid "Add/remove available genres"
 msgstr ""
 
 #: /resources/lib/utils.py
@@ -52,4 +52,19 @@ msgstr ""
 #: /resources/lib/utils.py
 msgctxt "#32007"
 msgid "Select from available items"
+msgstr ""
+
+#: /context.py
+msgctxt "#32008"
+msgid "Remove favourite tag"
+msgstr ""
+
+#: /context.py
+msgctxt "#32009"
+msgid "Add favourite tag"
+msgstr ""
+
+#: /context.py
+msgctxt "#32010"
+msgid "Open editor"
 msgstr ""

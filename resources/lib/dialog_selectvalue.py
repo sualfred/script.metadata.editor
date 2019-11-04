@@ -113,7 +113,10 @@ class SelectValue(object):
                   )
 
         if self.nfo_support and self.file:
-            write_nfo(self.file, self.dbkey, self.modified, self.dbtype)
+            write_nfo(file=self.file,
+                      elem=self.dbkey,
+                      value=self.modified,
+                      dbtype=self.dbtype)
 
     def _json_query(self,library=None,type=None):
         if library is None:

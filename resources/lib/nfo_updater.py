@@ -9,20 +9,35 @@ from resources.lib.helper import *
 
 class UpdateNFO():
     def __init__(self,file,elem,value):
-        self.elem = elem
-        self.value = value
+        self.elems = elem
+        self.values = value
         self.targetfile = file
 
+        self.init()
+
+    def init(self):
         if xbmcvfs.exists(self.targetfile):
             self.root = self.read_file()
 
-            if self.root:
-                if self.elem == 'uniqueid':
-                    self.add_uniqueid()
+            if len(self.root):
+                if isinstance(self.elems, list):
+                    for elem in self.elems:
+                        self.elem = elem
+                        self.value = self.values[self.elems.index(elem)]
+                        self.update_elem()
+
                 else:
-                    self.add_elem()
+                    self.elem = self.elems
+                    self.value = self.values
+                    self.update_elem()
 
                 self.write_file()
+
+    def update_elem(self):
+        if self.elem == 'uniqueid':
+            self.add_uniqueid()
+        else:
+            self.add_elem()
 
     def read_file(self):
         file = xbmcvfs.File(self.targetfile)

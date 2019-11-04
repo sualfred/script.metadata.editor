@@ -6,17 +6,9 @@
 	</requires>
 	<extension point="xbmc.python.script" library="default.py" />
 	<extension point="kodi.context.item">
-		<menu id="kodi.core.manage">
-			<item library="context_editor.py">
+		<menu id="kodi.core.main">
+			<item library="context.py">
 				<label>$ADDON[script.metadata.editor 32000]</label>
-				<visible>!String.IsEmpty(ListItem.DBID) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode) | String.IsEqual(ListItem.DBType,musicvideo) | String.IsEqual(ListItem.DBType,artist) | String.IsEqual(ListItem.DBType,album) | String.IsEqual(ListItem.DBType,song)]</visible>
-			</item>
-			<item library="context_select_tags.py">
-				<label>$ADDON[script.metadata.editor 32003]</label>
-				<visible>!String.IsEmpty(ListItem.DBID) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode) | String.IsEqual(ListItem.DBType,musicvideo)]</visible>
-			</item>
-			<item library="context_select_genres.py">
-				<label>$ADDON[script.metadata.editor 32004]</label>
 				<visible>!String.IsEmpty(ListItem.DBID) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode) | String.IsEqual(ListItem.DBType,musicvideo) | String.IsEqual(ListItem.DBType,artist) | String.IsEqual(ListItem.DBType,album) | String.IsEqual(ListItem.DBType,song)]</visible>
 			</item>
 		</menu>

@@ -5,7 +5,6 @@
 
 from resources.lib.helper import *
 from resources.lib.nfo_updater import *
-from resources.lib.dialog_selectvalue import *
 
 ########################
 
@@ -110,6 +109,8 @@ def set_array(preset,dbid,dbtype,key):
         return remove_empty(array)
 
     elif array_action == 2:
+        from resources.lib.dialog_selectvalue import SelectValue
+
         array = SelectValue(params={'dbid': dbid, 'type': dbtype, 'key': key},
                             editor=True)
 
