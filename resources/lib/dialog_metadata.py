@@ -5,7 +5,7 @@
 
 from resources.lib.helper import *
 from resources.lib.json_map import *
-from resources.lib.utils import *
+from resources.lib.functions import *
 
 ########################
 
@@ -38,7 +38,7 @@ class EditDialog(object):
         self.keylist = []
         self.presetlist = []
         self.typelist = []
-        self.elemlist = []
+        self.optionlist = []
 
         self.generate_list()
         self.field_dialog()
@@ -56,16 +56,15 @@ class EditDialog(object):
 
         winprop('SelectDialogPreselect', str(self.editdialog))
 
-        write_db(value_type=self.typelist[self.editdialog],
-                 dbid=self.dbid,
-                 dbtype=self.dbtype,
-                 key=self.keylist[self.editdialog],
-                 preset=self.presetlist[self.editdialog],
-                 elem=self.elemlist[self.editdialog],
-                 details=self.details,
-                 file=self.details.get('file'),
-                 update_nfo=self.nfo_support
-                 )
+        handle_dbitem(value_type=self.typelist[self.editdialog],
+                      dbid=self.dbid,
+                      dbtype=self.dbtype,
+                      key=self.keylist[self.editdialog],
+                      preset=self.presetlist[self.editdialog],
+                      option=self.optionlist[self.editdialog],
+                      file=self.details.get('file'),
+                      nfo_support=self.nfo_support
+                      )
 
         self.init()
 
@@ -83,6 +82,18 @@ class EditDialog(object):
 
     def generate_list(self):
         details = self.details
+        ratings = details.get('ratings')
+        uniqueid = details.get('uniqueid')
+
+        if ratings:
+            ratings_default = None
+
+            for item in ratings:
+                if ratings[item].get('default'):
+                    ratings_value = str(get_rounded_value(ratings[item].get('rating', 0.0)))
+                    votes_value = str(ratings[item].get('votes', '0'))
+                    ratings_default = ratings_value + ' / ' + votes_value + ' (' + xbmc.getLocalizedString(21870) + ': ' + item + ')'
+                    break
 
         if self.dbtype == 'movie':
             '''
@@ -120,18 +131,31 @@ class EditDialog(object):
             x [ Optional.String premiered ] linked with year. Overriedes year
             x [ mixed uniqueid ]
             '''
+
+            '''    for item in ['imdb', 'themoviedb', 'tomatometerallcritics', 'tomatometerallaudience', 'metacritic']:
+                    if item not in ratings:
+                        self._create_list(xbmc.getLocalizedString(563) + ' (' + item + ')', 'ratings', value='n/a', type='ratings', option=ratings)'''
+
+
+
+
             self._create_list(xbmc.getLocalizedString(369), 'title', value=details.get('title'), type='string')
             self._create_list(xbmc.getLocalizedString(20376), 'originaltitle', value=details.get('originaltitle'), type='string')
             self._create_list(xbmc.getLocalizedString(171), 'sorttitle', value=details.get('sorttitle'), type='string')
             self._create_list(xbmc.getLocalizedString(345) + ' / ' + xbmc.getLocalizedString(172), 'premiered', value=details.get('premiered'), type='date')
             self._create_list(xbmc.getLocalizedString(515), 'genre', value=get_joined_items(details.get('genre')), type='array')
-            self._create_list(xbmc.getLocalizedString(563), 'rating', value=str(get_rounded_value(details.get('rating'))), type='float')
-            self._create_list(xbmc.getLocalizedString(205), 'votes', value=str(details.get('votes')), type='integer')
-            self._create_list(ADDON.getLocalizedString(32001), 'userrating', value=str(details.get('userrating')), type='integer')
+
+            if ratings_default:
+                self._create_list(xbmc.getLocalizedString(563) + ' / ' + xbmc.getLocalizedString(205), 'ratings', value=ratings_default, type='ratings', option=ratings)
+            else:
+                self._create_list(xbmc.getLocalizedString(563), 'rating', value=str(get_rounded_value(details.get('rating'))), type='float')
+                self._create_list(xbmc.getLocalizedString(205), 'votes', value=str(details.get('votes')), type='integer')
+
+            self._create_list(ADDON.getLocalizedString(32001), 'userrating', value=str(details.get('userrating')), type='userrating')
             self._create_list(xbmc.getLocalizedString(20074), 'mpaa', value=details.get('mpaa'), type='string')
             self._create_list(xbmc.getLocalizedString(202), 'tagline', value=details.get('tagline'), type='string')
             self._create_list(xbmc.getLocalizedString(207), 'plot', value=details.get('plot'), type='string')
-            self._create_list(xbmc.getLocalizedString(203), 'plotoutline', value=details.get('plotoutline'), type='string', xml='outline')
+            self._create_list(xbmc.getLocalizedString(203), 'plotoutline', value=details.get('plotoutline'), type='string')
             self._create_list(xbmc.getLocalizedString(20339), 'director', value=get_joined_items(details.get('director')), type='array')
             self._create_list(xbmc.getLocalizedString(20417), 'writer', value=get_joined_items(details.get('writer')), type='array')
             self._create_list(xbmc.getLocalizedString(20457), 'set', value=details.get('set'), type='string')
@@ -140,8 +164,8 @@ class EditDialog(object):
             self._create_list(xbmc.getLocalizedString(20459), 'tag', value=get_joined_items(details.get('tag')), type='array')
             self._create_list(xbmc.getLocalizedString(20410), 'trailer', value=details.get('trailer'), type='string')
             self._create_list(xbmc.getLocalizedString(13409), 'top250', value=str(details.get('top250')), type='integer')
-            self._create_list('IMDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'imdb'), type='uniqueid_imdb')
-            self._create_list('TMDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'tmdb'), type='uniqueid_tmdb')
+            self._create_list('IMDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'imdb'), type='uniqueid', option='imdb')
+            self._create_list('TMDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'tmdb'), type='uniqueid', option='tmdb')
             self._create_list(xbmc.getLocalizedString(570), 'dateadded', value=details.get('dateadded'), type='datetime')
 
         elif self.dbtype == 'tvshow':
@@ -178,7 +202,7 @@ class EditDialog(object):
             self._create_list(xbmc.getLocalizedString(515), 'genre', value=get_joined_items(details.get('genre')), type='array')
             self._create_list(xbmc.getLocalizedString(563), 'rating', value=str(get_rounded_value(details.get('rating'))), type='float')
             self._create_list(xbmc.getLocalizedString(205), 'votes', value=str(details.get('votes')), type='integer')
-            self._create_list(ADDON.getLocalizedString(32001), 'userrating', value=str(details.get('userrating')), type='integer')
+            self._create_list(ADDON.getLocalizedString(32001), 'userrating', value=str(details.get('userrating')), type='userrating')
             self._create_list(xbmc.getLocalizedString(20074), 'mpaa', value=details.get('mpaa'), type='string')
             self._create_list(xbmc.getLocalizedString(207), 'plot', value=details.get('plot'), type='string')
             self._create_list(xbmc.getLocalizedString(572), 'studio', value=get_joined_items(details.get('studio')), type='array')
@@ -221,7 +245,7 @@ class EditDialog(object):
             self._create_list(xbmc.getLocalizedString(20416), 'firstaired', value=details.get('firstaired'), type='date')
             self._create_list(xbmc.getLocalizedString(563), 'rating', value=str(get_rounded_value(details.get('rating'))), type='float')
             self._create_list(xbmc.getLocalizedString(205), 'votes', value=str(details.get('votes')), type='integer')
-            self._create_list(ADDON.getLocalizedString(32001), 'userrating', value=str(details.get('userrating')), type='integer')
+            self._create_list(ADDON.getLocalizedString(32001), 'userrating', value=str(details.get('userrating')), type='userrating')
             self._create_list(xbmc.getLocalizedString(207), 'plot', value=details.get('plot'), type='string')
             self._create_list(xbmc.getLocalizedString(20339), 'director', value=get_joined_items(details.get('director')), type='array')
             self._create_list(xbmc.getLocalizedString(20417), 'writer', value=get_joined_items(details.get('writer')), type='array')
@@ -284,7 +308,7 @@ class EditDialog(object):
             self._create_list(xbmc.getLocalizedString(736), 'style', value=get_joined_items(details.get('style')), type='array')
             self._create_list(xbmc.getLocalizedString(563), 'rating', value=str(get_rounded_value(details.get('rating'))), type='float')
             self._create_list(xbmc.getLocalizedString(205), 'votes', value=str(details.get('votes')), type='integer')
-            self._create_list(ADDON.getLocalizedString(32001), 'userrating', value=str(details.get('userrating')), type='integer')
+            self._create_list(ADDON.getLocalizedString(32001), 'userrating', value=str(details.get('userrating')), type='userrating')
 
         elif self.dbtype == 'song':
             '''
@@ -319,7 +343,7 @@ class EditDialog(object):
             self._create_list(xbmc.getLocalizedString(569), 'comment', value=details.get('comment'), type='string')
             self._create_list(xbmc.getLocalizedString(563), 'rating', value=str(get_rounded_value(details.get('rating'))), type='float')
             self._create_list(xbmc.getLocalizedString(205), 'votes', value=str(details.get('votes')), type='integer')
-            self._create_list(ADDON.getLocalizedString(32001), 'userrating', value=str(details.get('userrating')), type='integer')
+            self._create_list(ADDON.getLocalizedString(32001), 'userrating', value=str(details.get('userrating')), type='userrating')
             self._create_list('MusicBrainz Track-ID', 'musicbrainztrackid', value=details.get('musicbrainztrackid'), type='string')
             self._create_list('MusicBrainz Artist-ID', 'musicbrainzartistid', value=get_joined_items(details.get('musicbrainzartistid')), type='array')
             self._create_list('MusicBrainz Album-ID', 'musicbrainzalbumid', value=details.get('musicbrainzalbumid'), type='string')
@@ -360,13 +384,12 @@ class EditDialog(object):
             self._create_list(xbmc.getLocalizedString(20459), 'tag', value=get_joined_items(details.get('tag')), type='array')
             self._create_list(xbmc.getLocalizedString(563), 'rating', value=str(get_rounded_value(details.get('rating'))), type='float')
             self._create_list(xbmc.getLocalizedString(554), 'track', value=str(details.get('track')), type='integer')
-            self._create_list(ADDON.getLocalizedString(32001), 'userrating', value=details.get('userrating'), type='integer')
+            self._create_list(ADDON.getLocalizedString(32001), 'userrating', value=details.get('userrating'), type='userrating')
             self._create_list(xbmc.getLocalizedString(570), 'dateadded', value=details.get('dateadded'), type='datetime')
 
 
-    def _create_list(self,label,key,type,value,xml=None):
+    def _create_list(self,label,key,type,value,option=None):
         value = 'n/a' if not value else value
-        xml = key if not xml else xml
 
         if type.startswith('uniqueid'):
             icon = 'string'
@@ -381,7 +404,7 @@ class EditDialog(object):
         self.modeselect.append(li_item)
         self.keylist.append(key)
         self.typelist.append(type)
-        self.elemlist.append(xml)
+        self.optionlist.append(option)
 
         if value:
             self.presetlist.append(value)

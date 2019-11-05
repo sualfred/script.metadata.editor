@@ -4,7 +4,7 @@
 ########################
 
 from resources.lib.helper import *
-from resources.lib.utils import *
+from resources.lib.functions import *
 
 ########################
 
@@ -113,10 +113,21 @@ class SelectValue(object):
                   )
 
         if self.nfo_support and self.file:
-            write_nfo(file=self.file,
-                      elem=self.dbkey,
-                      value=self.modified,
-                      dbtype=self.dbtype)
+            if self.dbkey == 'tag':
+                # Respect Emby favourites <isuserfavorite>
+                isuserfavorite = 'false'
+                for tag in self.modified:
+                    if tag in ['Fav. Kodi ', 'Favorite movies', 'Favorite tvshows']:
+                        isuserfavorite = 'true'
+                        break
+
+                self.dbkey = [self.dbkey, 'isuserfavorite']
+                self.modified = [self.modified, isuserfavorite]
+
+            update_nfo(file=self.file,
+                       elem=self.dbkey,
+                       value=self.modified,
+                       dbtype=self.dbtype)
 
     def _json_query(self,library=None,type=None):
         if library is None:

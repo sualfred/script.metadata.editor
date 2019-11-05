@@ -4,7 +4,7 @@
 ########################
 
 from resources.lib.helper import *
-from resources.lib.utils import *
+from resources.lib.functions import *
 
 ########################
 
@@ -35,9 +35,9 @@ class ToggleFav(object):
 
     def check_tag(self):
         result = json_call(self.method_details,
-                               properties=['tag', 'file'],
-                               params={self.param: int(self.dbid)}
-                               )
+                           properties=['tag', 'file'],
+                           params={self.param: int(self.dbid)}
+                           )
 
         result = result['result'][self.key_details]
 
@@ -58,9 +58,13 @@ class ToggleFav(object):
                   )
 
         if self.file:
-            write_nfo(file=self.file,
-                      elem=['tag', 'isuserfavorite'],
-                      value=[self.tag_list, isuserfavorite],
-                      dbtype=self.dbtype)
+            # Respect Emby favourites <isuserfavorite>
+            if ('Favorite movies' in self.tag_list) or ('Favorite tvshows' in self.tag_list):
+                isuserfavorite = 'true'
+
+            update_nfo(file=self.file,
+                       elem=['tag', 'isuserfavorite'],
+                       value=[self.tag_list, isuserfavorite],
+                       dbtype=self.dbtype)
 
         #reload_widgets(reason='Fav. updated')

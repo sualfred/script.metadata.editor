@@ -23,6 +23,8 @@ try:
 except ImportError:
     import urllib.request as urllib
 
+from contextlib import contextmanager
+
 ########################
 
 PYTHON3 = True if sys.version_info.major == 3 else False
@@ -79,11 +81,13 @@ def get_joined_items(item):
 
     return item
 
+
 def get_key_item(items,key):
     try:
         return items.get(key)
     except Exception:
         return
+
 
 def get_rounded_value(item):
     item = float(item)
@@ -91,18 +95,24 @@ def get_rounded_value(item):
 
     return item
 
+
 def get_date(date_time):
     date_time_obj = datetime.datetime.strptime(date_time, '%Y-%m-%d %H:%M:%S')
     date_obj = date_time_obj.date()
 
     return date_obj
 
-def remove_empty(array):
-    for item in array:
-        if not item:
-            array.remove(item)
 
-    return array
+def remove_empty(array):
+    cleaned_array = []
+
+    for item in array:
+        if not item or item in ['', ';']:
+            continue
+        cleaned_array.append(item)
+
+    return cleaned_array
+
 
 def execute(cmd):
     log('Execute: %s' % cmd, DEBUG)
@@ -228,3 +238,11 @@ def xml_prettyprint(root,level=0):
     else:
         if level and (not root.tail or not root.tail.strip()):
             root.tail = i
+
+@contextmanager
+def busy_dialog():
+    execute('ActivateWindow(busydialognocancel)')
+    try:
+        yield
+    finally:
+        execute('Dialog.Close(busydialognocancel)')
