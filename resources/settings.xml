@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+	<category label="128">
+        <setting label="$LOCALIZE[128]" type="lsep"/>
+		<setting id="nfo_updating" label="$ADDON[script.metadata.editor 32021]" type="bool" default="true"/>
+	</category>
+</settings>

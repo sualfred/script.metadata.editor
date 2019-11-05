@@ -212,6 +212,7 @@ class EditDialog(object):
             self._create_list(xbmc.getLocalizedString(20074), 'mpaa', value=details.get('mpaa'), type='string')
             self._create_list(xbmc.getLocalizedString(572), 'studio', value=get_joined_items(details.get('studio')), type='array')
             self._create_list(xbmc.getLocalizedString(20459), 'tag', value=get_joined_items(details.get('tag')), type='array')
+            self._create_list(xbmc.getLocalizedString(126), 'status', value=ADDON.getLocalizedString(32022), type='status')
             #self._create_list(xbmc.getLocalizedString(126), 'status', value=details.get('status'), type='string') not available in GetDetails
             self._create_list('IMDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'imdb'), type='uniqueid', option='imdb')
             self._create_list('TMDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'tmdb'), type='uniqueid', option='tmdb')
@@ -403,12 +404,12 @@ class EditDialog(object):
     def _create_list(self,label,key,type,value,option=None):
         value = 'n/a' if not value else value
 
-        if type.startswith('uniqueid'):
+        if type in ['uniqueid', 'status']:
             icon = 'string'
+        elif type == ('userrating'):
+            icon = 'integer'
         elif type.startswith('date'):
             icon = 'date'
-        elif type.startswith('userrating'):
-            icon = 'integer'
         elif type.startswith('rating'):
             icon = 'float'
         else:

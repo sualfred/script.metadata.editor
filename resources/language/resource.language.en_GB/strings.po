@@ -118,3 +118,13 @@ msgstr ""
 msgctxt "#32020"
 msgid "Set as default?"
 msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32021"
+msgid "Enable .nfo updating for movies and TV shows"
+msgstr ""
+
+#: /resources/lib/dialog_metadata.py
+msgctxt "#32022"
+msgid "value cannot be fetched"
+msgstr ""

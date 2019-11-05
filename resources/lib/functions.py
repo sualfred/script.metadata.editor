@@ -41,6 +41,9 @@ def handle_dbitem(value_type,dbid,dbtype,key,preset,option,file,nfo_support):
     elif value_type == 'ratings':
         value = set_ratings(option)
 
+    elif value_type == 'status':
+        value = set_status(preset)
+
     elif value_type == ('uniqueid'):
         returned_value = set_string(preset)
         value = {option: returned_value if returned_value else None}
@@ -76,6 +79,9 @@ def update_library(dbtype,key,value,dbid):
 
 
 def update_nfo(file,elem,value,dbtype):
+    if not ADDON.getSettingBool('nfo_updating'):
+        return
+
     if dbtype == 'tvshow':
         path = os.path.join(file,'tvshow.nfo')
     else:
@@ -298,9 +304,23 @@ def set_integer_range(preset, maximum):
     for i in range(0, maximum):
         rangelist.append(str(i))
 
-    rangedialog = DIALOG.select(xbmc.getLocalizedString(424), rangelist, preselect=preset)
+    value = DIALOG.select(xbmc.getLocalizedString(424), rangelist, preselect=preset)
 
-    if rangedialog >= 0:
-        return rangedialog
+    if value >= 0:
+        return value
+
+    return preset
+
+
+def set_status(preset):
+    statuslist = ['Continuing', 'Ended']
+
+    if preset == ADDON.getLocalizedString(32022):
+        preset = ''
+
+    value = DIALOG.select(xbmc.getLocalizedString(126), statuslist)
+
+    if value >= 0:
+        return statuslist[value]
 
     return preset
