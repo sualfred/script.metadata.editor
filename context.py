@@ -66,18 +66,22 @@ class ContextMenu(object):
             else:
                 itemlist.append(ADDON.getLocalizedString(32009))
 
-        contextdialog = DIALOG.contextmenu(itemlist)
+        if len(itemlist) > 1:
+            contextdialog = DIALOG.contextmenu(itemlist)
 
-        if contextdialog == 0:
-            EditDialog({'dbid': dbid, 'type': dbtype})
-        elif contextdialog == 1:
-            SelectValue({'dbid': dbid, 'type': dbtype, 'key': 'genre'})
-        elif contextdialog == 2:
-            SelectValue({'dbid': dbid, 'type': dbtype, 'key': 'tag'})
-        elif contextdialog == 3:
-            ToggleFav({'dbid': dbid, 'type': dbtype})
+            if contextdialog == 0:
+                EditDialog({'dbid': dbid, 'type': dbtype})
+            elif contextdialog == 1:
+                SelectValue({'dbid': dbid, 'type': dbtype, 'key': 'genre'})
+            elif contextdialog == 2:
+                SelectValue({'dbid': dbid, 'type': dbtype, 'key': 'tag'})
+            elif contextdialog == 3:
+                ToggleFav({'dbid': dbid, 'type': dbtype})
+            else:
+                return
+
         else:
-            return
+            EditDialog({'dbid': dbid, 'type': dbtype})
 
 
 if __name__ == "__main__":

@@ -144,6 +144,10 @@ class EditDialog(object):
             self._create_list(xbmc.getLocalizedString(171), 'sorttitle', value=details.get('sorttitle'), type='string')
             self._create_list(xbmc.getLocalizedString(345) + ' / ' + xbmc.getLocalizedString(172), 'premiered', value=details.get('premiered'), type='date')
             self._create_list(xbmc.getLocalizedString(515), 'genre', value=get_joined_items(details.get('genre')), type='array')
+            self._create_list(xbmc.getLocalizedString(202), 'tagline', value=details.get('tagline'), type='string')
+            self._create_list(xbmc.getLocalizedString(207), 'plot', value=details.get('plot'), type='string')
+            self._create_list(xbmc.getLocalizedString(203), 'plotoutline', value=details.get('plotoutline'), type='string')
+            self._create_list(xbmc.getLocalizedString(20457), 'set', value=details.get('set'), type='string')
 
             if ratings_default:
                 self._create_list(xbmc.getLocalizedString(563) + ' / ' + xbmc.getLocalizedString(205), 'ratings', value=ratings_default, type='ratings', option=ratings)
@@ -153,19 +157,15 @@ class EditDialog(object):
 
             self._create_list(ADDON.getLocalizedString(32001), 'userrating', value=str(details.get('userrating')), type='userrating')
             self._create_list(xbmc.getLocalizedString(20074), 'mpaa', value=details.get('mpaa'), type='string')
-            self._create_list(xbmc.getLocalizedString(202), 'tagline', value=details.get('tagline'), type='string')
-            self._create_list(xbmc.getLocalizedString(207), 'plot', value=details.get('plot'), type='string')
-            self._create_list(xbmc.getLocalizedString(203), 'plotoutline', value=details.get('plotoutline'), type='string')
             self._create_list(xbmc.getLocalizedString(20339), 'director', value=get_joined_items(details.get('director')), type='array')
             self._create_list(xbmc.getLocalizedString(20417), 'writer', value=get_joined_items(details.get('writer')), type='array')
-            self._create_list(xbmc.getLocalizedString(20457), 'set', value=details.get('set'), type='string')
             self._create_list(xbmc.getLocalizedString(21875), 'country', value=get_joined_items(details.get('country')), type='array')
             self._create_list(xbmc.getLocalizedString(572), 'studio', value=get_joined_items(details.get('studio')), type='array')
             self._create_list(xbmc.getLocalizedString(20459), 'tag', value=get_joined_items(details.get('tag')), type='array')
             self._create_list(xbmc.getLocalizedString(20410), 'trailer', value=details.get('trailer'), type='string')
-            self._create_list(xbmc.getLocalizedString(13409), 'top250', value=str(details.get('top250')), type='integer')
             self._create_list('IMDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'imdb'), type='uniqueid', option='imdb')
             self._create_list('TMDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'tmdb'), type='uniqueid', option='tmdb')
+            self._create_list(xbmc.getLocalizedString(13409), 'top250', value=str(details.get('top250')), type='integer')
             self._create_list(xbmc.getLocalizedString(570), 'dateadded', value=details.get('dateadded'), type='datetime')
 
         elif self.dbtype == 'tvshow':
@@ -200,17 +200,23 @@ class EditDialog(object):
             self._create_list(xbmc.getLocalizedString(171), 'sorttitle', value=details.get('sorttitle'), type='string')
             self._create_list(xbmc.getLocalizedString(345) + ' / ' + xbmc.getLocalizedString(172), 'premiered', value=details.get('premiered'), type='date')
             self._create_list(xbmc.getLocalizedString(515), 'genre', value=get_joined_items(details.get('genre')), type='array')
-            self._create_list(xbmc.getLocalizedString(563), 'rating', value=str(get_rounded_value(details.get('rating'))), type='float')
-            self._create_list(xbmc.getLocalizedString(205), 'votes', value=str(details.get('votes')), type='integer')
+            self._create_list(xbmc.getLocalizedString(207), 'plot', value=details.get('plot'), type='string')
+
+            if ratings_default:
+                self._create_list(xbmc.getLocalizedString(563) + ' / ' + xbmc.getLocalizedString(205), 'ratings', value=ratings_default, type='ratings', option=ratings)
+            else:
+                self._create_list(xbmc.getLocalizedString(563), 'rating', value=str(get_rounded_value(details.get('rating'))), type='float')
+                self._create_list(xbmc.getLocalizedString(205), 'votes', value=str(details.get('votes')), type='integer')
+
             self._create_list(ADDON.getLocalizedString(32001), 'userrating', value=str(details.get('userrating')), type='userrating')
             self._create_list(xbmc.getLocalizedString(20074), 'mpaa', value=details.get('mpaa'), type='string')
-            self._create_list(xbmc.getLocalizedString(207), 'plot', value=details.get('plot'), type='string')
             self._create_list(xbmc.getLocalizedString(572), 'studio', value=get_joined_items(details.get('studio')), type='array')
             self._create_list(xbmc.getLocalizedString(20459), 'tag', value=get_joined_items(details.get('tag')), type='array')
             #self._create_list(xbmc.getLocalizedString(126), 'status', value=details.get('status'), type='string') not available in GetDetails
-            self._create_list('IMDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'imdb'), type='uniqueid_imdb')
-            self._create_list('TMDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'tmdb'), type='uniqueid_tmdb')
-            self._create_list('TVDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'tvdb'), type='uniqueid_tvdb')
+            self._create_list('IMDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'imdb'), type='uniqueid', option='imdb')
+            self._create_list('TMDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'tmdb'), type='uniqueid', option='tmdb')
+            self._create_list('TVDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'tvdb'), type='uniqueid', option='tvdb')
+            self._create_list('aniDB ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'anidb'), type='uniqueid', option='anidb')
             self._create_list(xbmc.getLocalizedString(570), 'dateadded', value=details.get('dateadded'), type='datetime')
 
         elif self.dbtype == 'episode':
@@ -243,15 +249,21 @@ class EditDialog(object):
             self._create_list(xbmc.getLocalizedString(20359), 'episode', value=str(details.get('episode')), type='integer')
             self._create_list(xbmc.getLocalizedString(20373), 'season', value=str(details.get('season')), type='integer')
             self._create_list(xbmc.getLocalizedString(20416), 'firstaired', value=details.get('firstaired'), type='date')
-            self._create_list(xbmc.getLocalizedString(563), 'rating', value=str(get_rounded_value(details.get('rating'))), type='float')
-            self._create_list(xbmc.getLocalizedString(205), 'votes', value=str(details.get('votes')), type='integer')
-            self._create_list(ADDON.getLocalizedString(32001), 'userrating', value=str(details.get('userrating')), type='userrating')
             self._create_list(xbmc.getLocalizedString(207), 'plot', value=details.get('plot'), type='string')
+
+            if ratings_default:
+                self._create_list(xbmc.getLocalizedString(563) + ' / ' + xbmc.getLocalizedString(205), 'ratings', value=ratings_default, type='ratings', option=ratings)
+            else:
+                self._create_list(xbmc.getLocalizedString(563), 'rating', value=str(get_rounded_value(details.get('rating'))), type='float')
+                self._create_list(xbmc.getLocalizedString(205), 'votes', value=str(details.get('votes')), type='integer')
+
+            self._create_list(ADDON.getLocalizedString(32001), 'userrating', value=str(details.get('userrating')), type='userrating')
             self._create_list(xbmc.getLocalizedString(20339), 'director', value=get_joined_items(details.get('director')), type='array')
             self._create_list(xbmc.getLocalizedString(20417), 'writer', value=get_joined_items(details.get('writer')), type='array')
-            self._create_list('IMDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'imdb'), type='uniqueid_imdb')
-            self._create_list('TMDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'tmdb'), type='uniqueid_tmdb')
-            self._create_list('TVDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'tvdb'), type='uniqueid_tvdb')
+            self._create_list('IMDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'imdb'), type='uniqueid', option='imdb')
+            self._create_list('TMDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'tmdb'), type='uniqueid', option='tmdb')
+            self._create_list('TVDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'tvdb'), type='uniqueid', option='tvdb')
+            self._create_list('aniDB ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'anidb'), type='uniqueid', option='anidb')
             self._create_list(xbmc.getLocalizedString(570), 'dateadded', value=details.get('dateadded'), type='datetime')
 
         elif self.dbtype == 'artist':
@@ -270,14 +282,14 @@ class EditDialog(object):
             '''
             self._create_list(xbmc.getLocalizedString(21899), 'artist', value=details.get('artist'), type='string')
             self._create_list(xbmc.getLocalizedString(515), 'genre', value=get_joined_items(details.get('genre')), type='array')
-            self._create_list(xbmc.getLocalizedString(21892), 'instrument', value=get_joined_items(details.get('instrument')), type='array')
+            self._create_list(xbmc.getLocalizedString(21821), 'description', value=details.get('description'), type='string')
             self._create_list(xbmc.getLocalizedString(736), 'style', value=get_joined_items(details.get('style')), type='array')
             self._create_list(xbmc.getLocalizedString(175), 'mood', value=get_joined_items(details.get('mood')), type='array')
+            self._create_list(xbmc.getLocalizedString(21892), 'instrument', value=get_joined_items(details.get('instrument')), type='array')
             self._create_list(xbmc.getLocalizedString(21893), 'born', value=details.get('born'), type='string')
             self._create_list(xbmc.getLocalizedString(21897), 'died', value=details.get('died'), type='string')
             self._create_list(xbmc.getLocalizedString(21894), 'formed', value=details.get('formed'), type='string')
             self._create_list(xbmc.getLocalizedString(21896), 'disbanded', value=details.get('disbanded'), type='string')
-            self._create_list(xbmc.getLocalizedString(21821), 'description', value=details.get('description'), type='string')
             self._create_list(xbmc.getLocalizedString(21898), 'yearsactive', value=get_joined_items(details.get('yearsactive')), type='array')
 
         elif self.dbtype == 'album':
@@ -297,11 +309,11 @@ class EditDialog(object):
             x [ Optional.Integer votes ]
             '''
             self._create_list(xbmc.getLocalizedString(21899), 'title', value=details.get('title'), type='string')
-            self._create_list(xbmc.getLocalizedString(467), 'type', value=details.get('type'), type='string')
-            #self._create_list(xbmc.getLocalizedString(21899), 'albumlabel', value=details.get('albumlabel'), type='string')
-            self._create_list(xbmc.getLocalizedString(345), 'year', value=str(details.get('year')), type='integer')
             self._create_list(xbmc.getLocalizedString(133), 'artist', value=get_joined_items(details.get('artist')), type='array')
             self._create_list(xbmc.getLocalizedString(21821), 'description', value=details.get('description'), type='string')
+            self._create_list(xbmc.getLocalizedString(345), 'year', value=str(details.get('year')), type='integer')
+            self._create_list(xbmc.getLocalizedString(467), 'type', value=details.get('type'), type='string')
+            #self._create_list(xbmc.getLocalizedString(21899), 'albumlabel', value=details.get('albumlabel'), type='string')
             self._create_list(xbmc.getLocalizedString(515), 'genre', value=get_joined_items(details.get('genre')), type='array')
             self._create_list(xbmc.getLocalizedString(15111), 'theme', value=get_joined_items(details.get('theme')), type='array')
             self._create_list(xbmc.getLocalizedString(175), 'mood', value=get_joined_items(details.get('mood')), type='array')
@@ -333,11 +345,11 @@ class EditDialog(object):
             [ Optional.Integer votes ]
             '''
             self._create_list(xbmc.getLocalizedString(21899), 'title', value=details.get('title'), type='string')
+            self._create_list(xbmc.getLocalizedString(133), 'artist', value=get_joined_items(details.get('artist')), type='array')
+            self._create_list(xbmc.getLocalizedString(566), 'albumartist', value=get_joined_items(details.get('albumartist')), type='array')
             self._create_list(xbmc.getLocalizedString(558), 'album', value=details.get('album'), type='string')
             self._create_list(xbmc.getLocalizedString(554), 'track', value=str(details.get('track')), type='integer')
             self._create_list(xbmc.getLocalizedString(427), 'disc', value=str(details.get('disc')), type='integer')
-            self._create_list(xbmc.getLocalizedString(133), 'artist', value=get_joined_items(details.get('artist')), type='array')
-            self._create_list(xbmc.getLocalizedString(566), 'albumartist', value=get_joined_items(details.get('albumartist')), type='array')
             self._create_list(xbmc.getLocalizedString(515), 'genre', value=get_joined_items(details.get('genre')), type='array')
             self._create_list(xbmc.getLocalizedString(345), 'year', value=str(details.get('year')), type='integer')
             self._create_list(xbmc.getLocalizedString(569), 'comment', value=details.get('comment'), type='string')
@@ -374,17 +386,17 @@ class EditDialog(object):
             x [ Optional.String premiered ] linked with year. Overriedes year
             '''
             self._create_list(xbmc.getLocalizedString(369), 'title', value=details.get('title'), type='string')
+            self._create_list(xbmc.getLocalizedString(557), 'artist', value=get_joined_items(details.get('artist')), type='array')
             self._create_list(xbmc.getLocalizedString(558), 'album', value=details.get('album'), type='string')
             self._create_list(xbmc.getLocalizedString(345) + ' / ' + xbmc.getLocalizedString(172), 'premiered', value=details.get('premiered'), type='date')
-            self._create_list(xbmc.getLocalizedString(515), 'genre', value=get_joined_items(details.get('genre')), type='array')
+            self._create_list(xbmc.getLocalizedString(554), 'track', value=str(details.get('track')), type='integer')
             self._create_list(xbmc.getLocalizedString(207), 'plot', value=details.get('plot'), type='string')
-            self._create_list(xbmc.getLocalizedString(557), 'artist', value=get_joined_items(details.get('artist')), type='array')
+            self._create_list(xbmc.getLocalizedString(515), 'genre', value=get_joined_items(details.get('genre')), type='array')
             self._create_list(xbmc.getLocalizedString(20339), 'director', value=get_joined_items(details.get('director')), type='array')
             self._create_list(xbmc.getLocalizedString(572), 'studio', value=get_joined_items(details.get('studio')), type='array')
-            self._create_list(xbmc.getLocalizedString(20459), 'tag', value=get_joined_items(details.get('tag')), type='array')
             self._create_list(xbmc.getLocalizedString(563), 'rating', value=str(get_rounded_value(details.get('rating'))), type='float')
-            self._create_list(xbmc.getLocalizedString(554), 'track', value=str(details.get('track')), type='integer')
             self._create_list(ADDON.getLocalizedString(32001), 'userrating', value=details.get('userrating'), type='userrating')
+            self._create_list(xbmc.getLocalizedString(20459), 'tag', value=get_joined_items(details.get('tag')), type='array')
             self._create_list(xbmc.getLocalizedString(570), 'dateadded', value=details.get('dateadded'), type='datetime')
 
 

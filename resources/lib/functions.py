@@ -75,7 +75,6 @@ def update_library(dbtype,key,value,dbid):
                   )
 
 
-
 def update_nfo(file,elem,value,dbtype):
     if dbtype == 'tvshow':
         path = os.path.join(file,'tvshow.nfo')
@@ -95,7 +94,7 @@ def set_ratings(ratings):
     for item in ratings:
         providerlist.append(item)
 
-    menu = DIALOG.contextmenu([ADDON.getLocalizedString(32015), ADDON.getLocalizedString(32016), ADDON.getLocalizedString(32017)])
+    menu = DIALOG.select(xbmc.getLocalizedString(424), [ADDON.getLocalizedString(32015), ADDON.getLocalizedString(32016), ADDON.getLocalizedString(32017)])
 
     if menu == 0: # set default provider
         providerdefault = DIALOG.select(ADDON.getLocalizedString(32014), providerlist)
@@ -287,7 +286,7 @@ def set_string(preset):
 
     if keyboard.isConfirmed():
         value = keyboard.getText()
-        return valuexbmc.getLocalizedString(0)
+        return value
 
     return preset
 
