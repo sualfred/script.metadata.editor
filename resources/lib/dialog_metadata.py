@@ -395,11 +395,15 @@ class EditDialog(object):
             icon = 'string'
         elif type.startswith('date'):
             icon = 'date'
+        elif type.startswith('userrating'):
+            icon = 'integer'
+        elif type.startswith('rating'):
+            icon = 'float'
         else:
             icon = type
 
         li_item = xbmcgui.ListItem(label=label, label2=value)
-        li_item.setArt({'icon': 'special://home/addons/script.metadata.editor/resources/media/%s.png' % icon})
+        li_item.setArt({'icon': 'special://home/addons/script.metadata.editor/resources/media/icon_%s.png' % icon})
 
         self.modeselect.append(li_item)
         self.keylist.append(key)
