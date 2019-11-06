@@ -121,10 +121,10 @@ msgstr ""
 
 #: /resources/settings.xml
 msgctxt "#32021"
-msgid "Enable .nfo updating for movies and TV shows"
+msgid "Enable .nfo updating for movies, TV shows and music videos"
 msgstr ""
 
 #: /resources/lib/dialog_metadata.py
 msgctxt "#32022"
-msgid "value cannot be fetched"
+msgid "value unkown (missing Kodi feature)"
 msgstr ""
