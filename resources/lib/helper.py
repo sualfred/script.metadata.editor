@@ -148,7 +148,7 @@ def winprop(key, value=None, clear=False, window_id=10000):
     window = xbmcgui.Window(window_id)
 
     if clear:
-        window.clearProperty(key.replace('.json', '').replace('.bool', ''))
+        window.clearProperty(key.replace('.json', '').replace('.bool', '').replace('.str', ''))
 
     elif value is not None:
 
@@ -160,16 +160,22 @@ def winprop(key, value=None, clear=False, window_id=10000):
             key = key.replace('.bool', '')
             value = 'true' if value else 'false'
 
+        elif key.endswith('.str'):
+            key = key.replace('.str', '')
+            value = str(value)
+
         window.setProperty(key, value)
 
     else:
-        result = window.getProperty(key.replace('.json', '').replace('.bool', ''))
+        result = window.getProperty(key.replace('.json', '').replace('.bool', '').replace('.str', ''))
 
         if result:
             if key.endswith('.json'):
                 result = json.loads(result)
             elif key.endswith('.bool'):
                 result = result in ('true', '1')
+            elif key.endswith('.str'):
+                result = eval(result)
 
         return result
 

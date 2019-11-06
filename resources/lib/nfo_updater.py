@@ -9,29 +9,32 @@ from resources.lib.helper import *
 
 class UpdateNFO():
     def __init__(self,file,elem,value,dbtype):
-        ''' Key conversion/cleanup if nfo element has a different naming.
-            If Emby is using different elements, key + value will be
-            converted to a list to cover both.
-        '''
-        if elem == 'plotoutline':
-            elem = 'outline'
-
-        elif elem == 'writer':
-            elem = ['writer', 'credits']
-            value = [value, value]
-
-        elif elem == 'firstaired':
-            elem = 'aired'
-
-        elif isinstance(elem, list) and len(elem) > 1 and elem[0] == 'uniqueid':
-            # remove unrequired <imdbnumber> field
-            del elem[1]
-            del value[1]
-
         self.elems = elem
         self.values = value
         self.targetfile = file
         self.dbtype = dbtype
+
+        if not isinstance(self.elems, list):
+            self.elems = [self.elems]
+            self.values = [self.values]
+
+        ''' Key conversion/cleanup if nfo element has a different naming.
+            If Emby is using different elements, key + value will be
+            converted to a list to cover both.
+        '''
+        index = 0
+        for elem in self.elems:
+            if elem == 'plotoutline':
+                self.elems[index] = 'outline'
+
+            elif elem == 'writer':
+                self.elems[index] = ['writer', 'credits']
+                self.values[index] = [self.values[index], self.values[index]]
+
+            elif elem == 'firstaired':
+                self.elems[index] = 'aired'
+
+            index += 1
 
         self.run()
 
@@ -41,16 +44,17 @@ class UpdateNFO():
                 self.root = self.read_file()
 
                 if len(self.root):
-                    if isinstance(self.elems, list):
-                        for elem in self.elems:
-                            self.elem = elem
-                            self.value = self.values[self.elems.index(elem)]
-                            self.update_elem()
-
-                    else:
-                        self.elem = self.elems
-                        self.value = self.values
+                    index = 0
+                    for elem in self.elems:
+                        self.elem = elem
+                        self.value = self.values[index]
                         self.update_elem()
+                        index += 1
+
+                    #else:
+                    #    self.elem = self.elems
+                    #    self.value = self.values
+                    #    self.update_elem()
 
                     self.write_file()
 
@@ -85,35 +89,40 @@ class UpdateNFO():
             return root
 
     def handle_elem(self):
-        for elem in self.root.findall(self.elem):
-            self.root.remove(elem)
+        if not isinstance(self.elem, list):
+            self.elem = [self.elem]
+            self.value = [self.value]
 
-        if isinstance(self.value, list):
-            for item in self.value:
-                elem = ET.SubElement(self.root, self.elem)
-                if item:
-                    elem.text = item
+        index = 0
+        for elem_item in self.elem:
+            for elem in self.root.findall(elem_item):
+                self.root.remove(elem)
 
-        else:
-            elem = ET.SubElement(self.root, self.elem)
-            if self.value:
-                elem.text = str(self.value)
+            if isinstance(self.value[index], list):
+                for item in self.value[index]:
+                    elem = ET.SubElement(self.root, elem_item)
+                    if item:
+                        elem.text = item
+
+            else:
+                elem = ET.SubElement(self.root, elem_item)
+                if self.value[index]:
+                    elem.text = str(self.value[index])
 
     def handle_ratings(self):
         for elem in self.root.findall('ratings'):
             self.root.remove(elem)
 
         elem = ET.SubElement(self.root, 'ratings')
-
-        for item in self.values:
-            rating = str(round(self.values[item].get('rating', 0.0), 1))
-            votes = str(self.values[item].get('votes', 0))
+        for item in self.value:
+            rating = str(round(self.value[item].get('rating', 0.0), 1))
+            votes = str(self.value[item].get('votes', 0))
 
             subelem = ET.SubElement(elem, 'rating')
             subelem.set('name', item)
             subelem.set('max', '10')
 
-            if self.values[item].get('default'):
+            if self.value[item].get('default'):
                 subelem.set('default', 'true')
 
                 # <votes>, <rating>

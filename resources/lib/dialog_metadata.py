@@ -15,6 +15,9 @@ class EditDialog(object):
         self.dbid = params.get('dbid')
         self.dbtype = params.get('type')
 
+        self.nfo_key = []
+        self.nfo_value = []
+
         if self.dbtype in ['movie', 'tvshow', 'season', 'episode', 'musicvideo']:
             library = 'Video'
             self.nfo_support = True
@@ -33,6 +36,7 @@ class EditDialog(object):
 
     def init(self):
         self.details = self.get_details()
+        self.file = self.details.get('file')
 
         self.modeselect = []
         self.keylist = []
@@ -52,11 +56,15 @@ class EditDialog(object):
 
         if self.editdialog == -1:
             winprop('SelectDialogPreselect', clear=True)
+
+            if self.file and self.nfo_support:
+                update_nfo(self.file, self.nfo_key, self.nfo_value, self.dbtype)
+
             return
 
         winprop('SelectDialogPreselect', str(self.editdialog))
 
-        handle_dbitem(value_type=self.typelist[self.editdialog],
+        self._handle_dbitem(value_type=self.typelist[self.editdialog],
                       dbid=self.dbid,
                       dbtype=self.dbtype,
                       key=self.keylist[self.editdialog],
@@ -65,6 +73,7 @@ class EditDialog(object):
                       file=self.details.get('file'),
                       nfo_support=self.nfo_support
                       )
+
 
         self.init()
 
@@ -400,7 +409,6 @@ class EditDialog(object):
             self._create_list(xbmc.getLocalizedString(20459), 'tag', value=get_joined_items(details.get('tag')), type='array')
             self._create_list(xbmc.getLocalizedString(570), 'dateadded', value=details.get('dateadded'), type='datetime')
 
-
     def _create_list(self,label,key,type,value,option=None):
         value = 'n/a' if not value else value
 
@@ -427,3 +435,53 @@ class EditDialog(object):
             self.presetlist.append(value)
         else:
             self.presetlist.append('')
+
+    def _handle_dbitem(self,value_type,dbid,dbtype,key,preset,option,file,nfo_support):
+        preset = preset.replace('n/a','')
+
+        if value_type == 'array':
+            value = set_array(preset, dbid, dbtype, key)
+
+        elif value_type == 'string':
+            value = set_string(preset)
+
+        elif value_type == 'integer':
+            value = set_integer(preset)
+            log(str(value))
+            if key == 'votes': # votes are stored as string
+                value = str(value)
+
+        elif value_type == 'float':
+            value = set_float(preset)
+
+        elif value_type == 'date':
+            value = set_date(preset)
+
+        elif value_type == 'datetime':
+            preset = preset.split(' ') if preset else ['', '']
+            date = set_date(preset[0])
+            time = set_time(preset[1][:-3])
+            value = date + ' ' + time + ':00'
+
+        elif value_type == 'userrating':
+            value = set_integer_range(preset, 11)
+
+        elif value_type == 'ratings':
+            value = set_ratings(option)
+
+        elif value_type == 'status':
+            value = set_status(preset)
+
+        elif value_type == ('uniqueid'):
+            returned_value = set_string(preset)
+            value = {option: returned_value if returned_value else None}
+
+            # update ListItem.IMDBnumber as well
+            if (dbtype == 'movie' and option == 'imdb') or (dbtype == 'tvshow' and option == 'tvdb'):
+                update_library(dbtype, 'imdbnumber', returned_value if returned_value else '', dbid)
+
+        update_library(dbtype, key, value, dbid)
+
+        if nfo_support and file:
+            self.nfo_key.append(key)
+            self.nfo_value.append(value)

@@ -8,56 +8,6 @@ from resources.lib.nfo_updater import *
 
 ########################
 
-def handle_dbitem(value_type,dbid,dbtype,key,preset,option,file,nfo_support):
-    preset = preset.replace('n/a','')
-
-    if value_type == 'array':
-        value = set_array(preset, dbid, dbtype, key)
-
-    elif value_type == 'string':
-        value = set_string(preset)
-
-    elif value_type == 'integer':
-        value = set_integer(preset)
-        log(str(value))
-        if key == 'votes': # votes are stored as string
-            value = str(value)
-
-    elif value_type == 'float':
-        value = set_float(preset)
-
-    elif value_type == 'date':
-        value = set_date(preset)
-
-    elif value_type == 'datetime':
-        preset = preset.split(' ') if preset else ['', '']
-        date = set_date(preset[0])
-        time = set_time(preset[1][:-3])
-        value = date + ' ' + time + ':00'
-
-    elif value_type == 'userrating':
-        value = set_integer_range(preset, 11)
-
-    elif value_type == 'ratings':
-        value = set_ratings(option)
-
-    elif value_type == 'status':
-        value = set_status(preset)
-
-    elif value_type == ('uniqueid'):
-        returned_value = set_string(preset)
-        value = {option: returned_value if returned_value else None}
-
-        if (dbtype == 'movie' and option == 'imdb') or (dbtype == 'tvshow' and option == 'tvdb'):
-            key = [key, 'imdbnumber']
-            value = [value, returned_value if returned_value else '']
-
-    update_library(dbtype,key,value,dbid)
-
-    if nfo_support and file:
-        update_nfo(file, key, value, dbtype)
-
-
 def update_library(dbtype,key,value,dbid):
     if dbtype in ['song', 'album', 'artist']:
         library = 'Audio'
@@ -97,8 +47,11 @@ def update_nfo(file,elem,value,dbtype):
 
 def set_ratings(ratings):
     providerlist = []
+    #ratings = json.dumps(ratings)
+    ratings = {str(k):(str(v) if isinstance(v, unicode) else v) for k,v in ratings.items()}
+    log('old ratings ' + str(ratings))
     for item in ratings:
-        providerlist.append(item)
+        providerlist.append(str(item))
 
     menu = DIALOG.select(xbmc.getLocalizedString(424), [ADDON.getLocalizedString(32015), ADDON.getLocalizedString(32016), ADDON.getLocalizedString(32017)])
 
@@ -181,10 +134,6 @@ def set_array(preset,dbid,dbtype,key):
 
     array_action = DIALOG.select(xbmc.getLocalizedString(14241), actionlist)
 
-
-    if array_action == -1:
-        return
-
     if array_action == 0:
         array = preset.replace('; ',';').split(';')
 
@@ -209,7 +158,6 @@ def set_array(preset,dbid,dbtype,key):
             array = preset
 
         array = array.replace('; ',';').split(';')
-
         return remove_empty(array)
 
     elif array_action == 2:
@@ -219,6 +167,10 @@ def set_array(preset,dbid,dbtype,key):
                             editor=True)
 
         return eval(str(array))
+
+    else:
+        array = preset.replace('; ',';').split(';')
+        return remove_empty(array)
 
 
 def set_integer(preset=''):
