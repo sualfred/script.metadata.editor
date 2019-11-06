@@ -447,8 +447,9 @@ class EditDialog(object):
 
         elif value_type == 'integer':
             value = set_integer(preset)
-            log(str(value))
-            if key == 'votes': # votes are stored as string
+
+            # votes are stored as string
+            if key == 'votes':
                 value = str(value)
 
         elif value_type == 'float':

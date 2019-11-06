@@ -18,24 +18,6 @@ class UpdateNFO():
             self.elems = [self.elems]
             self.values = [self.values]
 
-        ''' Key conversion/cleanup if nfo element has a different naming.
-            If Emby is using different elements, key + value will be
-            converted to a list to cover both.
-        '''
-        index = 0
-        for elem in self.elems:
-            if elem == 'plotoutline':
-                self.elems[index] = 'outline'
-
-            elif elem == 'writer':
-                self.elems[index] = ['writer', 'credits']
-                self.values[index] = [self.values[index], self.values[index]]
-
-            elif elem == 'firstaired':
-                self.elems[index] = 'aired'
-
-            index += 1
-
         self.run()
 
     def run(self):
@@ -51,11 +33,6 @@ class UpdateNFO():
                         self.update_elem()
                         index += 1
 
-                    #else:
-                    #    self.elem = self.elems
-                    #    self.value = self.values
-                    #    self.update_elem()
-
                     self.write_file()
 
     def update_elem(self):
@@ -66,6 +43,20 @@ class UpdateNFO():
             self.handle_uniqueid()
 
         else:
+            ''' Key conversion/cleanup if nfo element has a different naming.
+                If Emby is using different elements, key + value will be
+                converted to a list to cover both.
+            '''
+            if self.elem == 'plotoutline':
+                self.elem = 'outline'
+
+            elif self.elem == 'writer':
+                self.elem = ['writer', 'credits']
+                self.value = [self.value, self.value]
+
+            elif self.elem == 'firstaired':
+                self.elem = 'aired'
+
             self.handle_elem()
 
     def read_file(self):
@@ -102,12 +93,13 @@ class UpdateNFO():
                 for item in self.value[index]:
                     elem = ET.SubElement(self.root, elem_item)
                     if item:
-                        elem.text = item
+                        elem.text = decode_string(item)
 
             else:
                 elem = ET.SubElement(self.root, elem_item)
                 if self.value[index]:
-                    elem.text = str(self.value[index])
+                    value = self.value[index]
+                    elem.text = decode_string(value)
 
     def handle_ratings(self):
         for elem in self.root.findall('ratings'):

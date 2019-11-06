@@ -124,13 +124,22 @@ def condition(condition):
 
 
 def encode_string(string):
+    if not isinstance(string, str):
+        string = str(string)
+
     if not PYTHON3:
         string = string.encode('utf-8')
+
     return string
 
+
 def decode_string(string):
-    if not PYTHON3:
+    if not isinstance(string, str):
+        string = str(string)
+
+    if not PYTHON3 and isinstance(string, str):
         string = string.decode('utf-8')
+
     return string
 
 
@@ -172,8 +181,10 @@ def winprop(key, value=None, clear=False, window_id=10000):
         if result:
             if key.endswith('.json'):
                 result = json.loads(result)
+
             elif key.endswith('.bool'):
                 result = result in ('true', '1')
+
             elif key.endswith('.str'):
                 result = eval(result)
 

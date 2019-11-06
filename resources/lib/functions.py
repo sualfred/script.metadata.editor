@@ -47,16 +47,18 @@ def update_nfo(file,elem,value,dbtype):
 
 def set_ratings(ratings):
     providerlist = []
-    #ratings = json.dumps(ratings)
-    ratings = {str(k):(str(v) if isinstance(v, unicode) else v) for k,v in ratings.items()}
-    log('old ratings ' + str(ratings))
     for item in ratings:
         providerlist.append(str(item))
+
+    preselect = -1
+    for item in providerlist:
+        if ratings[item].get('default'):
+            preselect = providerlist.index(item)
 
     menu = DIALOG.select(xbmc.getLocalizedString(424), [ADDON.getLocalizedString(32015), ADDON.getLocalizedString(32016), ADDON.getLocalizedString(32017)])
 
     if menu == 0: # set default provider
-        providerdefault = DIALOG.select(ADDON.getLocalizedString(32014), providerlist)
+        providerdefault = DIALOG.select(ADDON.getLocalizedString(32014), providerlist, preselect=preselect)
 
         if providerdefault >= 0:
             name = providerlist[providerdefault]
@@ -68,10 +70,10 @@ def set_ratings(ratings):
                                  'votes': ratings[item].get('votes')}
 
     elif menu == 1: # edit votes/rating
-        providerdefault = DIALOG.select(ADDON.getLocalizedString(32012), providerlist)
+        providerratings = DIALOG.select(ADDON.getLocalizedString(32012), providerlist, preselect=preselect)
 
-        if providerdefault >= 0:
-            name = providerlist[providerdefault]
+        if providerratings >= 0:
+            name = providerlist[providerratings]
             cur_rating = round(ratings[name].get('rating', 0.0), 1)
             cur_votes = ratings[name].get('votes', 0)
 
