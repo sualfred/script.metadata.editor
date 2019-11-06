@@ -54,6 +54,10 @@ class UpdateNFO():
                 self.elem = ['writer', 'credits']
                 self.value = [self.value, self.value]
 
+            elif self.elem == 'premiered':
+                self.elem = ['premiered', 'year']
+                self.value = [self.value, self.value[:4]]
+
             elif self.elem == 'firstaired':
                 self.elem = 'aired'
 
@@ -100,6 +104,8 @@ class UpdateNFO():
                 if self.value[index]:
                     value = self.value[index]
                     elem.text = decode_string(value)
+
+            index += 1
 
     def handle_ratings(self):
         for elem in self.root.findall('ratings'):
