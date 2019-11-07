@@ -69,22 +69,28 @@ class ContextMenu(object):
             contextdialog = DIALOG.contextmenu(itemlist)
 
             if contextdialog == 0:
-                EditDialog({'dbid': dbid, 'type': dbtype})
+                EditDialog({'dbid': self.dbid, 'type': self.dbtype})
             elif contextdialog == 1:
-                SelectValue({'dbid': dbid, 'type': dbtype, 'key': 'genre'})
+                SelectValue({'dbid': self.dbid, 'type': self.dbtype, 'key': 'genre'})
             elif contextdialog == 2:
-                SelectValue({'dbid': dbid, 'type': dbtype, 'key': 'tag'})
+                SelectValue({'dbid': self.dbid, 'type': self.dbtype, 'key': 'tag'})
             elif contextdialog == 3:
-                ToggleFav({'dbid': dbid, 'type': dbtype})
+                ToggleFav({'dbid': self.dbid, 'type': self.dbtype})
             else:
                 return
 
         else:
-            EditDialog({'dbid': dbid, 'type': dbtype})
+            EditDialog({'dbid': self.dbid, 'type': self.dbtype})
 
 
 if __name__ == "__main__":
-    listitem = sys.listitem.getVideoInfoTag()
+    listitem = sys.listitem.getMusicInfoTag()
     dbid = listitem.getDbId()
     dbtype = listitem.getMediaType()
+
+    if not dbid or not dbtype:
+        listitem = sys.listitem.getMusicInfoTag()
+        dbid = listitem.getDbId()
+        dbtype = listitem.getMediaType()
+
     ContextMenu(dbid, dbtype)
