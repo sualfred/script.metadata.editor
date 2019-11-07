@@ -111,7 +111,7 @@ class EditDialog(object):
         if self.dbtype == 'movie':
             '''
             x [ Optional.String title ]
-            [ Optional.Integer playcount ]
+            x[ Optional.Integer playcount ]
             [ Optional.Integer runtime ] Runtime in seconds
             x [ mixed director ]
             x [ mixed studio ]
@@ -122,7 +122,7 @@ class EditDialog(object):
             x [ Optional.String mpaa ]
             x [ Optional.String imdbnumber ]
             x [ Optional.String votes ]
-            [ Optional.String lastplayed ]
+            x[ Optional.String lastplayed ]
             x [ Optional.String originaltitle ]
             x [ Optional.String trailer ]
             x [ Optional.String tagline ]
@@ -167,6 +167,8 @@ class EditDialog(object):
             self._create_list('TMDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'tmdb'), type='uniqueid', option='tmdb')
             self._create_list(xbmc.getLocalizedString(13409), 'top250', value=str(details.get('top250')), type='integer')
             self._create_list(xbmc.getLocalizedString(570), 'dateadded', value=details.get('dateadded'), type='datetime')
+            self._create_list(xbmc.getLocalizedString(568), 'lastplayed', value=details.get('lastplayed'), type='datetime')
+            self._create_list(xbmc.getLocalizedString(567), 'playcount', value=str(details.get('playcount', 0)), type='integer')
 
         elif self.dbtype == 'tvshow':
             '''
@@ -180,7 +182,7 @@ class EditDialog(object):
             x [ Optional.String imdbnumber ]
             x [ Optional.String premiered ]
             x [ Optional.String votes ]
-            [ Optional.String lastplayed ]
+            x [ Optional.String lastplayed ]
             x [ Optional.String originaltitle ]
             x [ Optional.String sorttitle ]
             [ Optional.String episodeguide ]
@@ -212,6 +214,8 @@ class EditDialog(object):
             self._create_list('TVDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'tvdb'), type='uniqueid', option='tvdb')
             self._create_list('aniDB ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'anidb'), type='uniqueid', option='anidb')
             self._create_list(xbmc.getLocalizedString(570), 'dateadded', value=details.get('dateadded'), type='datetime')
+            self._create_list(xbmc.getLocalizedString(568), 'lastplayed', value=details.get('lastplayed'), type='datetime')
+            self._create_list(xbmc.getLocalizedString(567), 'playcount', value=str(details.get('playcount', 0)), type='integer')
 
         elif self.dbtype == 'episode':
             '''
@@ -222,7 +226,7 @@ class EditDialog(object):
             x [ Optional.String plot ]
             x [ Optional.Number rating ]
             x [ Optional.String votes ]
-            [ Optional.String lastplayed ]
+            x [ Optional.String lastplayed ]
             x [ mixed writer ]
             x [ Optional.String firstaired ]
             [ Optional.String productioncode ]
@@ -253,6 +257,8 @@ class EditDialog(object):
             self._create_list('TVDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'tvdb'), type='uniqueid', option='tvdb')
             self._create_list('aniDB ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'anidb'), type='uniqueid', option='anidb')
             self._create_list(xbmc.getLocalizedString(570), 'dateadded', value=details.get('dateadded'), type='datetime')
+            self._create_list(xbmc.getLocalizedString(568), 'lastplayed', value=details.get('lastplayed'), type='datetime')
+            self._create_list(xbmc.getLocalizedString(567), 'playcount', value=str(details.get('playcount', 0)), type='integer')
 
         elif self.dbtype == 'artist':
             '''
@@ -327,8 +333,8 @@ class EditDialog(object):
             x [ Optional.String musicbrainzartistid ] -> wrong. is array.
             x [ Optional.String musicbrainzalbumid ]
             x [ Optional.String musicbrainzalbumartistid ] -> wrong. is array.
-            [ Optional.Integer playcount ]
-            [ Optional.String lastplayed ]
+            x [ Optional.Integer playcount ]
+            x [ Optional.String lastplayed ]
             x[ Optional.Integer userrating ]
             [ Optional.Integer votes ]
             '''
@@ -348,11 +354,13 @@ class EditDialog(object):
             self._create_list('MusicBrainz Artist-ID', 'musicbrainzartistid', value=get_joined_items(details.get('musicbrainzartistid')), type='array')
             self._create_list('MusicBrainz Album-ID', 'musicbrainzalbumid', value=details.get('musicbrainzalbumid'), type='string')
             self._create_list('MusicBrainz Album-Artist-ID', 'musicbrainzalbumartistid', value=get_joined_items(details.get('musicbrainzalbumartistid')), type='array')
+            self._create_list(xbmc.getLocalizedString(568), 'lastplayed', value=details.get('lastplayed'), type='datetime')
+            self._create_list(xbmc.getLocalizedString(567), 'playcount', value=str(details.get('playcount', 0)), type='integer')
 
         elif self.dbtype == 'musicvideo':
             '''
             x [ Optional.String title ]
-            [ Optional.Integer playcount ]
+            x [ Optional.Integer playcount ]
             [ Optional.Integer runtime ] Runtime in seconds
             x [ mixed director ]
             x [ mixed studio ]
@@ -362,7 +370,7 @@ class EditDialog(object):
             x [ mixed artist ]
             x [ mixed genre ]
             x [ Optional.Integer track ]
-            [ Optional.String lastplayed ]
+            x [ Optional.String lastplayed ]
             [ Optional.String thumbnail ]
             [ Optional.String fanart ]
             x [ mixed tag ]
@@ -386,6 +394,8 @@ class EditDialog(object):
             self._create_list(ADDON.getLocalizedString(32001), 'userrating', value=details.get('userrating'), type='userrating')
             self._create_list(xbmc.getLocalizedString(20459), 'tag', value=get_joined_items(details.get('tag')), type='array')
             self._create_list(xbmc.getLocalizedString(570), 'dateadded', value=details.get('dateadded'), type='datetime')
+            self._create_list(xbmc.getLocalizedString(568), 'lastplayed', value=details.get('lastplayed'), type='datetime')
+            self._create_list(xbmc.getLocalizedString(567), 'playcount', value=str(details.get('playcount', 0)), type='integer')
 
     def _create_list(self,label,key,type,value,option=None):
         value = 'n/a' if not value else value
