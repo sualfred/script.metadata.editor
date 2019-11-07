@@ -1,0 +1,146 @@
+# Metadata Editor language file
+# Addon Name: Metadata Editor
+# Addon id: script.metadata.editor
+# Addon Provider: sualfred
+# Translators:
+# Andrea Matesi <andreamatesi@gmail.com>, 2019
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: Metadata Editor\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2019-11-07 08:05+0000\n"
+"Last-Translator: Andrea Matesi <andreamatesi@gmail.com>, 2019\n"
+"Language-Team: Italian (Italy) (https://www.transifex.com/sualfred/teams/80018/it_IT/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: it_IT\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: /addon.xml
+msgctxt "#32000"
+msgid "Metadata Editor"
+msgstr "Editor Metadati"
+
+#: /resources/lib/dialog.py
+msgctxt "#32001"
+msgid "User rating"
+msgstr "Valutazione Utente"
+
+#: /resources/lib/dialog_videogenres.py
+msgctxt "#32002"
+msgid "Available entries"
+msgstr "Voci disponibili"
+
+#: /addon.xml
+msgctxt "#32003"
+msgid "Add/remove available tags"
+msgstr "Assegna/rimuovi tag disponibili"
+
+#: /addon.xml
+msgctxt "#32004"
+msgid "Add/remove available genres"
+msgstr "Assegna/rimuovi generi disponibili"
+
+#: /resources/lib/utils.py
+msgctxt "#32005"
+msgid "Add new item"
+msgstr "Aggiungi nuovo oggetto"
+
+#: /resources/lib/utils.py
+msgctxt "#32006"
+msgid "Modify current list"
+msgstr "Modifica lista attuale"
+
+#: /resources/lib/utils.py
+msgctxt "#32007"
+msgid "Select from available items"
+msgstr "Seleziona dagli oggetti disponibili"
+
+#: /context.py
+msgctxt "#32008"
+msgid "Remove favourite tag"
+msgstr "Rimuovi tag preferito"
+
+#: /context.py
+msgctxt "#32009"
+msgid "Add favourite tag"
+msgstr "Aggiungi tag preferito"
+
+#: /context.py
+msgctxt "#32010"
+msgid "Open editor"
+msgstr "Apri editor"
+
+#: /resources/lib/utils.py
+msgctxt "#32011"
+msgid "Enter floating number"
+msgstr "Inserisci numero decimale"
+
+#: /resources/lib/utils.py
+msgctxt "#32012"
+msgid "Select source"
+msgstr "Seleziona sorgente"
+
+#: /resources/lib/utils.py
+msgctxt "#32013"
+msgid "Available sources"
+msgstr "Sorgenti disponibili"
+
+#: /resources/lib/utils.py
+msgctxt "#32014"
+msgid "Default source"
+msgstr "Sorgente predefinita"
+
+#: /resources/lib/utils.py
+msgctxt "#32015"
+msgid "Select default source"
+msgstr "Seleziona sorgente predefinita"
+
+#: /resources/lib/utils.py
+msgctxt "#32016"
+msgid "Edit ratings and votes"
+msgstr "Modifica voti e valutazione"
+
+#: /resources/lib/utils.py
+msgctxt "#32017"
+msgid "Add source"
+msgstr "Aggiungi sorgente"
+
+#: /resources/lib/utils.py
+msgctxt "#32018"
+msgid "Only values between 1.0 and 10.0 are allowed."
+msgstr "Solo i valori compresi tra 1.0 e 10.0 sono consentiti"
+
+#: /resources/lib/utils.py
+msgctxt "#32019"
+msgid "Attention"
+msgstr "Attenzione"
+
+#: /resources/lib/utils.py
+msgctxt "#32020"
+msgid "Set as default?"
+msgstr "Imposta come predefinito?"
+
+#: /resources/settings.xml
+msgctxt "#32021"
+msgid "Enable .nfo updating for movies, TV shows and music videos"
+msgstr "Attiva aggiornamento .nfo per film, serie TV e video musicali"
+
+#: /resources/lib/dialog_metadata.py
+msgctxt "#32022"
+msgid "value unkown (missing Kodi feature)"
+msgstr "valore sconosciuto (funzionalità Kodi mancante)"
+
+#: /resources/lib/dialog_metadata.py
+msgctxt "#32023"
+msgid "Record label"
+msgstr "Casa discografica"
+
+#: /default.py
+msgctxt "#32024"
+msgid "Please use the context menu on a library item to run this script."
+msgstr ""
+"Si prega di usare il menu contestuale su un oggetto libreria per eseguire "
+"questo script"
