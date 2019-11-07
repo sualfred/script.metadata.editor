@@ -3,5 +3,10 @@
 	<category label="128">
         <setting label="$LOCALIZE[128]" type="lsep"/>
 		<setting id="nfo_updating" label="$ADDON[script.metadata.editor 32021]" type="bool" default="true"/>
+		<setting id="json_logging" label="$ADDON[script.metadata.editor 32029]" type="bool" default="false"/>
+        <setting label="$ADDON[script.metadata.editor 32026]" type="lsep"/>
+        <setting label="$ADDON[script.metadata.editor 32027]" type="select" values="TVDb|TMDb" id="tv_scraper_base" default="TVDb"/>
+    	<setting label="$ADDON[script.metadata.editor 32025]" type="select" values="bg|cs|da|de|ee|el|en|es|fa|fa-ir|fi|fr|fr-ca|he|hr|hu|it|ja|ko|nl|no|pl|pt|pt-br|ru|sl|sr|sv|tr|zh-cn|zh-tw" id="tmdb_language" default="en"/>
+    	<setting label="$ADDON[script.metadata.editor 32028]" type="select" values="-|TVDb|TMDb" id="tv_fallback_imdbnumber" default="-"/>
 	</category>
 </settings>

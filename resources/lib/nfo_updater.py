@@ -8,11 +8,12 @@ from resources.lib.helper import *
 ########################
 
 class UpdateNFO():
-    def __init__(self,file,elem,value,dbtype):
+    def __init__(self,file,elem,value,dbtype,dbid):
         self.elems = elem
         self.values = value
         self.targetfile = file
         self.dbtype = dbtype
+        self.dbid = dbid
 
         if not isinstance(self.elems, list):
             self.elems = [self.elems]
@@ -153,49 +154,62 @@ class UpdateNFO():
                 emby_rotten.text = str(normalized_rating)
 
     def handle_uniqueid(self):
-        for item in self.value:
-            id_type = item
-            value = self.value.get(id_type)
+        uniqueids = self.value[0]
+        episodeguide = str(self.value[1])
+        default = ''
+
+        # find default uniqueid
+        if 'tvdb' in episodeguide:
+            default = 'tvdb'
+        elif 'tmdb' in episodeguide:
+            default = 'tmdb'
+        else:
+            for elem in self.root.findall('uniqueid'):
+                if elem.get('default'):
+                    default = elem.get('type')
+                    break
+
+        # set fallback default uniqueid
+        if not default:
+            if self.dbtype == 'movie':
+                if uniqueids.get('tmdb'):
+                    default = 'tmdb'
+                elif uniqueids.get('imdb'):
+                    default = 'imdb'
+
+            elif self.dbtype == 'tvshow':
+                scraper_default = ADDON.getSetting('tv_scraper_base')
+
+                if (scraper_default == 'TVDb' and uniqueids.get('tvdb')):
+                    default = 'tvdb'
+                elif scraper_default == 'TMDb' and uniqueids.get('tmdb'):
+                    default = 'tmdb'
 
         # <uniqueid> fields
-        old_default = None
-        for default in self.root.findall('uniqueid'):
-            if default.get('default'):
-                old_default = default.get('type')
-                break
-
         for elem in self.root.findall('uniqueid'):
-            if elem.get('type') == id_type:
-                self.root.remove(elem)
-
-        if value:
-            elem = ET.SubElement(self.root, self.elem)
-            elem.set('type', id_type)
-            elem.text = value
-
-            ''' If no default is defined in nfo, we wil have to set one.
-                If replaced element was the default before, set the default
-                tag again.
-            '''
-            if old_default == id_type:
-                elem.set('default', 'true')
-
-            elif old_default is None:
-                if id_type in ['imdb', 'tmdb'] and self.dbtype == 'movie':
-                    elem.set('default', 'true')
-
-                elif id_type in ['tvdb', 'tmdb'] and self.dbtype == 'tvshow':
-                    elem.set('default', 'true')
-
-        # Emby <imdbid>, <tmdbid>, etc.
-        elem_name = id_type + 'id'
-
-        for elem in self.root.findall(elem_name):
             self.root.remove(elem)
 
-        if value:
-            elem = ET.SubElement(self.root, elem_name)
+        for item in uniqueids:
+            value = uniqueids.get(item, '')
+
+            elem = ET.SubElement(self.root, self.elem)
+            elem.set('type', item)
             elem.text = value
+
+            if default == item:
+                elem.set('default', 'true')
+                self._set_episodeguide(item, value)
+
+        # Emby <imdbid>, <tmdbid>, etc.
+        for item in uniqueids:
+            elem_name = item + 'id'
+
+            for elem in self.root.findall(elem_name):
+                self.root.remove(elem)
+
+            if value:
+                elem = ET.SubElement(self.root, elem_name)
+                elem.text = uniqueids.get(item, '')
 
     def write_file(self):
         xml_prettyprint(self.root)
@@ -204,3 +218,41 @@ class UpdateNFO():
         file = xbmcvfs.File(self.targetfile, 'w')
         file.write(content)
         file.close()
+
+    def _set_episodeguide(self,type,value):
+        if not self.dbtype == 'tvshow':
+            return
+
+        post = False
+        cache = ''
+
+        if type == 'tvdb':
+            post = 'yes'
+            cache = 'auth.json'
+            url = 'https://api.thetvdb.com/login?{"apikey":"439DFEBA9D3059C6","id":%s}|Content-Type=application/json' % str(value)
+            json_value = '<episodeguide><url post="%s" cache="%s"><url>%s</url></episodeguide>' % (post, cache, url)
+
+        elif type == 'tmdb':
+            language = ADDON.getSetting('tmdb_language')
+            cache = 'tmdb-%s-%s.json' % (str(value), language)
+            url = 'http://api.themoviedb.org/3/tv/%s?api_key=6a5be4999abf74eba1f9a8311294c267&amp;language=%s' % (str(value), language)
+            json_value = '<episodeguide><url cache="%s"><url>%s</url></episodeguide>' % (cache, url)
+
+        else:
+            url = ''
+            json_value = '<episodeguide><url cache=""><url></url></episodeguide>'
+
+        for elem in self.root.findall('episodeguide'):
+            self.root.remove(elem)
+
+        episodeguide_elem = ET.SubElement(self.root, 'episodeguide')
+        url_elem = ET.SubElement(episodeguide_elem, 'url')
+        if post:
+            url_elem.set('post', post)
+        url_elem.set('cache', cache)
+        url_elem.text = url
+
+        json_call('VideoLibrary.SetTVShowDetails',
+                  params={'episodeguide': json_value, 'tvshowid': int(self.dbid)},
+                  debug=JSON_LOGGING
+                  )

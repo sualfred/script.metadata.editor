@@ -56,7 +56,7 @@ class ContextMenu(object):
 
             is_fav = False
             for tag in self.details.get('tag'):
-                if tag.startswith('Fav. Kodi '):
+                if tag in ['Movie Watchlist', 'TV Show Watchlist', 'Music Video Watchlist']
                     is_fav = True
                     break
 
@@ -84,7 +84,7 @@ class ContextMenu(object):
 
 
 if __name__ == "__main__":
-    listitem = sys.listitem.getMusicInfoTag()
+    listitem = sys.listitem.getVideoInfoTag()
     dbid = listitem.getDbId()
     dbtype = listitem.getMediaType()
 

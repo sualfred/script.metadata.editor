@@ -138,3 +138,28 @@ msgstr ""
 msgctxt "#32024"
 msgid "Please use the context menu on a library item to run this script."
 msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32025"
+msgid "Preferred TMDb language"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32026"
+msgid "TV show scraper related settings"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32027"
+msgid "Library is based on informations of"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32028"
+msgid "ListItem.IMDBNumber fallback value source"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32029"
+msgid "Enable JSON logging"
+msgstr ""

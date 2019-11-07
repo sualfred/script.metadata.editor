@@ -18,17 +18,17 @@ def update_library(dbtype,key,value,dbid):
         for item in key:
             json_call('%sLibrary.Set%sDetails' % (library, dbtype),
                       params={'%s' % item: value[key.index(item)], '%sid' % dbtype: int(dbid)},
-                      debug=True
+                      debug=JSON_LOGGING
                       )
 
     else:
         json_call('%sLibrary.Set%sDetails' % (library, dbtype),
                   params={'%s' % key: value, '%sid' % dbtype: int(dbid)},
-                  debug=True
+                  debug=JSON_LOGGING
                   )
 
 
-def update_nfo(file,elem,value,dbtype):
+def update_nfo(file,elem,value,dbtype,dbid):
     if not ADDON.getSettingBool('nfo_updating'):
         return
 
@@ -37,12 +37,12 @@ def update_nfo(file,elem,value,dbtype):
     else:
         path = file.replace(os.path.splitext(file)[1], '.nfo')
 
-    UpdateNFO(path, elem, value, dbtype)
+    UpdateNFO(path, elem, value, dbtype, dbid)
 
     # support for additional movie.nfo
     if dbtype == 'movie':
         path = file.replace(os.path.basename(file), 'movie.nfo')
-        UpdateNFO(path, elem, value, dbtype)
+        UpdateNFO(path, elem, value, dbtype, dbid)
 
 
 def set_ratings(ratings):

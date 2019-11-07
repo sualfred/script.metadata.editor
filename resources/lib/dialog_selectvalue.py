@@ -57,8 +57,9 @@ class SelectValue(object):
 
     def current_values(self):
         result = json_call(self.method_details,
-                           properties=[self.dbkey, 'file'],
-                           params={self.param: int(self.dbid)}
+                           properties=[self.dbkey, 'file'] if self.library == 'Video' else [self.dbkey],
+                           params={self.param: int(self.dbid)},
+                           debug=True
                            )
 
         result = result['result'][self.key_details]
@@ -109,7 +110,8 @@ class SelectValue(object):
 
     def update_data(self):
         json_call(self.method_setdetails,
-                  params={self.param: int(self.dbid), self.dbkey: self.modified}
+                  params={self.param: int(self.dbid), self.dbkey: self.modified},
+                  debug=JSON_LOGGING
                   )
 
         if self.nfo_support and self.file:
@@ -117,7 +119,7 @@ class SelectValue(object):
                 # Respect Emby favourites <isuserfavorite>
                 isuserfavorite = 'false'
                 for tag in self.modified:
-                    if tag in ['Fav. Kodi ', 'Favorite movies', 'Favorite tvshows']:
+                    if tag in ['Movie Watchlist', 'TV Show Watchlist', 'Music Video Watchlist', 'Favorite movies', 'Favorite tvshows']:
                         isuserfavorite = 'true'
                         break
 
@@ -127,7 +129,8 @@ class SelectValue(object):
             update_nfo(file=self.file,
                        elem=self.dbkey,
                        value=self.modified,
-                       dbtype=self.dbtype)
+                       dbtype=self.dbtype,
+                       dbid=self.dbid)
 
     def _json_query(self,library=None,type=None):
         if library is None:

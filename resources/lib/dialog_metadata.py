@@ -58,7 +58,7 @@ class EditDialog(object):
             winprop('SelectDialogPreselect', clear=True)
 
             if self.file and self.nfo_support:
-                update_nfo(self.file, self.nfo_key, self.nfo_value, self.dbtype)
+                update_nfo(self.file, self.nfo_key, self.nfo_value, self.dbtype, self.dbid)
 
             return
 
@@ -163,8 +163,10 @@ class EditDialog(object):
             self._create_list(xbmc.getLocalizedString(572), 'studio', value=get_joined_items(details.get('studio')), type='array')
             self._create_list(xbmc.getLocalizedString(20459), 'tag', value=get_joined_items(details.get('tag')), type='array')
             self._create_list(xbmc.getLocalizedString(20410), 'trailer', value=details.get('trailer'), type='string')
-            self._create_list('IMDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'imdb'), type='uniqueid', option='imdb')
-            self._create_list('TMDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'tmdb'), type='uniqueid', option='tmdb')
+            #self._create_list('IMDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'imdb'), type='uniqueid', option='imdb')
+            #self._create_list('TMDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'tmdb'), type='uniqueid', option='tmdb')
+            self._create_list('IMDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'imdb'), type='uniqueid', option={'type': 'imdb', 'uniqueids': uniqueid})
+            self._create_list('TMDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'tmdb'), type='uniqueid', option={'type': 'tmdb', 'uniqueids': uniqueid})
             self._create_list(xbmc.getLocalizedString(13409), 'top250', value=str(details.get('top250')), type='integer')
             self._create_list(xbmc.getLocalizedString(570), 'dateadded', value=details.get('dateadded'), type='datetime')
             self._create_list(xbmc.getLocalizedString(568), 'lastplayed', value=details.get('lastplayed'), type='datetime')
@@ -209,10 +211,14 @@ class EditDialog(object):
             self._create_list(xbmc.getLocalizedString(572), 'studio', value=get_joined_items(details.get('studio')), type='array')
             self._create_list(xbmc.getLocalizedString(20459), 'tag', value=get_joined_items(details.get('tag')), type='array')
             self._create_list(xbmc.getLocalizedString(126), 'status', value=ADDON.getLocalizedString(32022), type='status')
-            self._create_list('IMDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'imdb'), type='uniqueid', option='imdb')
-            self._create_list('TMDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'tmdb'), type='uniqueid', option='tmdb')
-            self._create_list('TVDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'tvdb'), type='uniqueid', option='tvdb')
-            self._create_list('aniDB ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'anidb'), type='uniqueid', option='anidb')
+            #self._create_list('IMDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'imdb'), type='uniqueid', option='imdb')
+            #self._create_list('TMDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'tmdb'), type='uniqueid', option='tmdb')
+            #self._create_list('TVDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'tvdb'), type='uniqueid', option='tvdb')
+            #self._create_list('aniDB ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'anidb'), type='uniqueid', option='anidb')
+            self._create_list('IMDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'imdb'), type='uniqueid', option={'type': 'imdb', 'uniqueids': uniqueid, 'episodeguide': details.get('episodeguide')})
+            self._create_list('TMDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'tmdb'), type='uniqueid', option={'type': 'tmdb', 'uniqueids': uniqueid, 'episodeguide': details.get('episodeguide')})
+            self._create_list('TVDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'tvdb'), type='uniqueid', option={'type': 'tvdb', 'uniqueids': uniqueid, 'episodeguide': details.get('episodeguide')})
+            self._create_list('aniDB ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'anidb'), type='uniqueid', option={'type': 'anidb', 'uniqueids': uniqueid, 'episodeguide': details.get('episodeguide')})
             self._create_list(xbmc.getLocalizedString(570), 'dateadded', value=details.get('dateadded'), type='datetime')
             self._create_list(xbmc.getLocalizedString(568), 'lastplayed', value=details.get('lastplayed'), type='datetime')
             self._create_list(xbmc.getLocalizedString(567), 'playcount', value=str(details.get('playcount', 0)), type='integer')
@@ -230,8 +236,8 @@ class EditDialog(object):
             x [ mixed writer ]
             x [ Optional.String firstaired ]
             [ Optional.String productioncode ]
-            x [ Optional.Integer season ]
-            x [ Optional.Integer episode ]
+            [ Optional.Integer season ] ->  gets overwritten on next db scan. kodi is using filenames.
+            [ Optional.Integer episode ] ->  gets overwritten on next db scan. kodi is using filenames.
             x [ Optional.String originaltitle ]
             [ Optional.String thumbnail ]
             [ Optional.String fanart ]
@@ -244,18 +250,20 @@ class EditDialog(object):
             '''
             self._create_list(xbmc.getLocalizedString(369), 'title', value=details.get('title'), type='string')
             self._create_list(xbmc.getLocalizedString(20376), 'originaltitle', value=details.get('originaltitle'), type='string')
-            self._create_list(xbmc.getLocalizedString(20359), 'episode', value=str(details.get('episode')), type='integer')
-            self._create_list(xbmc.getLocalizedString(20373), 'season', value=str(details.get('season')), type='integer')
             self._create_list(xbmc.getLocalizedString(20416), 'firstaired', value=details.get('firstaired'), type='date')
             self._create_list(xbmc.getLocalizedString(207), 'plot', value=details.get('plot'), type='string')
             self._create_list(xbmc.getLocalizedString(563) + ' / ' + xbmc.getLocalizedString(205), 'ratings', value=ratings_default, type='ratings', option=ratings)
             self._create_list(ADDON.getLocalizedString(32001), 'userrating', value=str(details.get('userrating')), type='userrating')
             self._create_list(xbmc.getLocalizedString(20339), 'director', value=get_joined_items(details.get('director')), type='array')
             self._create_list(xbmc.getLocalizedString(20417), 'writer', value=get_joined_items(details.get('writer')), type='array')
-            self._create_list('IMDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'imdb'), type='uniqueid', option='imdb')
-            self._create_list('TMDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'tmdb'), type='uniqueid', option='tmdb')
-            self._create_list('TVDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'tvdb'), type='uniqueid', option='tvdb')
-            self._create_list('aniDB ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'anidb'), type='uniqueid', option='anidb')
+            #self._create_list('IMDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'imdb'), type='uniqueid', option='imdb')
+            #self._create_list('TMDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'tmdb'), type='uniqueid', option='tmdb')
+            #self._create_list('TVDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'tvdb'), type='uniqueid', option='tvdb')
+            #self._create_list('aniDB ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'anidb'), type='uniqueid', option='anidb')
+            self._create_list('IMDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'imdb'), type='uniqueid', option={'type': 'imdb', 'uniqueids': uniqueid})
+            self._create_list('TMDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'tmdb'), type='uniqueid', option={'type': 'tmdb', 'uniqueids': uniqueid})
+            self._create_list('TVDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'tvdb'), type='uniqueid', option={'type': 'tvdb', 'uniqueids': uniqueid})
+            self._create_list('aniDB ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'anidb'), type='uniqueid', option={'type': 'anidb', 'uniqueids': uniqueid})
             self._create_list(xbmc.getLocalizedString(570), 'dateadded', value=details.get('dateadded'), type='datetime')
             self._create_list(xbmc.getLocalizedString(568), 'lastplayed', value=details.get('lastplayed'), type='datetime')
             self._create_list(xbmc.getLocalizedString(567), 'playcount', value=str(details.get('playcount', 0)), type='integer')
@@ -426,6 +434,8 @@ class EditDialog(object):
 
     def _handle_dbitem(self,value_type,dbid,dbtype,key,preset,option,file,nfo_support):
         preset = preset.replace('n/a','')
+        nfo_key = None
+        nfo_value = None
 
         if value_type == 'array':
             value = set_array(preset, dbid, dbtype, key)
@@ -459,14 +469,51 @@ class EditDialog(object):
 
         elif value_type == ('uniqueid'):
             returned_value = set_string(preset)
-            value = {option: returned_value if returned_value else None}
+
+            uniqueid_key = option.get('type')
+            uniqueids = option.get('uniqueids')
+
+            value = {uniqueid_key: returned_value if returned_value else None}
+
+            # build nfo info
+            updated_dict = {}
+            for item in uniqueids:
+                if item == uniqueid_key:
+                    updated_dict[item] = returned_value if returned_value else None
+                else:
+                    updated_dict[item] = uniqueids.get(item)
+
+            nfo_value = [updated_dict, option.get('episodeguide')]
 
             # update ListItem.IMDBnumber as well
-            if (dbtype == 'movie' and option == 'imdb') or (dbtype == 'tvshow' and option == 'tvdb'):
-                update_library(dbtype, 'imdbnumber', returned_value if returned_value else '', dbid)
+            imdbnumber = ''
+
+            if dbtype == 'movie':
+                if returned_value and key == 'imdb':
+                    imdbnumber = returned_value
+
+                elif uniqueids.get('imdb'):
+                    imdbnumber = uniqueids['imdb']
+
+            elif dbtype == 'tvshow':
+                fallback_imdbnumber = ADDON.getSetting('tv_fallback_imdbnumber')
+
+                if returned_value and key == 'imdb':
+                    imdbnumber = returned_value
+
+                elif uniqueids.get('imdb'):
+                    imdbnumber = uniqueids['imdb']
+
+                elif fallback_imdbnumber == 'TVDb' and uniqueids.get('tvdb'):
+                    imdbnumber = uniqueids['tvdb']
+
+                elif fallback_imdbnumber == 'TMDb' and uniqueids.get('tmdb'):
+                    imdbnumber = uniqueids['tmdb']
+
+            update_library(dbtype, 'imdbnumber', imdbnumber, dbid)
 
         update_library(dbtype, key, value, dbid)
 
         if nfo_support and file:
-            self.nfo_key.append(key)
-            self.nfo_value.append(value)
+            self.nfo_key.append(nfo_key if nfo_key else key)
+            self.nfo_value.append(nfo_value if nfo_value else value)

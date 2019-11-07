@@ -32,20 +32,22 @@ PYTHON3 = True if sys.version_info.major == 3 else False
 ADDON = xbmcaddon.Addon()
 ADDON_ID = ADDON.getAddonInfo('id')
 ADDON_DATA_PATH = os.path.join(xbmc.translatePath("special://profile/addon_data/%s" % ADDON_ID))
-ADDON_DATA_IMG_PATH = os.path.join(xbmc.translatePath("special://profile/addon_data/%s/img" % ADDON_ID))
-ADDON_DATA_IMG_TEMP_PATH = os.path.join(xbmc.translatePath("special://profile/addon_data/%s/img/tmp" % ADDON_ID))
 
 NOTICE = xbmc.LOGNOTICE
 WARNING = xbmc.LOGWARNING
 DEBUG = xbmc.LOGDEBUG
 ERROR = xbmc.LOGERROR
+JSON_LOGGING = ADDON.getSettingBool('json_logging')
 
 DIALOG = xbmcgui.Dialog()
 
 ########################
 
-def log(txt,loglevel=DEBUG,force=False):
+def log(txt,loglevel=DEBUG,force=JSON_LOGGING):
     if loglevel in [DEBUG, WARNING, ERROR] or force:
+
+        if force:
+            loglevel = NOTICE
 
         if not PYTHON3 and isinstance(txt, str):
             txt = txt.decode('utf-8')
@@ -108,7 +110,6 @@ def remove_empty(array):
 
 
 def execute(cmd):
-    log('Execute: %s' % cmd, DEBUG)
     xbmc.executebuiltin(cmd)
 
 
@@ -238,6 +239,34 @@ def xml_prettyprint(root,level=0):
     else:
         if level and (not root.tail or not root.tail.strip()):
             root.tail = i
+
+
+def getkodisetting(setting):
+    json_query = json_call('Settings.GetSettingValue',
+                           params={'setting': '%s' % setting}
+                           )
+
+    try:
+        result = json_query['result']
+        result = str(result.get('value'))
+
+        if result.startswith('[') and result.endswith(']'):
+           result = result[1:-1]
+
+        return result
+
+    except Exception:
+        return
+
+
+def getaddonsetting(addon_id,setting):
+    try:
+        value = xbmcaddon.Addon(addon_id).getSetting(setting)
+        return str(value)
+
+    except Exception:
+        return
+
 
 @contextmanager
 def busy_dialog():

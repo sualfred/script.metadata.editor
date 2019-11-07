@@ -23,7 +23,7 @@ Context menu entries:
 * `Metadata Editor` / `Open Editor` = Editor dialog or sub menu if more options are available
 * `Add/remove available genres` = Quickly edit the genres which the item belongs to
 * `Add/remove available tags` = Quickly edit the tags which the item belongs to
-* `Add/remove favourite tag` = Shortcut to toggle the library tags `Fav. Kodi TV Shows` and `Fav. Kodi Movies`. Can be used to create custom splitted favourite widgets (like a watchlist).
+* `Add/remove favourite tag` = Shortcut to toggle the library tags `Movie Watchlist`, `TV Show Watchlist` and `Music Video Watchlist`. Can be used to create custom splitted favourite widgets (like a watchlist).
 
 
 RunScript calls:

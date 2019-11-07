@@ -19,13 +19,13 @@ class ToggleFav(object):
         self.key_details = '%sdetails' % self.dbtype
 
         if self.dbtype == 'movie':
-            self.tag = 'Fav. Kodi Movies'
+            self.tag = 'Movie Watchlist'
 
         elif self.dbtype == 'tvshow':
-            self.tag = 'Fav. Kodi TV Shows'
+            self.tag = 'TV Show Watchlist'
 
         elif self.dbtype == 'musicvideo':
-            self.tag = 'Fav. Kodi Music Videos'
+            self.tag = 'Music Video Watchlist'
 
         self.init()
 
@@ -54,7 +54,8 @@ class ToggleFav(object):
             self.tag_list.remove(self.tag)
 
         json_call(self.method_setdetails,
-                  params={self.param: int(self.dbid), 'tag': self.tag_list}
+                  params={self.param: int(self.dbid), 'tag': self.tag_list},
+                  debug=JSON_LOGGING
                   )
 
         if self.file:
@@ -65,6 +66,7 @@ class ToggleFav(object):
             update_nfo(file=self.file,
                        elem=['tag', 'isuserfavorite'],
                        value=[self.tag_list, isuserfavorite],
-                       dbtype=self.dbtype)
+                       dbtype=self.dbtype,
+                       dbid=self.dbid)
 
         #reload_widgets(reason='Fav. updated')

@@ -95,6 +95,7 @@ tvshow_properties = [
                     'lastplayed',
                     'sorttitle',
                     'originaltitle',
+                    'episodeguide',
                     'art',
                     'tag',
                     'dateadded',
