@@ -106,7 +106,7 @@ msgstr ""
 
 #: /resources/lib/utils.py
 msgctxt "#32018"
-msgid "Only values between 0.1 and 10.0 are allowed."
+msgid "Only values between 1.0 and 10.0 are allowed."
 msgstr ""
 
 #: /resources/lib/utils.py
@@ -127,4 +127,14 @@ msgstr ""
 #: /resources/lib/dialog_metadata.py
 msgctxt "#32022"
 msgid "value unkown (missing Kodi feature)"
+msgstr ""
+
+#: /resources/lib/dialog_metadata.py
+msgctxt "#32023"
+msgid "Record label"
+msgstr ""
+
+#: /default.py
+msgctxt "#32024"
+msgid "Please use the context menu on a library item to run this script."
 msgstr ""

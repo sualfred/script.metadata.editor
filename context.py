@@ -15,7 +15,6 @@ from resources.lib.toggle_favourites import *
 #################################################################################################
 
 class ContextMenu(object):
-
     def __init__(self,dbid,dbtype):
         self.dbid = dbid
         self.dbtype = dbtype

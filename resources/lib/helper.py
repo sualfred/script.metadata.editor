@@ -44,7 +44,7 @@ DIALOG = xbmcgui.Dialog()
 
 ########################
 
-def log(txt,loglevel=NOTICE,force=True):
+def log(txt,loglevel=DEBUG,force=False):
     if loglevel in [DEBUG, WARNING, ERROR] or force:
 
         if not PYTHON3 and isinstance(txt, str):
@@ -96,13 +96,6 @@ def get_rounded_value(item):
     return item
 
 
-def get_date(date_time):
-    date_time_obj = datetime.datetime.strptime(date_time, '%Y-%m-%d %H:%M:%S')
-    date_obj = date_time_obj.date()
-
-    return date_obj
-
-
 def remove_empty(array):
     cleaned_array = []
 
@@ -141,16 +134,6 @@ def decode_string(string):
         string = string.decode('utf-8')
 
     return string
-
-
-def url_quote(string):
-    if not PYTHON3:
-        string = string.encode('utf-8')
-    return urllib.quote(string)
-
-
-def url_unquote(string):
-    return urllib.unquote(string)
 
 
 def winprop(key, value=None, clear=False, window_id=10000):
@@ -258,8 +241,10 @@ def xml_prettyprint(root,level=0):
 
 @contextmanager
 def busy_dialog():
-    execute('ActivateWindow(busydialognocancel)')
+    # NFO writing usually only takes < 1s. Just show BusyDialog if it takes longer for whatever reason.
+    execute('AlarmClock(BusyAlarmDelay,ActivateWindow(busydialognocancel),00:02,silent)')
     try:
         yield
     finally:
+        execute('CancelAlarm(BusyAlarmDelay,silent)')
         execute('Dialog.Close(busydialognocancel)')
