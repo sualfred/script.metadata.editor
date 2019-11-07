@@ -56,7 +56,7 @@ class ContextMenu(object):
 
             is_fav = False
             for tag in self.details.get('tag'):
-                if tag in ['Movie Watchlist', 'TV Show Watchlist', 'Music Video Watchlist']
+                if tag in ['Movie Watchlist', 'TV Show Watchlist', 'Music Video Watchlist']:
                     is_fav = True
                     break
 
