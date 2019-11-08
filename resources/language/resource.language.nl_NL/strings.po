@@ -144,3 +144,28 @@ msgid "Please use the context menu on a library item to run this script."
 msgstr ""
 "Gebruik a.u.b. het contextmenu van een bibliotheekitem om dit script uit te "
 "voeren."
+
+#: /resources/settings.xml
+msgctxt "#32025"
+msgid "Preferred TMDb language"
+msgstr "TMDb-voorkeurstaal"
+
+#: /resources/settings.xml
+msgctxt "#32026"
+msgid "TV show scraper related settings"
+msgstr "Instellingen voor TV-series schraper"
+
+#: /resources/settings.xml
+msgctxt "#32027"
+msgid "Library is based on informations of"
+msgstr "Bibliotheek is gebaseerd op informatie van"
+
+#: /resources/settings.xml
+msgctxt "#32028"
+msgid "ListItem.IMDBNumber fallback value source"
+msgstr "ListItem.IMDBNumber bron voor reservewaarde"
+
+#: /resources/settings.xml
+msgctxt "#32029"
+msgid "Enable JSON logging"
+msgstr "JSON-logboekregistratie inschakelen"
