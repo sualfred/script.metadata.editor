@@ -200,7 +200,7 @@ class UpdateRating(object):
         self.imdb_rating = omdb.get('imdbRating')
         self.imdb_votes = omdb.get('imdbVotes', 0)
 
-        if self.imdb_rating:
+        if self.imdb_rating and self.imdb_rating != 'N/A':
             self._update_ratings_dict(key='imdb',
                                       rating=float(self.imdb_rating),
                                       votes=int(self.imdb_votes.replace(',', ''))
@@ -218,14 +218,16 @@ class UpdateRating(object):
         self.metacritic = None
 
         for rating in omdb.get('Ratings', []):
-            if rating['Source'] == 'Metacritic':
-                self.metacritic = int(rating['Value'][:-4]) / 10
+            rating_value = rating.get('Value').replace('N/A', '')
+
+            if rating['Source'] == 'Metacritic' and rating_value:
+                self.metacritic = int(rating_value[:-4]) / 10
                 self._update_ratings_dict(key='metacritic',
                                           rating=self.metacritic,
                                           votes=0)
 
-            elif rating['Source'] == 'Rotten Tomatoes':
-                self.tomatometerallcritics = int(rating['Value'][:-1]) / 10
+            elif rating['Source'] == 'Rotten Tomatoes' and rating_value:
+                self.tomatometerallcritics = int(rating_value[:-1]) / 10
                 self._update_ratings_dict(key='tomatometerallcritics',
                                           rating=self.tomatometerallcritics,
                                           votes=0)
