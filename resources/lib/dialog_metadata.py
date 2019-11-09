@@ -487,28 +487,6 @@ class EditDialog(object):
 
             nfo_value = [updated_dict, option.get('episodeguide')]
 
-            # update ListItem.IMDBnumber as well
-            if dbtype == 'movie' and uniqueid_key == 'imdb':
-                imdbnumber = returned_value if returned_value else ''
-                update_library(dbtype, 'imdbnumber', '', dbid)
-
-            elif dbtype == 'tvshow':
-                fallback_imdbnumber = ADDON.getSetting('tv_fallback_imdbnumber')
-
-                if returned_value and uniqueid_key == 'imdb':
-                    imdbnumber = returned_value
-
-                elif uniqueid_key != 'imdb' and uniqueids.get('imdb'):
-                    imdbnumber = uniqueids['imdb']
-
-                elif fallback_imdbnumber == 'TVDb' and uniqueids.get('tvdb'):
-                    imdbnumber = uniqueids['tvdb']
-
-                elif fallback_imdbnumber == 'TMDb' and uniqueids.get('tmdb'):
-                    imdbnumber = uniqueids['tmdb']
-
-                update_library(dbtype, 'imdbnumber', imdbnumber, dbid)
-
         update_library(dbtype, key, value, dbid)
 
         if nfo_support and file:

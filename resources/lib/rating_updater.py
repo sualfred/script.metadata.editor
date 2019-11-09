@@ -69,6 +69,7 @@ class UpdateRating(object):
         self.dbtype = params.get('type')
         self.done_msg = True if params.get('done_msg', True) else False
         self.tmdb_type = 'movie' if self.dbtype == 'movie' else 'tv'
+        self.tmdb_tv_status = None
         self.update_uniqueid = False
 
         self.method_details = 'VideoLibrary.Get%sDetails' % self.dbtype
@@ -148,7 +149,6 @@ class UpdateRating(object):
 
             if self.imdb:
                 self._update_uniqueid_dict('imdb', self.imdb)
-                self._set_listitem_imdbnumber(self.imdb)
 
         self.tmdb_rating = result.get('vote_average')
         self.tmdb_votes = result.get('vote_count')
@@ -156,6 +156,12 @@ class UpdateRating(object):
 
         if self.tmdb_type == 'tv':
             year = result.get('first_air_date')
+            self.tmdb_tv_status = result.get('status')
+
+            # update TV status as well
+            if self.tmdb_tv_status:
+                self._set_value('status', self.tmdb_tv_status)
+
         else:
             year = result.get('release_date')
 
@@ -227,7 +233,6 @@ class UpdateRating(object):
         # TMDb doesn't store IMDb numbers for shows so store the one found via OMDb
         if not self.imdb and omdb.get('imdbID'):
                 self._update_uniqueid_dict('imdb', omdb.get('imdbID'))
-                self._set_listitem_imdbnumber(omdb.get('imdbID'))
 
     def update_info(self):
         json_call('VideoLibrary.Set%sDetails' % self.dbtype,
@@ -242,9 +247,16 @@ class UpdateRating(object):
                       )
 
         if self.file:
+            elems = ['ratings', 'uniqueid']
+            values = [self.ratings, [self.uniqueid, None]]
+
+            if self.tmdb_tv_status:
+                elems.append('status')
+                values.append(self.tmdb_tv_status)
+
             update_nfo(file=self.file,
-                       elem=['ratings', 'uniqueid'],
-                       value=[self.ratings, [self.uniqueid, None]],
+                       elem=elems,
+                       value=values,
                        dbtype=self.dbtype,
                        dbid=self.dbid)
 
@@ -257,8 +269,8 @@ class UpdateRating(object):
         self.uniqueid[key] = str(value)
         self.update_uniqueid = True
 
-    def _set_listitem_imdbnumber(self,value):
+    def _set_value(self,key,value):
         json_call('VideoLibrary.Set%sDetails' % self.dbtype,
-                  params={'imdbnumber': value, '%sid' % self.dbtype: int(self.dbid)},
+                  params={key: value, '%sid' % self.dbtype: int(self.dbid)},
                   debug=LOG_JSON
                   )

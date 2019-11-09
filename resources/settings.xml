@@ -7,7 +7,6 @@
 		<setting label="$ADDON[script.metadata.editor 32026]" type="lsep"/>
 		<setting label="$ADDON[script.metadata.editor 32027]" type="select" values="TVDb|TMDb" id="tv_scraper_base" default="TVDb"/>
 		<setting label="$ADDON[script.metadata.editor 32025]" type="select" values="bg|cs|da|de|ee|el|en|es|fa|fa-ir|fi|fr|fr-ca|he|hr|hu|it|ja|ko|nl|no|pl|pt|pt-br|ru|sl|sr|sv|tr|zh-cn|zh-tw" id="tmdb_language" default="en"/>
-		<setting label="$ADDON[script.metadata.editor 32028]" type="select" values="-|TVDb|TMDb" id="tv_fallback_imdbnumber" default="-"/>
 		<setting label="$ADDON[script.metadata.editor 32030]" type="lsep"/>
 		<setting label="$ADDON[script.metadata.editor 32031]" type="text" id="omdb_api_key"/>
 		<setting label="$ADDON[script.metadata.editor 32032]" type="bool" id="omdb_fallback_search" default="true"/>

@@ -37,4 +37,4 @@ RunScript calls:
 *  `RunScript(script.metadata.editor,action=updaterating,dbid=$INFO[ListItem.DBID],type=$INFO[ListItem.DBType])` = Updates rating for the requested item
 *  `RunScript(script.metadata.editor,action=updaterating)` = Updates all movie and TV show ratings
 *  `RunScript(script.metadata.editor,action=updaterating,type=movie)` = Updates all ratings for movies
-*  `RunScript(script.metadata.editor,action=updaterating,type=tvshow)` = Updates all ratings for movies
+*  `RunScript(script.metadata.editor,action=updaterating,type=tvshow)` = Updates all ratings for TV shows

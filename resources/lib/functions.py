@@ -267,7 +267,7 @@ def set_integer_range(preset, maximum):
 
 
 def set_status(preset):
-    statuslist = ['Continuing', 'Ended']
+    statuslist = ['Returning series', 'In production', 'Planned', 'Cancelled', 'Ended']
 
     if preset == ADDON.getLocalizedString(32022):
         preset = ''
