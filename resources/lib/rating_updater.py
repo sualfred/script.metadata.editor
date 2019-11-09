@@ -119,7 +119,7 @@ class UpdateRating(object):
 
     def get_details(self):
         json_query = json_call(self.method_details,
-                               properties=['title', 'originaltitle', 'year', 'uniqueid', 'ratings', 'file'],
+                               properties=['title', 'originaltitle', 'year', 'uniqueid', 'ratings', 'file', 'tag'],
                                params={self.param: int(self.dbid)}
                                )
         try:
@@ -129,6 +129,7 @@ class UpdateRating(object):
             self.year = json_query['result'][self.key_details].get('year')
             self.title = json_query['result'][self.key_details].get('title')
             self.original_title = json_query['result'][self.key_details].get('originaltitle') or self.title
+            self.tags = json_query['result'][self.key_details].get('tag')
 
         except KeyError:
             self.uniqueid = None
@@ -137,6 +138,7 @@ class UpdateRating(object):
             self.year = None
             self.title = None
             self.original_title = None
+            self.tags = None
 
     def get_tmdb(self):
         result = tmdb_call(action=self.tmdb_type,
@@ -255,6 +257,11 @@ class UpdateRating(object):
             if self.tmdb_tv_status:
                 elems.append('status')
                 values.append(self.tmdb_tv_status)
+
+            # write tags to nfo in case they weren't there to trigger Emby to add them
+            if self.tags:
+                elems.append('tag')
+                values.append(self.tags)
 
             update_nfo(file=self.file,
                        elem=elems,
