@@ -163,3 +163,53 @@ msgstr ""
 msgctxt "#32029"
 msgid "Enable JSON logging"
 msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32030"
+msgid "Rating updater"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32031"
+msgid "Your personal OMDb API key (www.omdbapi.com)"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32032"
+msgid "Search OMDb with title/year if IMDb is missing"
+msgstr ""
+
+#: /resources/lib/rating_updater.py
+msgctxt "#32033"
+msgid "Updating movie ratings"
+msgstr ""
+
+#: /resources/lib/rating_updater.py
+msgctxt "#32034"
+msgid "Updating TV show ratings"
+msgstr ""
+
+#: /default.py
+msgctxt "#32035"
+msgid "No OMDb API key is configured, which is required to update IMDb, Rotten Tomatoes and Metacritic ratings. Please visit www.omdbapi.com and create your own API key.[CR][CR]Note: The free key is limited to 1000 calls a day. Please suggest to become a patreon of OMDb to increase the limit to 100.000.[CR][CR]Do you want to proceed updating The Movie DB ratings? This only works if you have a TMDb ID stored."
+msgstr ""
+
+#: /default.py
+msgctxt "#32036"
+msgid "Update TV show ratings"
+msgstr ""
+
+#: /default.py
+msgctxt "#32037"
+msgid "Update movie ratings"
+msgstr ""
+
+#: /default.py
+msgctxt "#32038"
+msgid "Update all ratings"
+msgstr ""
+
+#: /context.py
+msgctxt "#32039"
+msgid "Update ratings"
+msgstr ""

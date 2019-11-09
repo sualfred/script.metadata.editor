@@ -111,7 +111,7 @@ class SelectValue(object):
     def update_data(self):
         json_call(self.method_setdetails,
                   params={self.param: int(self.dbid), self.dbkey: self.modified},
-                  debug=JSON_LOGGING
+                  debug=LOG_JSON
                   )
 
         if self.nfo_support and self.file:

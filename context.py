@@ -11,6 +11,7 @@ from resources.lib.json_map import *
 from resources.lib.dialog_metadata import *
 from resources.lib.dialog_selectvalue import *
 from resources.lib.toggle_favourites import *
+from resources.lib.rating_updater import *
 
 #################################################################################################
 
@@ -65,6 +66,9 @@ class ContextMenu(object):
             else:
                 itemlist.append(ADDON.getLocalizedString(32009))
 
+        if self.dbtype in ['movie', 'tvshow']:
+            itemlist.append(ADDON.getLocalizedString(32039))
+
         if len(itemlist) > 1:
             contextdialog = DIALOG.contextmenu(itemlist)
 
@@ -76,6 +80,8 @@ class ContextMenu(object):
                 SelectValue({'dbid': self.dbid, 'type': self.dbtype, 'key': 'tag'})
             elif contextdialog == 3:
                 ToggleFav({'dbid': self.dbid, 'type': self.dbtype})
+            elif contextdialog == 4:
+                UpdateRating({'dbid': self.dbid, 'type': self.dbtype})
             else:
                 return
 

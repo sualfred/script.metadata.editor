@@ -55,7 +55,7 @@ class ToggleFav(object):
 
         json_call(self.method_setdetails,
                   params={self.param: int(self.dbid), 'tag': self.tag_list},
-                  debug=JSON_LOGGING
+                  debug=LOG_JSON
                   )
 
         if self.file:

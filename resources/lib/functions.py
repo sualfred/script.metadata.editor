@@ -18,13 +18,13 @@ def update_library(dbtype,key,value,dbid):
         for item in key:
             json_call('%sLibrary.Set%sDetails' % (library, dbtype),
                       params={'%s' % item: value[key.index(item)], '%sid' % dbtype: int(dbid)},
-                      debug=JSON_LOGGING
+                      debug=LOG_JSON
                       )
 
     else:
         json_call('%sLibrary.Set%sDetails' % (library, dbtype),
                   params={'%s' % key: value, '%sid' % dbtype: int(dbid)},
-                  debug=JSON_LOGGING
+                  debug=LOG_JSON
                   )
 
 
@@ -278,3 +278,75 @@ def set_status(preset):
         return statuslist[value]
 
     return preset
+
+
+def omdb_call(imdbnumber=None,title=None,year=None):
+    api_key = ADDON.getSetting('omdb_api_key')
+    base_url = 'http://www.omdbapi.com/'
+
+    if imdbnumber:
+        url = '%s?i=%s&apikey=%s' % (base_url, imdbnumber, api_key)
+
+    elif ADDON.getSettingBool('omdb_fallback_search') and title and year:
+
+        # it seems that urllib has issues with some asian letters
+        try:
+            title = urllib.quote(title)
+        except KeyError:
+            return
+
+        url = '%s?t=%s&year=%s&apikey=%s' % (base_url, title, year, api_key)
+
+    else:
+        return
+
+    try:
+        for i in range(1,10): # loop if heavy server load
+            request = requests.get(url)
+            if not str(request.status_code).startswith('5'):
+                break
+            xbmc.sleep(500)
+
+        result = request.json()
+        return result
+
+    except Exception as error:
+        log('OMDB Error: %s' % error)
+        return
+
+
+def tmdb_call(action,call=None,get=None,params=None):
+    args = {}
+    args['api_key'] = 'fc168650632c6597038cf7072a7c20da'
+
+    if params:
+        args.update(params)
+
+    call = '/' + str(call) if call else ''
+    get = '/' + get if get else ''
+
+    url = 'https://api.themoviedb.org/3/' + action + call + get
+    url = '{0}?{1}'.format(url, urlencode(args))
+
+    try:
+        for i in range(1,10): # loop if heavy server load
+            request = requests.get(url)
+            if not str(request.status_code).startswith('5'):
+                break
+            xbmc.sleep(500)
+
+        if request.status_code != requests.codes.ok:
+            raise Exception
+
+        result = request.json()
+
+        if len(result) == 0:
+            raise Exception
+
+        if 'results' in result and len(result['results']) == 0:
+            raise Exception
+
+        return result
+
+    except Exception:
+        return

@@ -114,7 +114,8 @@ class UpdateNFO():
 
         elem = ET.SubElement(self.root, 'ratings')
         for item in self.value:
-            rating = str(round(self.value[item].get('rating', 0.0), 1))
+            rating = float(self.value[item].get('rating', 0.0))
+            rating = str(round(rating, 1))
             votes = str(self.value[item].get('votes', 0))
 
             subelem = ET.SubElement(elem, 'rating')
@@ -254,5 +255,5 @@ class UpdateNFO():
 
         json_call('VideoLibrary.SetTVShowDetails',
                   params={'episodeguide': json_value, 'tvshowid': int(self.dbid)},
-                  debug=JSON_LOGGING
+                  debug=LOG_JSON
                   )

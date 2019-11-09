@@ -469,39 +469,36 @@ class EditDialog(object):
 
         elif value_type == ('uniqueid'):
             returned_value = set_string(preset)
+            returned_value_json = returned_value if returned_value else None
+            returned_value_str = returned_value if returned_value else ''
 
             uniqueid_key = option.get('type')
             uniqueids = option.get('uniqueids')
 
-            value = {uniqueid_key: returned_value if returned_value else None}
+            value = {uniqueid_key: returned_value_json}
 
             # build nfo info
             updated_dict = {}
             for item in uniqueids:
                 if item == uniqueid_key:
-                    updated_dict[item] = returned_value if returned_value else None
+                    updated_dict[item] = returned_value_json
                 else:
                     updated_dict[item] = uniqueids.get(item)
 
             nfo_value = [updated_dict, option.get('episodeguide')]
 
             # update ListItem.IMDBnumber as well
-            imdbnumber = ''
-
-            if dbtype == 'movie':
-                if returned_value and key == 'imdb':
-                    imdbnumber = returned_value
-
-                elif uniqueids.get('imdb'):
-                    imdbnumber = uniqueids['imdb']
+            if dbtype == 'movie' and uniqueid_key == 'imdb':
+                imdbnumber = returned_value if returned_value else ''
+                update_library(dbtype, 'imdbnumber', '', dbid)
 
             elif dbtype == 'tvshow':
                 fallback_imdbnumber = ADDON.getSetting('tv_fallback_imdbnumber')
 
-                if returned_value and key == 'imdb':
+                if returned_value and uniqueid_key == 'imdb':
                     imdbnumber = returned_value
 
-                elif uniqueids.get('imdb'):
+                elif uniqueid_key != 'imdb' and uniqueids.get('imdb'):
                     imdbnumber = uniqueids['imdb']
 
                 elif fallback_imdbnumber == 'TVDb' and uniqueids.get('tvdb'):
@@ -510,7 +507,7 @@ class EditDialog(object):
                 elif fallback_imdbnumber == 'TMDb' and uniqueids.get('tmdb'):
                     imdbnumber = uniqueids['tmdb']
 
-            update_library(dbtype, 'imdbnumber', imdbnumber, dbid)
+                update_library(dbtype, 'imdbnumber', imdbnumber, dbid)
 
         update_library(dbtype, key, value, dbid)
 

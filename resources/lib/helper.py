@@ -15,9 +15,15 @@ import os
 import sys
 import hashlib
 import xml.etree.ElementTree as ET
+import requests
 
 ''' Python 2<->3 compatibility
 '''
+try:
+    from urllib import urlencode
+except ImportError:
+    from urllib.parse import urlencode
+
 try:
     import urllib2 as urllib
 except ImportError:
@@ -37,17 +43,19 @@ NOTICE = xbmc.LOGNOTICE
 WARNING = xbmc.LOGWARNING
 DEBUG = xbmc.LOGDEBUG
 ERROR = xbmc.LOGERROR
-JSON_LOGGING = ADDON.getSettingBool('json_logging')
+LOG_JSON = ADDON.getSettingBool('LOG_JSON')
 
 DIALOG = xbmcgui.Dialog()
 
 ########################
 
-def log(txt,loglevel=DEBUG,force=JSON_LOGGING):
+def log(txt,loglevel=DEBUG,json=False,force=True):
     if loglevel in [DEBUG, WARNING, ERROR] or force:
-
         if force:
             loglevel = NOTICE
+
+        if json:
+            txt = json_prettyprint(txt)
 
         if not PYTHON3 and isinstance(txt, str):
             txt = txt.decode('utf-8')
@@ -210,8 +218,8 @@ def json_call(method,properties=None,sort=None,query_filter=None,limit=None,para
     result = json.loads(result)
 
     if debug:
-        log('--> JSON CALL: ' + json_prettyprint(json_string))
-        log('--> JSON RESULT: ' + json_prettyprint(result))
+        log('--> JSON CALL: ' + json_prettyprint(json_string), force=True)
+        log('--> JSON RESULT: ' + json_prettyprint(result), force=True)
 
     return result
 
@@ -240,40 +248,15 @@ def xml_prettyprint(root,level=0):
         if level and (not root.tail or not root.tail.strip()):
             root.tail = i
 
-
-def getkodisetting(setting):
-    json_query = json_call('Settings.GetSettingValue',
-                           params={'setting': '%s' % setting}
-                           )
-
-    try:
-        result = json_query['result']
-        result = str(result.get('value'))
-
-        if result.startswith('[') and result.endswith(']'):
-           result = result[1:-1]
-
-        return result
-
-    except Exception:
-        return
-
-
-def getaddonsetting(addon_id,setting):
-    try:
-        value = xbmcaddon.Addon(addon_id).getSetting(setting)
-        return str(value)
-
-    except Exception:
-        return
-
-
 @contextmanager
 def busy_dialog():
-    # NFO writing usually only takes < 1s. Just show BusyDialog if it takes longer for whatever reason.
-    execute('AlarmClock(BusyAlarmDelay,ActivateWindow(busydialognocancel),00:02,silent)')
+    if not winprop('UpdatingRatings.bool'):
+        # NFO writing usually only takes < 1s. Just show BusyDialog if it takes longer for whatever reason.
+        execute('AlarmClock(BusyAlarmDelay,ActivateWindow(busydialognocancel),00:02,silent)')
+
     try:
         yield
+
     finally:
         execute('CancelAlarm(BusyAlarmDelay,silent)')
         execute('Dialog.Close(busydialognocancel)')

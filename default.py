@@ -6,6 +6,7 @@ from resources.lib.helper import *
 from resources.lib.dialog_metadata import *
 from resources.lib.dialog_selectvalue import *
 from resources.lib.toggle_favourites import *
+from resources.lib.rating_updater import *
 
 ########################
 
@@ -16,8 +17,37 @@ class Main:
         dbid = self.params.get('dbid')
         dbtype = self.params.get('type')
 
-        if not dbid or not dbtype:
-            DIALOG.ok(xbmc.getLocalizedString(257), ADDON.getLocalizedString(32024))
+        if not dbid and not dbtype and not self.action:
+            omdb_msg = self._omdb_msg()
+            if not omdb_msg:
+                return
+
+            updateselector = DIALOG.contextmenu([ADDON.getLocalizedString(32038), ADDON.getLocalizedString(32037), ADDON.getLocalizedString(32036)])
+
+            if updateselector == 0:
+                UpdateAllRatings({'type': 'movie'})
+                UpdateAllRatings({'type': 'tvshow'})
+
+            elif updateselector == 1:
+                UpdateAllRatings({'type': 'movie'})
+
+            elif updateselector == 2:
+                UpdateAllRatings({'type': 'tvshow'})
+
+        elif self.action == 'updaterating':
+            omdb_msg = self._omdb_msg()
+            if not omdb_msg:
+                return
+
+            if not dbtype:
+                UpdateAllRatings({'type': 'movie'})
+                UpdateAllRatings({'type': 'tvshow'})
+
+            elif dbtype and not dbid:
+                UpdateAllRatings({'type': dbtype})
+
+            else:
+                UpdateRating({'dbid': dbid, 'type': dbtype})
 
         elif self.action == 'togglefav':
             ToggleFav({'dbid': dbid, 'type': dbtype})
@@ -44,6 +74,12 @@ class Main:
                     self.params[arg.split("=")[0].lower()] = "=".join(arg.split("=")[1:]).strip()
                 except:
                     self.params = {}
+
+    def _omdb_msg(self):
+        if not ADDON.getSetting('omdb_api_key'):
+            if not DIALOG.yesno(xbmc.getLocalizedString(14117), ADDON.getLocalizedString(32035)):
+                return False
+        return True
 
 if __name__ == '__main__':
     Main()
