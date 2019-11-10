@@ -213,3 +213,8 @@ msgstr ""
 msgctxt "#32039"
 msgid "Update ratings"
 msgstr ""
+
+#: /resources/lib/dialog_metadata.py
+msgctxt "#32040"
+msgid "Edit data for"
+msgstr ""

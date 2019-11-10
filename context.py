@@ -49,7 +49,7 @@ class ContextMenu(object):
     def menu(self):
         itemlist = [ADDON.getLocalizedString(32010)]
 
-        if 'genre' in self.details:
+        if 'genre' in self.details and self.dbtype != 'song':
             itemlist.append(ADDON.getLocalizedString(32004))
 
         if 'tag' in self.details:

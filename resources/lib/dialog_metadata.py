@@ -45,14 +45,21 @@ class EditDialog(object):
         self.optionlist = []
 
         self.generate_list()
-        self.field_dialog()
+        self.editor_dialog()
 
-    def field_dialog(self):
+    def editor_dialog(self):
         preselect = winprop('SelectDialogPreselect')
         if not preselect:
             preselect = -1
 
-        self.editdialog = DIALOG.select(xbmc.getLocalizedString(14241), self.modeselect, preselect=int(preselect), useDetails=True)
+        if self.details.get('title'):
+            headline = ADDON.getLocalizedString(32040) + ' "' + self.details.get('title') + '"'
+        elif self.details.get('artist'):
+            headline = ADDON.getLocalizedString(32040) + ' "' + self.details.get('artist') + '"'
+        else:
+            headline = ADDON.getLocalizedString(32000)
+
+        self.editdialog = DIALOG.select(headline, self.modeselect, preselect=int(preselect), useDetails=True)
 
         if self.editdialog == -1:
             winprop('SelectDialogPreselect', clear=True)
@@ -93,6 +100,10 @@ class EditDialog(object):
         details = self.details
         uniqueid = details.get('uniqueid')
         ratings = details.get('ratings')
+        votes = details.get('votes')
+
+        if not votes or votes == -1:
+            votes = 0
 
         # Fallback rule. Create own ratings dict if it's missing in the database.
         if not ratings:
@@ -163,10 +174,8 @@ class EditDialog(object):
             self._create_list(xbmc.getLocalizedString(572), 'studio', value=get_joined_items(details.get('studio')), type='array')
             self._create_list(xbmc.getLocalizedString(20459), 'tag', value=get_joined_items(details.get('tag')), type='array')
             self._create_list(xbmc.getLocalizedString(20410), 'trailer', value=details.get('trailer'), type='string')
-            #self._create_list('IMDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'imdb'), type='uniqueid', option='imdb')
-            #self._create_list('TMDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'tmdb'), type='uniqueid', option='tmdb')
-            self._create_list('IMDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'imdb'), type='uniqueid', option={'type': 'imdb', 'uniqueids': uniqueid})
-            self._create_list('TMDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'tmdb'), type='uniqueid', option={'type': 'tmdb', 'uniqueids': uniqueid})
+            self._create_list('IMDb ID', 'uniqueid', value=get_key_item(uniqueid,'imdb'), type='uniqueid', option={'type': 'imdb', 'uniqueids': uniqueid})
+            self._create_list('TMDb ID', 'uniqueid', value=get_key_item(uniqueid,'tmdb'), type='uniqueid', option={'type': 'tmdb', 'uniqueids': uniqueid})
             self._create_list(xbmc.getLocalizedString(13409), 'top250', value=str(details.get('top250')), type='integer')
             self._create_list(xbmc.getLocalizedString(570), 'dateadded', value=details.get('dateadded'), type='datetime')
             self._create_list(xbmc.getLocalizedString(568), 'lastplayed', value=details.get('lastplayed'), type='datetime')
@@ -211,14 +220,10 @@ class EditDialog(object):
             self._create_list(xbmc.getLocalizedString(572), 'studio', value=get_joined_items(details.get('studio')), type='array')
             self._create_list(xbmc.getLocalizedString(20459), 'tag', value=get_joined_items(details.get('tag')), type='array')
             self._create_list(xbmc.getLocalizedString(126), 'status', value=ADDON.getLocalizedString(32022), type='status')
-            #self._create_list('IMDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'imdb'), type='uniqueid', option='imdb')
-            #self._create_list('TMDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'tmdb'), type='uniqueid', option='tmdb')
-            #self._create_list('TVDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'tvdb'), type='uniqueid', option='tvdb')
-            #self._create_list('aniDB ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'anidb'), type='uniqueid', option='anidb')
-            self._create_list('IMDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'imdb'), type='uniqueid', option={'type': 'imdb', 'uniqueids': uniqueid, 'episodeguide': details.get('episodeguide')})
-            self._create_list('TMDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'tmdb'), type='uniqueid', option={'type': 'tmdb', 'uniqueids': uniqueid, 'episodeguide': details.get('episodeguide')})
-            self._create_list('TVDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'tvdb'), type='uniqueid', option={'type': 'tvdb', 'uniqueids': uniqueid, 'episodeguide': details.get('episodeguide')})
-            self._create_list('aniDB ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'anidb'), type='uniqueid', option={'type': 'anidb', 'uniqueids': uniqueid, 'episodeguide': details.get('episodeguide')})
+            self._create_list('IMDb ID', 'uniqueid', value=get_key_item(uniqueid,'imdb'), type='uniqueid', option={'type': 'imdb', 'uniqueids': uniqueid, 'episodeguide': details.get('episodeguide')})
+            self._create_list('TMDb ID', 'uniqueid', value=get_key_item(uniqueid,'tmdb'), type='uniqueid', option={'type': 'tmdb', 'uniqueids': uniqueid, 'episodeguide': details.get('episodeguide')})
+            self._create_list('TVDb ID', 'uniqueid', value=get_key_item(uniqueid,'tvdb'), type='uniqueid', option={'type': 'tvdb', 'uniqueids': uniqueid, 'episodeguide': details.get('episodeguide')})
+            self._create_list('aniDB ID', 'uniqueid', value=get_key_item(uniqueid,'anidb'), type='uniqueid', option={'type': 'anidb', 'uniqueids': uniqueid, 'episodeguide': details.get('episodeguide')})
             self._create_list(xbmc.getLocalizedString(570), 'dateadded', value=details.get('dateadded'), type='datetime')
             self._create_list(xbmc.getLocalizedString(568), 'lastplayed', value=details.get('lastplayed'), type='datetime')
             self._create_list(xbmc.getLocalizedString(567), 'playcount', value=str(details.get('playcount', 0)), type='integer')
@@ -256,21 +261,17 @@ class EditDialog(object):
             self._create_list(ADDON.getLocalizedString(32001), 'userrating', value=str(details.get('userrating')), type='userrating')
             self._create_list(xbmc.getLocalizedString(20339), 'director', value=get_joined_items(details.get('director')), type='array')
             self._create_list(xbmc.getLocalizedString(20417), 'writer', value=get_joined_items(details.get('writer')), type='array')
-            #self._create_list('IMDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'imdb'), type='uniqueid', option='imdb')
-            #self._create_list('TMDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'tmdb'), type='uniqueid', option='tmdb')
-            #self._create_list('TVDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'tvdb'), type='uniqueid', option='tvdb')
-            #self._create_list('aniDB ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'anidb'), type='uniqueid', option='anidb')
-            self._create_list('IMDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'imdb'), type='uniqueid', option={'type': 'imdb', 'uniqueids': uniqueid})
-            self._create_list('TMDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'tmdb'), type='uniqueid', option={'type': 'tmdb', 'uniqueids': uniqueid})
-            self._create_list('TVDb ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'tvdb'), type='uniqueid', option={'type': 'tvdb', 'uniqueids': uniqueid})
-            self._create_list('aniDB ID', 'uniqueid', value=get_key_item(details.get('uniqueid'),'anidb'), type='uniqueid', option={'type': 'anidb', 'uniqueids': uniqueid})
+            self._create_list('IMDb ID', 'uniqueid', value=get_key_item(uniqueid,'imdb'), type='uniqueid', option={'type': 'imdb', 'uniqueids': uniqueid})
+            self._create_list('TMDb ID', 'uniqueid', value=get_key_item(uniqueid,'tmdb'), type='uniqueid', option={'type': 'tmdb', 'uniqueids': uniqueid})
+            self._create_list('TVDb ID', 'uniqueid', value=get_key_item(uniqueid,'tvdb'), type='uniqueid', option={'type': 'tvdb', 'uniqueids': uniqueid})
+            self._create_list('aniDB ID', 'uniqueid', value=get_key_item(uniqueid,'anidb'), type='uniqueid', option={'type': 'anidb', 'uniqueids': uniqueid})
             self._create_list(xbmc.getLocalizedString(570), 'dateadded', value=details.get('dateadded'), type='datetime')
             self._create_list(xbmc.getLocalizedString(568), 'lastplayed', value=details.get('lastplayed'), type='datetime')
             self._create_list(xbmc.getLocalizedString(567), 'playcount', value=str(details.get('playcount', 0)), type='integer')
 
         elif self.dbtype == 'artist':
             '''
-            x [ Optional.String artist ]
+            [ Optional.String artist ]
             x [ mixed instrument ]
             x [ mixed style ]
             x [ mixed mood ]
@@ -282,7 +283,6 @@ class EditDialog(object):
             x [ Optional.String disbanded ]
             x [ mixed yearsactive ]
             '''
-            self._create_list(xbmc.getLocalizedString(21899), 'artist', value=details.get('artist'), type='string')
             self._create_list(xbmc.getLocalizedString(515), 'genre', value=get_joined_items(details.get('genre')), type='array')
             self._create_list(xbmc.getLocalizedString(21821), 'description', value=details.get('description'), type='string')
             self._create_list(xbmc.getLocalizedString(736), 'style', value=get_joined_items(details.get('style')), type='array')
@@ -296,8 +296,8 @@ class EditDialog(object):
 
         elif self.dbtype == 'album':
             '''
-            x [ Optional.String title ]
-            x [ mixed artist ]
+            [ Optional.String title ]
+            [ mixed artist ]
             x [ Optional.String description ]
             x [ mixed genre ]
             x [ mixed theme ]
@@ -310,9 +310,7 @@ class EditDialog(object):
             x [ Optional.Integer userrating ]
             x [ Optional.Integer votes ]
             '''
-            self._create_list(xbmc.getLocalizedString(21899), 'title', value=details.get('title'), type='string')
             self._create_list(ADDON.getLocalizedString(32023), 'albumlabel', value=details.get('albumlabel'), type='string')
-            self._create_list(xbmc.getLocalizedString(133), 'artist', value=get_joined_items(details.get('artist')), type='array')
             self._create_list(xbmc.getLocalizedString(21821), 'description', value=details.get('description'), type='string')
             self._create_list(xbmc.getLocalizedString(345), 'year', value=str(details.get('year')), type='integer')
             self._create_list(xbmc.getLocalizedString(467), 'type', value=details.get('type'), type='string')
@@ -321,47 +319,41 @@ class EditDialog(object):
             self._create_list(xbmc.getLocalizedString(175), 'mood', value=get_joined_items(details.get('mood')), type='array')
             self._create_list(xbmc.getLocalizedString(736), 'style', value=get_joined_items(details.get('style')), type='array')
             self._create_list(xbmc.getLocalizedString(563), 'rating', value=str(get_rounded_value(details.get('rating'))), type='float')
-            self._create_list(xbmc.getLocalizedString(205), 'votes', value=str(details.get('votes')), type='integer')
+            self._create_list(xbmc.getLocalizedString(205), 'votes', value=str(votes), type='integer')
             self._create_list(ADDON.getLocalizedString(32001), 'userrating', value=str(details.get('userrating')), type='userrating')
 
         elif self.dbtype == 'song':
             '''
-            x [ Optional.String title ]
-            x [ mixed artist ]
-            x [ mixed albumartist ]
-            x [ mixed genre ]
-            x [ Optional.Integer year ]
+             [ Optional.String title ]
+            [ mixed artist ]
+            [ mixed albumartist ]
+             [ mixed genre ]
+             [ Optional.Integer year ]
             x [ Optional.Number rating ]
-            x [ Optional.String album ]
-            x [ Optional.Integer track ]
-            x [ Optional.Integer disc ]
+             [ Optional.String album ]
+             [ Optional.Integer track ]
+             [ Optional.Integer disc ]
             [ Optional.Integer duration ]
-            x [ Optional.String comment ]
-            x [ Optional.String musicbrainztrackid ]
-            x [ Optional.String musicbrainzartistid ] -> wrong. is array.
-            x [ Optional.String musicbrainzalbumid ]
-            x [ Optional.String musicbrainzalbumartistid ] -> wrong. is array.
+            [ Optional.String comment ]
+            [ Optional.String musicbrainztrackid ]
+            [ Optional.String musicbrainzartistid ] -> wrong. is array.
+            [ Optional.String musicbrainzalbumid ]
+            [ Optional.String musicbrainzalbumartistid ] -> wrong. is array.
             x [ Optional.Integer playcount ]
             x [ Optional.String lastplayed ]
-            x[ Optional.Integer userrating ]
+            [ Optional.Integer userrating ]
             [ Optional.Integer votes ]
             '''
-            self._create_list(xbmc.getLocalizedString(21899), 'title', value=details.get('title'), type='string')
-            self._create_list(xbmc.getLocalizedString(133), 'artist', value=get_joined_items(details.get('artist')), type='array')
-            self._create_list(xbmc.getLocalizedString(566), 'albumartist', value=get_joined_items(details.get('albumartist')), type='array')
-            self._create_list(xbmc.getLocalizedString(558), 'album', value=details.get('album'), type='string')
-            self._create_list(xbmc.getLocalizedString(554), 'track', value=str(details.get('track')), type='integer')
-            self._create_list(xbmc.getLocalizedString(427), 'disc', value=str(details.get('disc')), type='integer')
-            self._create_list(xbmc.getLocalizedString(515), 'genre', value=get_joined_items(details.get('genre')), type='array')
-            self._create_list(xbmc.getLocalizedString(345), 'year', value=str(details.get('year')), type='integer')
-            self._create_list(xbmc.getLocalizedString(569), 'comment', value=details.get('comment'), type='string')
+            #self._create_list(xbmc.getLocalizedString(21899), 'title', value=details.get('title'), type='string')
+            #self._create_list(xbmc.getLocalizedString(558), 'album', value=details.get('album'), type='string')
+            #self._create_list(xbmc.getLocalizedString(554), 'track', value=str(details.get('track')), type='integer')
+            #self._create_list(xbmc.getLocalizedString(427), 'disc', value=str(details.get('disc')), type='integer')
+            #self._create_list(xbmc.getLocalizedString(515), 'genre', value=get_joined_items(details.get('genre')), type='array')
+            #self._create_list(xbmc.getLocalizedString(345), 'year', value=str(details.get('year')), type='integer')
+            #self._create_list(xbmc.getLocalizedString(569), 'comment', value=details.get('comment'), type='string')
             self._create_list(xbmc.getLocalizedString(563), 'rating', value=str(get_rounded_value(details.get('rating'))), type='float')
-            self._create_list(xbmc.getLocalizedString(205), 'votes', value=str(details.get('votes')), type='integer')
+            #self._create_list(xbmc.getLocalizedString(205), 'votes', value=str(details.get('votes')), type='integer') not available in methods.json? DaveBlake will fix it.
             self._create_list(ADDON.getLocalizedString(32001), 'userrating', value=str(details.get('userrating')), type='userrating')
-            self._create_list('MusicBrainz Track-ID', 'musicbrainztrackid', value=details.get('musicbrainztrackid'), type='string')
-            self._create_list('MusicBrainz Artist-ID', 'musicbrainzartistid', value=get_joined_items(details.get('musicbrainzartistid')), type='array')
-            self._create_list('MusicBrainz Album-ID', 'musicbrainzalbumid', value=details.get('musicbrainzalbumid'), type='string')
-            self._create_list('MusicBrainz Album-Artist-ID', 'musicbrainzalbumartistid', value=get_joined_items(details.get('musicbrainzalbumartistid')), type='array')
             self._create_list(xbmc.getLocalizedString(568), 'lastplayed', value=details.get('lastplayed'), type='datetime')
             self._create_list(xbmc.getLocalizedString(567), 'playcount', value=str(details.get('playcount', 0)), type='integer')
 
