@@ -241,14 +241,14 @@ def set_time(preset):
 
 
 def set_string(preset):
-    keyboard = xbmc.Keyboard(preset)
+    value = preset.replace('\n', '[CR]')
+    keyboard = xbmc.Keyboard(value)
     keyboard.doModal()
 
     if keyboard.isConfirmed():
         value = keyboard.getText()
-        return value
 
-    return preset
+    return value.replace('[CR]', '\n')
 
 
 def set_integer_range(preset, maximum):
