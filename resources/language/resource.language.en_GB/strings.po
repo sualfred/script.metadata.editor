@@ -56,12 +56,12 @@ msgstr ""
 
 #: /context.py
 msgctxt "#32008"
-msgid "Remove favourite tag"
+msgid "Remove watchlist tag"
 msgstr ""
 
 #: /context.py
 msgctxt "#32009"
-msgid "Add favourite tag"
+msgid "Add watchlist tag"
 msgstr ""
 
 #: /context.py

@@ -23,18 +23,22 @@ class UpdateNFO():
 
     def run(self):
         with busy_dialog():
-            if xbmcvfs.exists(self.targetfile):
-                self.root = self.read_file()
+            try:
+                if xbmcvfs.exists(self.targetfile):
+                    self.root = self.read_file()
 
-                if len(self.root):
-                    index = 0
-                    for elem in self.elems:
-                        self.elem = elem
-                        self.value = self.values[index]
-                        self.update_elem()
-                        index += 1
+                    if len(self.root):
+                        index = 0
+                        for elem in self.elems:
+                            self.elem = elem
+                            self.value = self.values[index]
+                            self.update_elem()
+                            index += 1
 
-                    self.write_file()
+                        self.write_file()
+
+            except Exception as error:
+                log('Cannot find/access .nfo file for updating: %s' % error)
 
     def update_elem(self):
         if self.elem == 'ratings':
