@@ -285,17 +285,16 @@ def omdb_call(imdbnumber=None,title=None,year=None):
     base_url = 'http://www.omdbapi.com/'
 
     if imdbnumber:
-        url = '%s?i=%s&apikey=%s' % (base_url, imdbnumber, api_key)
+        url = '%s?apikey=%s&i=%s&plot=short&r=xml&tomatoes=true' % (base_url, api_key, imdbnumber)
 
     elif ADDON.getSettingBool('omdb_fallback_search') and title and year:
-
         # it seems that urllib has issues with some asian letters
         try:
             title = urllib.quote(title)
         except KeyError:
             return
 
-        url = '%s?t=%s&year=%s&apikey=%s' % (base_url, title, year, api_key)
+        url = '%s?apikey=%s&t=%s&year=%s&plot=short&r=xml&tomatoes=true' % (base_url, api_key, title, year)
 
     else:
         return
@@ -307,11 +306,13 @@ def omdb_call(imdbnumber=None,title=None,year=None):
                 break
             xbmc.sleep(500)
 
-        result = request.json()
+        if request.status_code != requests.codes.ok:
+            raise Exception
+
+        result = request.content
         return result
 
-    except Exception as error:
-        log('OMDB Error: %s' % error)
+    except Exception:
         return
 
 

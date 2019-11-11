@@ -18,10 +18,13 @@ class UpdateAllRatings(object):
                               properties=['title', 'year']
                               )
 
-        self.items = all_items['result']['%ss' % self.dbtype]
-        self.total_items = len(self.items)
+        try:
+        	self.items = all_items['result']['%ss' % self.dbtype]
+        	self.total_items = len(self.items)
+        	self.run()
 
-        self.run()
+        except Exception:
+        	pass
 
     def run(self):
         winprop('UpdatingRatings.bool', True)
@@ -199,44 +202,66 @@ class UpdateRating(object):
         if not omdb:
             return
 
-        self.imdb_rating = omdb.get('imdbRating')
-        self.imdb_votes = omdb.get('imdbVotes', 0)
+        tree = ET.ElementTree(ET.fromstring(omdb))
+        root = tree.getroot()
 
-        if self.imdb_rating and self.imdb_rating != 'N/A':
-            self._update_ratings_dict(key='imdb',
-                                      rating=float(self.imdb_rating),
-                                      votes=int(self.imdb_votes.replace(',', ''))
-                                      )
+        for child in root:
+            # imdb ratings
+            imdb_rating = child.get('imdbRating')
+            imdb_votes = child.get('imdbVotes', 0)
 
-            # Emby For Kodi is storing the rating as 'default'
-            if 'default' in self.ratings:
-                self._update_ratings_dict(key='default',
-                                          rating=float(self.imdb_rating),
-                                          votes=int(self.imdb_votes.replace(',', ''))
+            if imdb_rating and imdb_rating != 'N/A':
+                votes = imdb_votes.replace(',', '') if imdb_votes != 'N/A' else 0
+                self._update_ratings_dict(key='imdb',
+                                          rating=float(imdb_rating),
+                                          votes=int(votes)
                                           )
 
+                # Emby For Kodi is storing the rating as 'default'
+                if 'default' in self.ratings:
+                    self._update_ratings_dict(key='default',
+                                              rating=float(imdb_rating),
+                                              votes=int(votes)
+                                              )
 
-        self.tomatometerallcritics = None
-        self.metacritic = None
+            # regular rotten rating
+            tomatometerallcritics = child.get('tomatoMeter')
+            tomatometerallcritics_votes = child.get('tomatoReviews', 0)
 
-        for rating in omdb.get('Ratings', []):
-            rating_value = rating.get('Value').replace('N/A', '')
-
-            if rating['Source'] == 'Metacritic' and rating_value:
-                self.metacritic = int(rating_value[:-4]) / 10
-                self._update_ratings_dict(key='metacritic',
-                                          rating=self.metacritic,
-                                          votes=0)
-
-            elif rating['Source'] == 'Rotten Tomatoes' and rating_value:
-                self.tomatometerallcritics = int(rating_value[:-1]) / 10
+            if tomatometerallcritics and tomatometerallcritics != 'N/A':
+                tomatometerallcritics = int(tomatometerallcritics) / 10
+                votes = tomatometerallcritics_votes if tomatometerallcritics_votes != 'N/A' else 0
                 self._update_ratings_dict(key='tomatometerallcritics',
-                                          rating=self.tomatometerallcritics,
+                                          rating=tomatometerallcritics,
+                                          votes=int(votes))
+
+            # user rotten rating
+            tomatometeravgcritics = child.get('tomatoUserMeter')
+            tomatometeravgcritics_votes = child.get('tomatoUserReviews', 0)
+
+            if tomatometeravgcritics and tomatometeravgcritics != 'N/A':
+                tomatometeravgcritics = int(tomatometeravgcritics) / 10
+                votes = tomatometeravgcritics_votes if tomatometeravgcritics_votes != 'N/A' else 0
+                self._update_ratings_dict(key='tomatometeravgcritics',
+                                          rating=tomatometeravgcritics,
+                                          votes=int(votes))
+
+            # metacritic
+            metacritic = child.get('metascore')
+
+            if metacritic and metacritic != 'N/A':
+                metacritic = int(metacritic) / 10
+                self._update_ratings_dict(key='metacritic',
+                                          rating=metacritic,
                                           votes=0)
 
-        # TMDb doesn't store IMDb numbers for shows so store the one found via OMDb
-        if not self.imdb and omdb.get('imdbID'):
-                self._update_uniqueid_dict('imdb', omdb.get('imdbID'))
+            # TMDb doesn't store IMDb numbers for shows so store the one found via OMDb
+            if not self.imdb and child.get('imdbID') and child.get('imdbID') != 'N/A':
+                self.imdb = child.get('imdbID')
+                self._update_uniqueid_dict('imdb', child.get('imdbID'))
+
+            break
+
 
     def update_info(self):
         json_call('VideoLibrary.Set%sDetails' % self.dbtype,
