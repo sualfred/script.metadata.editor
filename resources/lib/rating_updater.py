@@ -206,6 +206,9 @@ class UpdateRating(object):
         root = tree.getroot()
 
         for child in root:
+            if child.text == 'Incorrect IMDb ID.':
+                break
+
             # imdb ratings
             imdb_rating = child.get('imdbRating')
             imdb_votes = child.get('imdbVotes', 0)
