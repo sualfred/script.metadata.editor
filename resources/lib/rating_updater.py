@@ -13,6 +13,7 @@ from resources.lib.functions import *
 class UpdateAllRatings(object):
     def __init__(self,params):
         self.dbtype = params.get('type')
+        self.background_task = ADDON.getSettingBool('update_background')
 
         all_items = json_call('VideoLibrary.Get%ss' % self.dbtype,
                               properties=['title', 'year']
@@ -36,30 +37,34 @@ class UpdateAllRatings(object):
 
         processed_items = 0
         progress = 0
-        percentage = self.total_items / 100
 
-        progressdialog = xbmcgui.DialogProgress()
+        if self.background_task:
+            progressdialog = xbmcgui.DialogProgressBG()
+        else:
+            progressdialog = xbmcgui.DialogProgress()
+
         progressdialog.create(heading, '')
 
         for item in self.items:
-            if progressdialog.iscanceled():
+            if (not self.background_task and progressdialog.iscanceled()) or winprop('CancelRatingUpdater.bool'):
+                winprop('CancelRatingUpdater', clear=True)
                 break
 
             label = item.get('title')
             if item.get('year'):
                 label = label + ' (' + str(item.get('year')) + ')'
 
-            progressdialog.update(int(progress), label, str(processed_items) + ' / ' + str(self.total_items))
+            if self.background_task:
+                progressdialog.update(int(progress), str(processed_items) + ' / ' + str(self.total_items) + ':', label)
+            else:
+                progressdialog.update(int(progress), label, str(processed_items) + ' / ' + str(self.total_items))
 
             UpdateRating({'dbid': item.get('%sid' % self.dbtype),
                           'type': self.dbtype,
                           'done_msg': False})
 
             processed_items += 1
-
-            if processed_items > percentage:
-                progress = progress + 1
-                percentage = percentage + percentage
+            progress = int(100 / self.total_items * processed_items)
 
         progressdialog.close
 

@@ -165,6 +165,11 @@ msgid "Rating updater"
 msgstr ""
 
 #: /resources/settings.xml
+msgctxt "#32028"
+msgid "Run updating process in the background"
+msgstr ""
+
+#: /resources/settings.xml
 msgctxt "#32031"
 msgid "Your personal OMDb API key (www.omdbapi.com)"
 msgstr ""
@@ -212,4 +217,9 @@ msgstr ""
 #: /resources/lib/dialog_metadata.py
 msgctxt "#32040"
 msgid "Edit data for"
+msgstr ""
+
+#: /default.py
+msgctxt "#32041"
+msgid "Cancel updating"
 msgstr ""

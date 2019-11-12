@@ -22,11 +22,20 @@ class Main:
             if not omdb_msg:
                 return
 
-            updateselector = DIALOG.contextmenu([ADDON.getLocalizedString(32038), ADDON.getLocalizedString(32037), ADDON.getLocalizedString(32036)])
+            if not winprop('UpdatingRatings.bool'):
+                menuitems = [ADDON.getLocalizedString(32038), ADDON.getLocalizedString(32037), ADDON.getLocalizedString(32036)]
+            else:
+                menuitems = [ADDON.getLocalizedString(32041)]
+
+            updateselector = DIALOG.contextmenu(menuitems)
 
             if updateselector == 0:
-                UpdateAllRatings({'type': 'movie'})
-                UpdateAllRatings({'type': 'tvshow'})
+                if not winprop('UpdatingRatings.bool'):
+                    UpdateAllRatings({'type': 'movie'})
+                    UpdateAllRatings({'type': 'tvshow'})
+
+                else:
+                    winprop('CancelRatingUpdater.bool', True)
 
             elif updateselector == 1:
                 UpdateAllRatings({'type': 'movie'})
