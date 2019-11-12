@@ -233,3 +233,8 @@ msgstr ""
 msgctxt "#32043"
 msgid "MPAA region"
 msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32044"
+msgid "Skip updating of MPAA"
+msgstr ""

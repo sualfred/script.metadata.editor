@@ -84,6 +84,7 @@ class UpdateRating(object):
         self.tmdb_type = 'movie' if self.dbtype == 'movie' else 'tv'
         self.tmdb_tv_status = None
         self.tmdb_mpaa = None
+        self.tmdb_mpaa_fallback = None
         self.update_uniqueid = False
 
         self.method_details = 'VideoLibrary.Get%sDetails' % self.dbtype
@@ -150,6 +151,8 @@ class UpdateRating(object):
         self.tags = result.get('tag')
 
     def get_tmdb(self):
+        country_code = ADDON.getSetting('country_code')
+
         result = tmdb_call(action=self.tmdb_type,
                            call=str(self.tmdb),
                            params={'append_to_response': 'release_dates,content_ratings,external_ids'}
@@ -176,24 +179,37 @@ class UpdateRating(object):
             self._update_ratings_dict(key='themoviedb', rating=self.tmdb_rating, votes=self.tmdb_votes)
 
         # set MPAA based on setting
-        if self.tmdb_type == 'movie':
-            release_dates = result['release_dates']['results']
+        if not ADDON.getSettingBool('skip_mpaa'):
+            if self.tmdb_type == 'movie':
+                release_dates = result['release_dates']['results']
 
-            for country in release_dates:
-                if country.get('iso_3166_1') == ADDON.getSetting('country_code'):
-                    self.tmdb_mpaa = country['release_dates'][0].get('certification')
-                    break
+                for country in release_dates:
+                    if country.get('iso_3166_1') == country_code:
+                        self.tmdb_mpaa = country['release_dates'][0].get('certification')
+                        break
 
-        if self.tmdb_type == 'tv':
-            content_ratings = result['content_ratings']['results']
+                    elif country.get('iso_3166_1') == 'US':
+                        self.tmdb_mpaa_fallback = country['release_dates'][0].get('certification')
 
-            for country in content_ratings:
-                if country.get('iso_3166_1') == ADDON.getSetting('country_code'):
-                    self.tmdb_mpaa = country.get('rating')
-                    break
+            if self.tmdb_type == 'tv':
+                content_ratings = result['content_ratings']['results']
 
-        if self.tmdb_mpaa:
-            self._set_value('mpaa', self.tmdb_mpaa)
+                for country in content_ratings:
+                    if country.get('iso_3166_1') == country_code:
+                        self.tmdb_mpaa = country.get('rating')
+                        break
+
+                    elif country.get('iso_3166_1') == 'US':
+                        self.tmdb_mpaa_fallback = country.get('rating')
+
+            if self.tmdb_mpaa:
+                if country_code == 'DE':
+                    self.tmdb_mpaa = 'FSK ' + self.tmdb_mpaa
+
+                self._set_value('mpaa', self.tmdb_mpaa)
+
+            elif self.tmdb_mpaa_fallback:
+                self._set_value('mpaa', self.tmdb_mpaa_fallback)
 
         # set IMDb ID if not available in the library
         if not self.imdb:
@@ -317,15 +333,21 @@ class UpdateRating(object):
             elems = ['ratings', 'uniqueid']
             values = [self.ratings, [self.uniqueid, None]]
 
+            # TV status
             if self.tmdb_tv_status:
                 elems.append('status')
                 values.append(self.tmdb_tv_status)
 
+            # MPAA
             if self.tmdb_mpaa:
                 elems.append('mpaa')
                 values.append(self.tmdb_mpaa)
 
-            # write tags to nfo in case they weren't there to trigger Emby to add them
+            elif self.tmdb_mpaa_fallback:
+                elems.append('mpaa')
+                values.append(self.tmdb_mpaa_fallback)
+
+            # Write tags to nfo in case they weren't there to trigger Emby to add them
             if self.tags:
                 elems.append('tag')
                 values.append(self.tags)

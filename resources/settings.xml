@@ -12,5 +12,6 @@
 		<setting label="$ADDON[script.metadata.editor 32031]" type="text" id="omdb_api_key"/>
 		<setting label="$ADDON[script.metadata.editor 32032]" type="bool" id="omdb_fallback_search" default="true"/>
 		<setting label="$ADDON[script.metadata.editor 32028]" type="bool" id="update_background" default="false"/>
+		<setting label="$ADDON[script.metadata.editor 32044]" type="bool" id="skip_mpaa" default="false"/>
 	</category>
 </settings>
