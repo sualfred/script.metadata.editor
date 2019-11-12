@@ -142,8 +142,8 @@ class UpdateRating(object):
         except KeyError:
             result = {}
 
-        self.uniqueid = result.get('uniqueid')
-        self.ratings = result.get('ratings')
+        self.uniqueid = result.get('uniqueid', {})
+        self.ratings = result.get('ratings', {})
         self.file = result.get('file')
         self.year = result.get('year')
         self.title = result.get('title')
@@ -316,8 +316,21 @@ class UpdateRating(object):
 
             break
 
-
     def update_info(self):
+        # set at least one default rating if none is set in the library
+        if not self.default_rating and self.ratings:
+            for item in ['imdb', 'themoviedb', 'tomatometerallcritics', 'tomatometeravgcritics', 'metacritic']:
+                if item in self.ratings:
+                    self.default_rating = item
+                    break
+
+            # unkown rating source is stored -> use the first one
+            if not self.default_rating:
+                for item in self.ratings:
+                    self.default_rating = item
+                    break
+
+        # update to library
         json_call('VideoLibrary.Set%sDetails' % self.dbtype,
                   params={'ratings': self.ratings, '%sid' % self.dbtype: int(self.dbid)},
                   debug=LOG_JSON
@@ -329,6 +342,7 @@ class UpdateRating(object):
                       debug=LOG_JSON
                       )
 
+        # nfo updating
         if self.file:
             elems = ['ratings', 'uniqueid']
             values = [self.ratings, [self.uniqueid, None]]
