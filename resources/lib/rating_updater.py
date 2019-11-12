@@ -126,6 +126,13 @@ class UpdateRating(object):
         # get Rotten, Metacritic and IMDb ratings of OMDb
         self.get_omdb()
 
+        # if no TMDb ID was known before but OMDb return the IMDb ID -> try to get TMDb data again
+        if not self.tmdb and self.imdb:
+            self.get_tmdb_externalid(self.imdb)
+
+            if self.tmdb:
+                self.get_tmdb()
+
         # update db + nfo
         self.update_info()
 
@@ -309,7 +316,7 @@ class UpdateRating(object):
                                           rating=metacritic,
                                           votes=0)
 
-            # TMDb doesn't store IMDb numbers for shows so store the one found via OMDb
+            # set imdb if not set before
             if not self.imdb and child.get('imdbID') and child.get('imdbID') != 'N/A':
                 self.imdb = child.get('imdbID')
                 self._update_uniqueid_dict('imdb', child.get('imdbID'))
