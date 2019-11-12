@@ -46,7 +46,7 @@ msgstr ""
 
 #: /resources/lib/utils.py
 msgctxt "#32006"
-msgid "Modify current list"
+msgid "Edit current list as string"
 msgstr ""
 
 #: /resources/lib/utils.py
