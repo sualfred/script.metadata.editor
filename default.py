@@ -5,7 +5,7 @@
 from resources.lib.helper import *
 from resources.lib.dialog_metadata import *
 from resources.lib.dialog_selectvalue import *
-from resources.lib.toggle_favourites import *
+from resources.lib.toggle_watchlist import *
 from resources.lib.rating_updater import *
 
 ########################
@@ -58,8 +58,8 @@ class Main:
             else:
                 UpdateRating({'dbid': dbid, 'type': dbtype})
 
-        elif self.action == 'togglefav':
-            ToggleFav({'dbid': dbid, 'type': dbtype})
+        elif self.action == 'togglewatchlist':
+            ToggleWatchlist({'dbid': dbid, 'type': dbtype})
 
         elif self.action == 'setgenre':
             SelectValue({'dbid': dbid, 'type': dbtype, 'key': 'genre'})

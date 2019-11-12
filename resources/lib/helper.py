@@ -49,7 +49,7 @@ DIALOG = xbmcgui.Dialog()
 
 ########################
 
-def log(txt,loglevel=DEBUG,json=False,force=False):
+def log(txt,loglevel=DEBUG,json=False,force=True):
     if loglevel in [DEBUG, WARNING, ERROR] or force:
         if force:
             loglevel = NOTICE
@@ -247,6 +247,11 @@ def xml_prettyprint(root,level=0):
     else:
         if level and (not root.tail or not root.tail.strip()):
             root.tail = i
+
+
+def notification(header=ADDON.getLocalizedString(32000),message=''):
+    DIALOG.notification(header, message, icon='special://home/addons/script.metadata.editor/resources/icon.png')
+
 
 @contextmanager
 def busy_dialog():

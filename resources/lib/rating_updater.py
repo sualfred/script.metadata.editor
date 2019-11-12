@@ -29,6 +29,7 @@ class UpdateAllRatings(object):
 
     def run(self):
         winprop('UpdatingRatings.bool', True)
+        msg_text = None
 
         if self.dbtype == 'movie':
             heading = ADDON.getLocalizedString(32033)
@@ -48,9 +49,13 @@ class UpdateAllRatings(object):
         for item in self.items:
             if (not self.background_task and progressdialog.iscanceled()) or winprop('CancelRatingUpdater.bool'):
                 winprop('CancelRatingUpdater', clear=True)
+                msg_text = ADDON.getLocalizedString(32042)
                 break
 
+            processed_items += 1
+            progress = int(100 / self.total_items * processed_items)
             label = item.get('title')
+
             if item.get('year'):
                 label = label + ' (' + str(item.get('year')) + ')'
 
@@ -63,10 +68,10 @@ class UpdateAllRatings(object):
                           'type': self.dbtype,
                           'done_msg': False})
 
-            processed_items += 1
-            progress = int(100 / self.total_items * processed_items)
+        progressdialog.close()
+        progressdialog = None
 
-        progressdialog.close
+        notification(ADDON.getLocalizedString(32030), msg_text if msg_text else xbmc.getLocalizedString(19256))
 
         winprop('UpdatingRatings', clear=True)
 
@@ -78,6 +83,7 @@ class UpdateRating(object):
         self.done_msg = True if params.get('done_msg', True) else False
         self.tmdb_type = 'movie' if self.dbtype == 'movie' else 'tv'
         self.tmdb_tv_status = None
+        self.tmdb_mpaa = None
         self.update_uniqueid = False
 
         self.method_details = 'VideoLibrary.Get%sDetails' % self.dbtype
@@ -123,7 +129,7 @@ class UpdateRating(object):
         self.update_info()
 
         if self.done_msg:
-            DIALOG.notification(ADDON.getLocalizedString(32030), xbmc.getLocalizedString(19256), icon='special://home/addons/script.metadata.editor/resources/icon.png')
+            notification(ADDON.getLocalizedString(32030), xbmc.getLocalizedString(19256))
 
     def get_details(self):
         json_query = json_call(self.method_details,
@@ -131,34 +137,23 @@ class UpdateRating(object):
                                params={self.param: int(self.dbid)}
                                )
         try:
-            self.uniqueid = json_query['result'][self.key_details].get('uniqueid')
-            self.ratings = json_query['result'][self.key_details].get('ratings')
-            self.file = json_query['result'][self.key_details].get('file')
-            self.year = json_query['result'][self.key_details].get('year')
-            self.title = json_query['result'][self.key_details].get('title')
-            self.original_title = json_query['result'][self.key_details].get('originaltitle') or self.title
-            self.tags = json_query['result'][self.key_details].get('tag')
-
+            result = json_query['result'][self.key_details]
         except KeyError:
-            self.uniqueid = None
-            self.ratings = None
-            self.file = None
-            self.year = None
-            self.title = None
-            self.original_title = None
-            self.tags = None
+            result = {}
+
+        self.uniqueid = result.get('uniqueid')
+        self.ratings = result.get('ratings')
+        self.file = result.get('file')
+        self.year = result.get('year')
+        self.title = result.get('title')
+        self.original_title = result.get('originaltitle') or self.title
+        self.tags = result.get('tag')
 
     def get_tmdb(self):
         result = tmdb_call(action=self.tmdb_type,
                            call=str(self.tmdb),
+                           params={'append_to_response': 'release_dates,content_ratings,external_ids'}
                            )
-
-        # set IMDb ID if not available in the library
-        if not self.imdb:
-            self.imdb = result.get('imdb_id')
-
-            if self.imdb:
-                self._update_uniqueid_dict('imdb', self.imdb)
 
         self.tmdb_rating = result.get('vote_average')
         self.tmdb_votes = result.get('vote_count')
@@ -179,6 +174,44 @@ class UpdateRating(object):
 
         if self.tmdb_rating:
             self._update_ratings_dict(key='themoviedb', rating=self.tmdb_rating, votes=self.tmdb_votes)
+
+        # set MPAA based on setting
+        if self.tmdb_type == 'movie':
+            release_dates = result['release_dates']['results']
+
+            for country in release_dates:
+                if country.get('iso_3166_1') == ADDON.getSetting('country_code'):
+                    self.tmdb_mpaa = country['release_dates'][0].get('certification')
+                    break
+
+        if self.tmdb_type == 'tv':
+            content_ratings = result['content_ratings']['results']
+
+            for country in content_ratings:
+                if country.get('iso_3166_1') == ADDON.getSetting('country_code'):
+                    self.tmdb_mpaa = country.get('rating')
+                    break
+
+        if self.tmdb_mpaa:
+            self._set_value('mpaa', self.tmdb_mpaa)
+
+        # set IMDb ID if not available in the library
+        if not self.imdb:
+            if self.tmdb_type == 'movie':
+                self.imdb = result.get('imdb_id')
+
+            elif self.tmdb_type == 'tv':
+                self.imdb = result['external_ids'].get('imdb_id')
+
+            if self.imdb:
+                self._update_uniqueid_dict('imdb', self.imdb)
+
+        # add TVDb ID to uniqueid if missing
+        if not self.tvdb and self.tmdb_type == 'tv':
+            self.tvdb = result['external_ids'].get('tvdb_id')
+
+            if self.tvdb:
+                self._update_uniqueid_dict('tvdb', self.tvdb)
 
     def get_tmdb_externalid(self,external_id):
         result = tmdb_call(action='find',
@@ -287,6 +320,10 @@ class UpdateRating(object):
             if self.tmdb_tv_status:
                 elems.append('status')
                 values.append(self.tmdb_tv_status)
+
+            if self.tmdb_mpaa:
+                elems.append('mpaa')
+                values.append(self.tmdb_mpaa)
 
             # write tags to nfo in case they weren't there to trigger Emby to add them
             if self.tags:

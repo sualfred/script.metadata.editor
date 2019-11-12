@@ -10,7 +10,7 @@ from resources.lib.helper import *
 from resources.lib.json_map import *
 from resources.lib.dialog_metadata import *
 from resources.lib.dialog_selectvalue import *
-from resources.lib.toggle_favourites import *
+from resources.lib.toggle_watchlist import *
 from resources.lib.rating_updater import *
 
 #################################################################################################

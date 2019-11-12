@@ -8,7 +8,7 @@ from resources.lib.functions import *
 
 ########################
 
-class ToggleFav(object):
+class ToggleWatchlist(object):
     def __init__(self,params):
         self.dbid = params.get('dbid')
         self.dbtype = params.get('type')
@@ -17,15 +17,7 @@ class ToggleFav(object):
         self.method_setdetails = 'VideoLibrary.Set%sDetails' % self.dbtype
         self.param = '%sid' % self.dbtype
         self.key_details = '%sdetails' % self.dbtype
-
-        if self.dbtype == 'movie':
-            self.tag = 'Movie Watchlist'
-
-        elif self.dbtype == 'tvshow':
-            self.tag = 'TV Show Watchlist'
-
-        elif self.dbtype == 'musicvideo':
-            self.tag = 'Music Video Watchlist'
+        self.tag = 'Watchlist'
 
         self.init()
 
