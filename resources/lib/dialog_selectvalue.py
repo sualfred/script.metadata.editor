@@ -43,7 +43,7 @@ class SelectValue(object):
             else:
                 self.available_audio_values()
 
-        else:
+        elif self.dbkey == 'tag':
             if self.dbtype in ['movie', 'tvshow', 'season', 'episode', 'musicvideo']:
                 self.available_video_values()
             else:
@@ -72,6 +72,10 @@ class SelectValue(object):
             for item in self.values:
                 if item not in self.all_values:
                     self.all_values.append(item)
+
+        # for regular library arrays that only can be fetched on item base
+        if not self.all_values:
+            self.all_values = self.values
 
     def available_video_values(self):
         self._json_query(type='movie')

@@ -129,11 +129,7 @@ def set_ratings(ratings):
 
 
 def set_array(preset,dbid,dbtype,key):
-    actionlist = [ADDON.getLocalizedString(32005), ADDON.getLocalizedString(32006)]
-
-    if key in ['genre', 'tag']:
-        actionlist.append(ADDON.getLocalizedString(32007))
-
+    actionlist = [ADDON.getLocalizedString(32005), ADDON.getLocalizedString(32007), ADDON.getLocalizedString(32006)]
     array_action = DIALOG.select(xbmc.getLocalizedString(14241), actionlist)
 
     if array_action == 0:
@@ -151,6 +147,14 @@ def set_array(preset,dbid,dbtype,key):
         return remove_empty(array)
 
     elif array_action == 1:
+        from resources.lib.dialog_selectvalue import SelectValue
+
+        array = SelectValue(params={'dbid': dbid, 'type': dbtype, 'key': key},
+                            editor=True)
+
+        return eval(str(array))
+
+    elif array_action == 2:
         keyboard = xbmc.Keyboard(preset)
         keyboard.doModal()
 
@@ -161,14 +165,6 @@ def set_array(preset,dbid,dbtype,key):
 
         array = array.replace('; ',';').split(';')
         return remove_empty(array)
-
-    elif array_action == 2:
-        from resources.lib.dialog_selectvalue import SelectValue
-
-        array = SelectValue(params={'dbid': dbid, 'type': dbtype, 'key': key},
-                            editor=True)
-
-        return eval(str(array))
 
     else:
         array = preset.replace('; ',';').split(';')
