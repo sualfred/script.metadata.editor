@@ -86,6 +86,7 @@ class UpdateRating(object):
         self.tmdb_mpaa = None
         self.tmdb_mpaa_fallback = None
         self.update_uniqueid = False
+        self.episodeguide = None
 
         self.method_details = 'VideoLibrary.Get%sDetails' % self.dbtype
         self.method_setdetails = 'VideoLibrary.Set%sDetails' % self.dbtype
@@ -140,8 +141,13 @@ class UpdateRating(object):
             notification(ADDON.getLocalizedString(32030), xbmc.getLocalizedString(19256))
 
     def get_details(self):
+        if self.dbtype == 'movie':
+            details_properties = ['title', 'originaltitle', 'year', 'uniqueid', 'ratings', 'file', 'tag']
+        else:
+            details_properties = ['title', 'originaltitle', 'year', 'uniqueid', 'ratings', 'file', 'tag', 'episodeguide']
+
         json_query = json_call(self.method_details,
-                               properties=['title', 'originaltitle', 'year', 'uniqueid', 'ratings', 'file', 'tag'],
+                               properties=details_properties,
                                params={self.param: int(self.dbid)}
                                )
         try:
@@ -156,6 +162,11 @@ class UpdateRating(object):
         self.title = result.get('title')
         self.original_title = result.get('originaltitle') or self.title
         self.tags = result.get('tag')
+
+        if ('thetvdb' or 'themoviedb') in result.get('episodeguide'):
+            self.episodeguide = result.get('episodeguide')
+        else:
+            self.episodeguide = None
 
     def get_tmdb(self):
         country_code = ADDON.getSetting('country_code')
@@ -260,7 +271,9 @@ class UpdateRating(object):
                          title=self.original_title,
                          year=self.year)
 
-        if not omdb:
+        if not omdb or '<root response="False">' in omdb:
+            error_msg = 'OMDb error for "%s" IMDBd "%s" --> ' % (self.original_title, self.imdb)
+            log(error_msg + str(omdb), WARNING)
             return
 
         tree = ET.ElementTree(ET.fromstring(omdb))
@@ -349,10 +362,36 @@ class UpdateRating(object):
                       debug=LOG_JSON
                       )
 
+        # episode guide verification
+        if self.episodeguide:
+            if 'thetvdb' in self.episodeguide and 'tvdb' not in self.uniqueid:
+                self.episodeguide = None
+            elif 'themoviedb' in self.episodeguide and 'tmdb' not in self.uniqueid:
+                self.episodeguide = None
+
+        if self.dbtype == 'tvshow' and not self.episodeguide:
+            if 'tvdb' in self.uniqueid:
+                value = self.uniqueid.get('tvdb')
+                url = 'https://api.thetvdb.com/login?{"apikey":"439DFEBA9D3059C6","id":%s}|Content-Type=application/json' % str(value)
+                json_value = '<episodeguide><url post="yes" cache="auth.json"><url>%s</url></episodeguide>' % url
+
+            elif 'tmdb' in self.uniqueid:
+                value = self.uniqueid.get('tmdb')
+                language = ADDON.getSetting('tmdb_language')
+                cache = 'tmdb-%s-%s.json' % (str(value), language)
+                url = 'http://api.themoviedb.org/3/tv/%s?api_key=6a5be4999abf74eba1f9a8311294c267&amp;language=%s' % (str(value), language)
+                json_value = '<episodeguide><url cache="%s"><url>%s</url></episodeguide>' % (cache, url)
+
+            else:
+                json_value = '<episodeguide><url cache=""><url></url></episodeguide>'
+
+            self.episodeguide = json_value
+            self._set_value('episodeguide', json_value)
+
         # nfo updating
         if self.file:
             elems = ['ratings', 'uniqueid']
-            values = [self.ratings, [self.uniqueid, None]]
+            values = [self.ratings, [self.uniqueid, self.episodeguide]]
 
             # TV status
             if self.tmdb_tv_status:
