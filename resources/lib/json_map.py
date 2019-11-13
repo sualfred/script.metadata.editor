@@ -149,7 +149,8 @@ artist_properties = [
                     'dateadded',
                     'roles',
                     'songgenres',
-                    'isalbumartist'
+                    'isalbumartist',
+                    'disambiguation'
                     ]
 
 album_properties = [

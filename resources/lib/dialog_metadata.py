@@ -202,6 +202,7 @@ class EditDialog(object):
         elif self.dbtype == 'artist':
             self._create_list(xbmc.getLocalizedString(515), 'genre', value=get_joined_items(details.get('genre')), type='array')
             self._create_list(xbmc.getLocalizedString(21821), 'description', value=details.get('description'), type='string')
+            self._create_list(xbmc.getLocalizedString(39026), 'disambiguation', value=details.get('disambiguation'), type='string')
             self._create_list(xbmc.getLocalizedString(736), 'style', value=get_joined_items(details.get('style')), type='array')
             self._create_list(xbmc.getLocalizedString(175), 'mood', value=get_joined_items(details.get('mood')), type='array')
             self._create_list(xbmc.getLocalizedString(21892), 'instrument', value=get_joined_items(details.get('instrument')), type='array')
