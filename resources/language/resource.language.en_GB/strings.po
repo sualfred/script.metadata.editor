@@ -238,3 +238,13 @@ msgstr ""
 msgctxt "#32044"
 msgid "Skip updating of MPAA"
 msgstr ""
+
+#: /default.py
+msgctxt "#32045"
+msgid "Update episode ratings"
+msgstr ""
+
+#: /resources/lib/rating_updater.py
+msgctxt "#32046"
+msgid "Updating episode ratings"
+msgstr ""

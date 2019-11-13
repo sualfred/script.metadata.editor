@@ -276,14 +276,14 @@ def set_status(preset):
     return preset
 
 
-def omdb_call(imdbnumber=None,title=None,year=None):
+def omdb_call(imdbnumber=None,title=None,year=None,use_fallback=False):
     api_key = ADDON.getSetting('omdb_api_key')
     base_url = 'http://www.omdbapi.com/'
 
     if imdbnumber:
         url = '%s?apikey=%s&i=%s&plot=short&r=xml&tomatoes=true' % (base_url, api_key, imdbnumber)
 
-    elif ADDON.getSettingBool('omdb_fallback_search') and title and year:
+    elif use_fallback and title and year:
         # it seems that urllib has issues with some asian letters
         try:
             title = urllib.quote(title)

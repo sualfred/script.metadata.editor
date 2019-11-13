@@ -23,7 +23,7 @@ class Main:
                 return
 
             if not winprop('UpdatingRatings.bool'):
-                menuitems = [ADDON.getLocalizedString(32038), ADDON.getLocalizedString(32037), ADDON.getLocalizedString(32036)]
+                menuitems = [ADDON.getLocalizedString(32038), ADDON.getLocalizedString(32037), ADDON.getLocalizedString(32036), ADDON.getLocalizedString(32045)]
             else:
                 menuitems = [ADDON.getLocalizedString(32041)]
 
@@ -33,6 +33,7 @@ class Main:
                 if not winprop('UpdatingRatings.bool'):
                     UpdateAllRatings({'type': 'movie'})
                     UpdateAllRatings({'type': 'tvshow'})
+                    UpdateAllRatings({'type': 'episode'})
 
                 else:
                     winprop('CancelRatingUpdater.bool', True)
@@ -43,6 +44,9 @@ class Main:
             elif updateselector == 2:
                 UpdateAllRatings({'type': 'tvshow'})
 
+            elif updateselector == 3:
+                UpdateAllRatings({'type': 'episode'})
+
         elif self.action == 'updaterating':
             omdb_msg = self._omdb_msg()
             if not omdb_msg:
@@ -51,6 +55,7 @@ class Main:
             if not dbtype:
                 UpdateAllRatings({'type': 'movie'})
                 UpdateAllRatings({'type': 'tvshow'})
+                UpdateAllRatings({'type': 'episode'})
 
             elif dbtype and not dbid:
                 UpdateAllRatings({'type': dbtype})

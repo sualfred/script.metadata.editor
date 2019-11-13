@@ -66,7 +66,7 @@ class ContextMenu(object):
             else:
                 itemlist.append(ADDON.getLocalizedString(32009))
 
-        if self.dbtype in ['movie', 'tvshow']:
+        if self.dbtype in ['movie', 'tvshow', 'episode']:
             itemlist.append(ADDON.getLocalizedString(32039))
 
         if len(itemlist) > 1:
@@ -74,14 +74,23 @@ class ContextMenu(object):
 
             if contextdialog == 0:
                 EditDialog({'dbid': self.dbid, 'type': self.dbtype})
+
             elif contextdialog == 1:
-                SelectValue({'dbid': self.dbid, 'type': self.dbtype, 'key': 'genre'})
+                if self.dbtype == 'episode':
+                    UpdateRating({'dbid': self.dbid, 'type': self.dbtype})
+
+                else:
+                    SelectValue({'dbid': self.dbid, 'type': self.dbtype, 'key': 'genre'})
+
             elif contextdialog == 2:
                 SelectValue({'dbid': self.dbid, 'type': self.dbtype, 'key': 'tag'})
+
             elif contextdialog == 3:
                 ToggleFav({'dbid': self.dbid, 'type': self.dbtype})
+
             elif contextdialog == 4:
                 UpdateRating({'dbid': self.dbid, 'type': self.dbtype})
+
             else:
                 return
 

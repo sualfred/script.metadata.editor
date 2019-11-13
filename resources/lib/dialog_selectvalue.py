@@ -58,8 +58,7 @@ class SelectValue(object):
     def current_values(self):
         result = json_call(self.method_details,
                            properties=[self.dbkey, 'file'] if self.library == 'Video' else [self.dbkey],
-                           params={self.param: int(self.dbid)},
-                           debug=True
+                           params={self.param: int(self.dbid)}
                            )
 
         result = result['result'][self.key_details]

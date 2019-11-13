@@ -10,22 +10,34 @@ from resources.lib.functions import *
 
 ########################
 
+OMDB_FALLBACK = ADDON.getSettingBool('omdb_fallback_search')
+
+########################
+
 class UpdateAllRatings(object):
     def __init__(self,params):
         self.dbtype = params.get('type')
         self.background_task = ADDON.getSettingBool('update_background')
+        self.get_items()
 
-        all_items = json_call('VideoLibrary.Get%ss' % self.dbtype,
-                              properties=['title', 'year']
-                              )
+    def get_items(self):
+        if self.dbtype == 'episode':
+            all_items_properties = ['title', 'showtitle']
+        else:
+            all_items_properties = ['title', 'year']
+
+        with busy_dialog():
+            all_items = json_call('VideoLibrary.Get%ss' % self.dbtype,
+                                  properties=all_items_properties
+                                  )
 
         try:
-        	self.items = all_items['result']['%ss' % self.dbtype]
-        	self.total_items = len(self.items)
-        	self.run()
+            self.items = all_items['result']['%ss' % self.dbtype]
+            self.total_items = len(self.items)
+            self.run()
 
         except Exception:
-        	pass
+            pass
 
     def run(self):
         winprop('UpdatingRatings.bool', True)
@@ -33,8 +45,10 @@ class UpdateAllRatings(object):
 
         if self.dbtype == 'movie':
             heading = ADDON.getLocalizedString(32033)
-        else:
+        elif self.dbtype == 'tvshow':
             heading = ADDON.getLocalizedString(32034)
+        else:
+            heading = ADDON.getLocalizedString(32046)
 
         processed_items = 0
         progress = 0
@@ -54,7 +68,11 @@ class UpdateAllRatings(object):
 
             processed_items += 1
             progress = int(100 / self.total_items * processed_items)
-            label = item.get('title')
+
+            if item.get('showtitle') and item.get('label'):
+                label = item.get('showtitle') + ' - ' + item.get('label')
+            else:
+                label = item.get('title')
 
             if item.get('year'):
                 label = label + ' (' + str(item.get('year')) + ')'
@@ -106,6 +124,10 @@ class UpdateRating(object):
         self.tmdb = self.uniqueid.get('tmdb')
         self.tvdb = self.uniqueid.get('tvdb')
 
+        # don't proceed for episodes if no IMDb is available
+        if self.dbtype == 'episode' and not self.imdb:
+            return
+
         # get the default used rating
         self.default_rating = None
         for rating in self.ratings:
@@ -113,22 +135,23 @@ class UpdateRating(object):
                 self.default_rating = rating
                 break
 
-        # get TMDb ID (if not available) by using the ID of IMDb or TVDb
-        if not self.tmdb and self.imdb:
-            self.get_tmdb_externalid(self.imdb)
+        if self.dbtype != 'episode':
+            # get TMDb ID (if not available) by using the ID of IMDb or TVDb
+            if not self.tmdb and self.imdb:
+                self.get_tmdb_externalid(self.imdb)
 
-        elif not self.tmdb and self.tvdb:
-            self.get_tmdb_externalid(self.tvdb)
+            elif not self.tmdb and self.tvdb:
+                self.get_tmdb_externalid(self.tvdb)
 
-        # get TMDb rating and IMDb number if not available
-        if self.tmdb:
-            self.get_tmdb()
+            # get TMDb rating and IMDb number if not available
+            if self.tmdb:
+                self.get_tmdb()
 
         # get Rotten, Metacritic and IMDb ratings of OMDb
         self.get_omdb()
 
         # if no TMDb ID was known before but OMDb return the IMDb ID -> try to get TMDb data again
-        if not self.tmdb and self.imdb:
+        if self.dbtype != 'episode' and not self.tmdb and self.imdb:
             self.get_tmdb_externalid(self.imdb)
 
             if self.tmdb:
@@ -141,10 +164,12 @@ class UpdateRating(object):
             notification(ADDON.getLocalizedString(32030), xbmc.getLocalizedString(19256))
 
     def get_details(self):
-        if self.dbtype == 'movie':
-            details_properties = ['title', 'originaltitle', 'year', 'uniqueid', 'ratings', 'file', 'tag']
-        else:
+        if self.dbtype == 'tvshow':
             details_properties = ['title', 'originaltitle', 'year', 'uniqueid', 'ratings', 'file', 'tag', 'episodeguide']
+        elif self.dbtype == 'episode':
+            details_properties = ['title', 'originaltitle', 'uniqueid', 'ratings', 'file']
+        else:
+            details_properties = ['title', 'originaltitle', 'year', 'uniqueid', 'ratings', 'file', 'tag']
 
         json_query = json_call(self.method_details,
                                properties=details_properties,
@@ -269,7 +294,9 @@ class UpdateRating(object):
     def get_omdb(self):
         omdb = omdb_call(imdbnumber=self.imdb,
                          title=self.original_title,
-                         year=self.year)
+                         year=self.year,
+                         use_fallback=OMDB_FALLBACK if self.dbtype != 'episode' else False
+                         )
 
         if not omdb or '<root response="False">' in omdb:
             error_msg = 'OMDb error for "%s" IMDBd "%s" --> ' % (self.original_title, self.imdb)

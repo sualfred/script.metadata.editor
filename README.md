@@ -35,6 +35,10 @@ RunScript calls:
 *  `RunScript(script.metadata.editor,action=settags,dbid=$INFO[ListItem.DBID],type=$INFO[ListItem.DBType])` = opens tags selector
 *  `RunScript(script.metadata.editor,action=togglewatchlist,dbid=$INFO[ListItem.DBID],type=$INFO[ListItem.DBType])` = toggle watchlist tag
 *  `RunScript(script.metadata.editor,action=updaterating,dbid=$INFO[ListItem.DBID],type=$INFO[ListItem.DBType])` = Updates rating for the requested item
-*  `RunScript(script.metadata.editor,action=updaterating)` = Updates all movie and TV show ratings
-*  `RunScript(script.metadata.editor,action=updaterating,type=movie)` = Updates all ratings for movies
-*  `RunScript(script.metadata.editor,action=updaterating,type=tvshow)` = Updates all ratings for TV shows
+
+RunScript calls for updating ratings:
+*  `RunScript(script.metadata.editor)` = Shows select dialog to update movies, shows and episodes or all of them
+*  `RunScript(script.metadata.editor,action=updaterating)` = Updates all movie/TV show ratings (combination of available TMDb, TVDb, IMDb IDs) and episode ratings (only if IMDb is available)
+*  `RunScript(script.metadata.editor,action=updaterating,type=movie)` = Updates all ratings for movies (combination of available TMDb, TVDb, IMDb IDs)
+*  `RunScript(script.metadata.editor,action=updaterating,type=tvshow)` = Updates all ratings for TV shows (combination of available TMDb, TVDb, IMDb IDs)
+*  `RunScript(script.metadata.editor,action=updaterating,type=episode)` = Updates all ratings for TV shows (only if IMDb is available)
