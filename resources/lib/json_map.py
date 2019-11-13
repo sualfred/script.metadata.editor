@@ -60,7 +60,8 @@ episode_properties = [
                     'writer',
                     'cast',
                     'dateadded',
-                    'lastplayed'
+                    'lastplayed',
+                    'uniqueid'
                     ]
 
 season_properties = [

@@ -305,6 +305,9 @@ class EditDialog(object):
                 else:
                     updated_dict[item] = uniqueids.get(item)
 
+            if uniqueid_key not in updated_dict:
+                updated_dict[uniqueid_key] = returned_value_str
+
             nfo_value = [updated_dict, option.get('episodeguide')]
 
         update_library(dbtype, key, value, dbid)
