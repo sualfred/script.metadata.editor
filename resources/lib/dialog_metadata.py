@@ -111,6 +111,7 @@ class EditDialog(object):
                                    'votes': details.get('votes', 0)}
                                    }
 
+        ratings_default = None
         for item in ratings:
             if ratings[item].get('default'):
                 ratings_value = str(get_rounded_value(ratings[item].get('rating', 0.0)))
