@@ -163,7 +163,7 @@ class UpdateRating(object):
         self.original_title = result.get('originaltitle') or self.title
         self.tags = result.get('tag')
 
-        if ('thetvdb' or 'themoviedb') in result.get('episodeguide'):
+        if ('thetvdb' or 'themoviedb') in result.get('episodeguide', ''):
             self.episodeguide = result.get('episodeguide')
         else:
             self.episodeguide = None
