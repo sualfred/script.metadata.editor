@@ -228,11 +228,17 @@ class UpdateRating(object):
 
                 for country in release_dates:
                     if country.get('iso_3166_1') == country_code:
-                        self.tmdb_mpaa = country['release_dates'][0].get('certification')
+                        for item in country['release_dates']:
+                            if item.get('certification'):
+                                self.tmdb_mpaa = item.get('certification')
+                                break
                         break
 
                     elif country.get('iso_3166_1') == 'US':
-                        self.tmdb_mpaa_fallback = country['release_dates'][0].get('certification')
+                        for item in country['release_dates']:
+                            if item.get('certification'):
+                                self.tmdb_mpaa = item.get('certification')
+                                break
 
             if self.tmdb_type == 'tv':
                 content_ratings = result['content_ratings']['results']
