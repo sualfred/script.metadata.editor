@@ -248,3 +248,8 @@ msgstr ""
 msgctxt "#32046"
 msgid "Updating episode ratings"
 msgstr ""
+
+#: /resources/lib/dialog_metadata.py
+msgctxt "#32047"
+msgid "No default source defined"
+msgstr ""

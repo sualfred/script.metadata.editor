@@ -119,6 +119,9 @@ class EditDialog(object):
                 ratings_default = ratings_value + ' / ' + votes_value + ' (' + xbmc.getLocalizedString(21870) + ': ' + item + ')'
                 break
 
+        if not ratings_default and len(ratings) > 0:
+            ratings_default = ADDON.getLocalizedString(32047)
+
         if self.dbtype == 'movie':
             self._create_list(xbmc.getLocalizedString(369), 'title', value=details.get('title'), type='string')
             self._create_list(xbmc.getLocalizedString(20376), 'originaltitle', value=details.get('originaltitle'), type='string')
