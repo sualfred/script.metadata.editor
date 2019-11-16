@@ -241,3 +241,33 @@ msgstr "Bearbeite Daten für"
 msgctxt "#32041"
 msgid "Cancel updating"
 msgstr "Aktualisierung abbrechen"
+
+#: /resources/lib/rating_updater.py
+msgctxt "#32042"
+msgid "Canceled"
+msgstr "Abgebrochen"
+
+#: /resources/settings.xml
+msgctxt "#32043"
+msgid "MPAA region"
+msgstr "MPAA Region"
+
+#: /resources/settings.xml
+msgctxt "#32044"
+msgid "Skip updating of MPAA"
+msgstr "MPAA nicht aktualisieren"
+
+#: /default.py
+msgctxt "#32045"
+msgid "Update episode ratings"
+msgstr "Aktualisiere Episodenbewertungen"
+
+#: /resources/lib/rating_updater.py
+msgctxt "#32046"
+msgid "Updating episode ratings"
+msgstr "Aktualisiere Episodenbewertungen"
+
+#: /resources/lib/dialog_metadata.py
+msgctxt "#32047"
+msgid "No default source defined"
+msgstr "Keine Standard-Quelle definiert"
