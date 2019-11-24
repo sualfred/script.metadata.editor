@@ -50,8 +50,8 @@ msgstr "Nieuw item toevoegen"
 
 #: /resources/lib/utils.py
 msgctxt "#32006"
-msgid "Modify current list"
-msgstr "Huidige lijst wijzigen"
+msgid "Edit current list as string"
+msgstr "Huidige lijst als string bewerken"
 
 #: /resources/lib/utils.py
 msgctxt "#32007"
@@ -60,13 +60,13 @@ msgstr "Kiezen uit beschikbare items"
 
 #: /context.py
 msgctxt "#32008"
-msgid "Remove favourite tag"
-msgstr "Favoriete label verwijderen"
+msgid "Remove watchlist tag"
+msgstr "Kijklijst label verwijderen"
 
 #: /context.py
 msgctxt "#32009"
-msgid "Add favourite tag"
-msgstr "Favoriete label toevoegen"
+msgid "Add watchlist tag"
+msgstr "Kijklijst label toevoegen"
 
 #: /context.py
 msgctxt "#32010"
@@ -161,11 +161,114 @@ msgid "Library is based on informations of"
 msgstr "Bibliotheek is gebaseerd op informatie van"
 
 #: /resources/settings.xml
-msgctxt "#32028"
-msgid "ListItem.IMDBNumber fallback value source"
-msgstr "ListItem.IMDBNumber bron voor reservewaarde"
-
-#: /resources/settings.xml
 msgctxt "#32029"
 msgid "Enable JSON logging"
 msgstr "JSON-logboekregistratie inschakelen"
+
+#: /resources/settings.xml
+msgctxt "#32030"
+msgid "Rating updater"
+msgstr "Beoordelingsupdater"
+
+#: /resources/settings.xml
+msgctxt "#32028"
+msgid "Run updating process in the background"
+msgstr "Het updateproces op de achtergrond uitvoeren"
+
+#: /resources/settings.xml
+msgctxt "#32031"
+msgid "Your personal OMDb API key (www.omdbapi.com)"
+msgstr "Uw persoonlijke OMDb API key (www.omdbapi.com)"
+
+#: /resources/settings.xml
+msgctxt "#32032"
+msgid "Search OMDb with title/year if IMDb is missing"
+msgstr "In OMDb zoeken met titel/jaar als IMDb ontbreekt"
+
+#: /resources/lib/rating_updater.py
+msgctxt "#32033"
+msgid "Updating movie ratings"
+msgstr "Beoordelingen van films aan het bijwerken"
+
+#: /resources/lib/rating_updater.py
+msgctxt "#32034"
+msgid "Updating TV show ratings"
+msgstr "Beoordelingen van TV-series aan het bijwerken"
+
+#: /default.py
+msgctxt "#32035"
+msgid ""
+"No OMDb API key is configured, which is required to update IMDb, Rotten "
+"Tomatoes and Metacritic ratings. Please visit www.omdbapi.com and create "
+"your own API key.[CR][CR]Note: The free key is limited to 1000 calls a day. "
+"Please suggest to become a patreon of OMDb to increase the limit to "
+"100.000.[CR][CR]Do you want to proceed updating The Movie DB ratings? This "
+"only works if you have a TMDb ID stored."
+msgstr ""
+"Er is geen OMDb API-sleutel geconfigureerd, die nodig is om IMDb, Rotten "
+"Tomatoes en Metacritic-beoordelingen bij te werken. Ga naar www.omdbapi.com "
+"en maak uw eigen API-sleutel aan.[CR][CR]Opmerking: de gratis sleutel is "
+"beperkt tot 1000 oproepen per dag. Overweeg om een patreon van OMDb te "
+"worden om de limiet naar 100.000 te verhogen.[CR][CR] Wilt u doorgaan met "
+"het bijwerken van The Movie DB-beoordelingen? Dit werkt alleen als u een "
+"TMDb-ID hebt opgeslagen."
+
+#: /default.py
+msgctxt "#32036"
+msgid "Update TV show ratings"
+msgstr "Beoordelingen van TV-series bijwerken"
+
+#: /default.py
+msgctxt "#32037"
+msgid "Update movie ratings"
+msgstr "Beoordelingen van films bijwerken"
+
+#: /default.py
+msgctxt "#32038"
+msgid "Update all ratings"
+msgstr "Alle beoordelingen bijwerken"
+
+#: /context.py
+msgctxt "#32039"
+msgid "Update ratings"
+msgstr "Beoordelingen bijwerken"
+
+#: /resources/lib/dialog_metadata.py
+msgctxt "#32040"
+msgid "Edit data for"
+msgstr "Data bewerken voor"
+
+#: /default.py
+msgctxt "#32041"
+msgid "Cancel updating"
+msgstr "Bijwerken annuleren"
+
+#: /resources/lib/rating_updater.py
+msgctxt "#32042"
+msgid "Canceled"
+msgstr "Geannuleerd"
+
+#: /resources/settings.xml
+msgctxt "#32043"
+msgid "MPAA region"
+msgstr "MPAA regio"
+
+#: /resources/settings.xml
+msgctxt "#32044"
+msgid "Skip updating of MPAA"
+msgstr "Bijwerken van MPAA overslaan"
+
+#: /default.py
+msgctxt "#32045"
+msgid "Update episode ratings"
+msgstr "Beoordelingen van afleveringen bijwerken"
+
+#: /resources/lib/rating_updater.py
+msgctxt "#32046"
+msgid "Updating episode ratings"
+msgstr "Beoordelingen van afleveringen aan het bijwerken"
+
+#: /resources/lib/dialog_metadata.py
+msgctxt "#32047"
+msgid "No default source defined"
+msgstr "Geen standaardbron gedefinieerd"
