@@ -55,13 +55,7 @@ class ContextMenu(object):
         if 'tag' in self.details:
             itemlist.append(ADDON.getLocalizedString(32003))
 
-            is_fav = False
-            for tag in self.details.get('tag'):
-                if tag in ['Movie Watchlist', 'TV Show Watchlist', 'Music Video Watchlist']:
-                    is_fav = True
-                    break
-
-            if is_fav:
+            if 'Watchlist' in self.details.get('tag'):
                 itemlist.append(ADDON.getLocalizedString(32008))
             else:
                 itemlist.append(ADDON.getLocalizedString(32009))
@@ -86,7 +80,7 @@ class ContextMenu(object):
                 SelectValue({'dbid': self.dbid, 'type': self.dbtype, 'key': 'tag'})
 
             elif contextdialog == 3:
-                ToggleFav({'dbid': self.dbid, 'type': self.dbtype})
+                ToggleWatchlist({'dbid': self.dbid, 'type': self.dbtype})
 
             elif contextdialog == 4:
                 UpdateRating({'dbid': self.dbid, 'type': self.dbtype})

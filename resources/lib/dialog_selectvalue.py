@@ -54,6 +54,7 @@ class SelectValue(object):
 
         if not self.editor:
             self.update_data()
+            reload_widgets()
 
     def current_values(self):
         result = json_call(self.method_details,

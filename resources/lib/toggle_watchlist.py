@@ -61,4 +61,4 @@ class ToggleWatchlist(object):
                        dbtype=self.dbtype,
                        dbid=self.dbid)
 
-        #reload_widgets(reason='Fav. updated')
+        reload_widgets()

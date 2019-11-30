@@ -32,9 +32,9 @@ class EditDialog(object):
 
         winprop('SelectDialogPreselect', clear=True)
 
-        self.init()
+        self.entry_point()
 
-    def init(self):
+    def entry_point(self):
         self.details = self.get_details()
         self.file = self.details.get('file')
 
@@ -61,14 +61,23 @@ class EditDialog(object):
 
         self.editdialog = DIALOG.select(headline, self.modeselect, preselect=int(preselect), useDetails=True)
 
+        # Dialog closed -> write changes to nfo and exit
         if self.editdialog == -1:
             winprop('SelectDialogPreselect', clear=True)
 
             if self.file and self.nfo_support:
-                update_nfo(self.file, self.nfo_key, self.nfo_value, self.dbtype, self.dbid)
+                update_nfo(file=self.file,
+                           elem=self.nfo_key,
+                           value=self.nfo_value,
+                           dbtype=self.dbtype,
+                           dbid=self.dbid
+                           )
 
-            return
+                reload_widgets()
 
+                exit()
+
+        # Edit value based on the type
         winprop('SelectDialogPreselect', str(self.editdialog))
 
         self._handle_dbitem(value_type=self.typelist[self.editdialog],
@@ -81,7 +90,8 @@ class EditDialog(object):
                             nfo_support=self.nfo_support
                             )
 
-        self.init()
+        # Return to entry_point to populate the changes in the dialog
+        self.entry_point()
 
     def get_details(self):
         json_query = json_call(self.method_details,

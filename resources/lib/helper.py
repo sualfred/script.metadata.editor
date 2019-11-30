@@ -253,6 +253,11 @@ def notification(header=ADDON.getLocalizedString(32000),message=''):
     DIALOG.notification(header, message, icon='special://home/addons/script.metadata.editor/resources/icon.png')
 
 
+def reload_widgets():
+    # Notifies script.embuary.helper to reload widgets
+    execute('NotifyAll(%s,Finished)' % ADDON_ID)
+
+
 @contextmanager
 def busy_dialog():
     if not winprop('UpdatingRatings.bool'):

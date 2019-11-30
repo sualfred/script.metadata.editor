@@ -18,7 +18,10 @@ class UpdateAllRatings(object):
     def __init__(self,params):
         self.dbtype = params.get('type')
         self.background_task = ADDON.getSettingBool('update_background')
-        self.get_items()
+        self.items, self.total_items = self.get_items()
+
+        if self.items:
+            self.run()
 
     def get_items(self):
         if self.dbtype == 'episode':
@@ -32,12 +35,13 @@ class UpdateAllRatings(object):
                                   )
 
         try:
-            self.items = all_items['result']['%ss' % self.dbtype]
-            self.total_items = len(self.items)
-            self.run()
+            items = all_items['result']['%ss' % self.dbtype]
+            total_items = len(items)
+            return items, total_items
 
         except Exception:
-            pass
+            log('No items found for DBtype: %s' % self.dbtype)
+            return '', ''
 
     def run(self):
         winprop('UpdatingRatings.bool', True)
@@ -284,18 +288,14 @@ class UpdateRating(object):
                            params={'external_source': 'imdb_id' if external_id.startswith('tt') else 'tvdb_id'}
                            )
 
-        try:
-            if self.dbtype == 'movie':
-                self.tmdb = result['movie_results'][0].get('id')
+        if self.dbtype == 'movie' and result.get('movie_results'):
+            self.tmdb = result['movie_results'][0].get('id')
 
-            elif self.dbtype == 'tvshow':
-                self.tmdb = result['tv_results'][0].get('id')
+        elif self.dbtype == 'tvshow' and result.get('tv_results'):
+            self.tmdb = result['tv_results'][0].get('id')
 
-            if self.tmdb:
-                self._update_uniqueid_dict('tmdb', self.tmdb)
-
-        except Exception:
-            pass
+        if self.tmdb:
+            self._update_uniqueid_dict('tmdb', self.tmdb)
 
     def get_omdb(self):
         omdb = omdb_call(imdbnumber=self.imdb,

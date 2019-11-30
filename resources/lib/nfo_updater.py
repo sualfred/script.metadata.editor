@@ -70,17 +70,7 @@ class UpdateNFO():
 
     def read_file(self):
         file = xbmcvfs.File(self.targetfile)
-        cur_buf = []
-        content = ''
-
-        while True:
-            buf = file.read(1024)
-            cur_buf.append(buf)
-
-            if not buf:
-                content = ''.join(cur_buf)
-                break
-
+        content = file.read()
         file.close()
 
         if content:
