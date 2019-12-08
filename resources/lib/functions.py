@@ -325,26 +325,14 @@ def tmdb_call(action,call=None,get=None,params=None):
     url = 'https://api.themoviedb.org/3/' + action + call + get
     url = '{0}?{1}'.format(url, urlencode(args))
 
-    try:
-        for i in range(1,10): # loop if heavy server load
-            request = requests.get(url)
-            if not str(request.status_code).startswith('5'):
-                break
-            xbmc.sleep(500)
+    for i in range(1,10): # loop if heavy server load
+        request = requests.get(url)
+        if not str(request.status_code).startswith('5'):
+            break
+        xbmc.sleep(500)
 
-        if request.status_code != requests.codes.ok:
-            raise Exception
-
+    result = {}
+    if request.status_code == requests.codes.ok:
         result = request.json()
 
-        if len(result) == 0:
-            raise Exception
-
-        if 'results' in result and len(result['results']) == 0:
-            raise Exception
-
-        return result
-
-
-    except Exception:
-        return
+    return result

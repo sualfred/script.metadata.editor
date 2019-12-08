@@ -3,6 +3,7 @@
 
 ########################
 
+import sys
 import xbmc
 import xbmcaddon
 import xbmcgui
@@ -12,28 +13,12 @@ import json
 import time
 import datetime
 import os
-import sys
 import hashlib
 import xml.etree.ElementTree as ET
 import requests
-
-''' Python 2<->3 compatibility
-'''
-try:
-    from urllib import urlencode
-except ImportError:
-    from urllib.parse import urlencode
-
-try:
-    import urllib2 as urllib
-except ImportError:
-    import urllib.request as urllib
-
 from contextlib import contextmanager
 
 ########################
-
-PYTHON3 = True if sys.version_info.major == 3 else False
 
 ADDON = xbmcaddon.Addon()
 ADDON_ID = ADDON.getAddonInfo('id')
@@ -48,6 +33,21 @@ LOG_JSON = ADDON.getSettingBool('LOG_JSON')
 DIALOG = xbmcgui.Dialog()
 
 ########################
+
+''' Python 2<->3 compatibility
+'''
+PYTHON3 = True if sys.version_info.major == 3 else False
+
+if not PYTHON3:
+    import urllib2 as urllib
+    from urllib import urlencode
+
+else:
+    import urllib.request as urllib
+    from urllib.parse import urlencode
+
+########################
+
 
 def log(txt,loglevel=DEBUG,json=False,force=False):
     if loglevel in [DEBUG, WARNING, ERROR] or force:
