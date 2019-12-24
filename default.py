@@ -72,6 +72,9 @@ class Main:
         elif self.action == 'settags':
             SelectValue({'dbid': dbid, 'type': dbtype, 'key': 'tag'})
 
+        elif self.action == 'replace':
+            scan_nfo()
+
         else:
             EditDialog(self.params)
 

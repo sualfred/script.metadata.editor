@@ -14,6 +14,26 @@ OMDB_FALLBACK = ADDON.getSettingBool('omdb_fallback_search')
 
 ########################
 
+def scan_nfo():
+    count = scan_nfo2()
+    log('done - updated %s' % str(count), force=True)
+
+
+def scan_nfo2(path='smb://192.168.2.250/share/music',count=0):
+    dirs, files = xbmcvfs.listdir(path)
+
+    for file in files:
+        if file.endswith(('.nfo')):
+            ReplacePath(path + '/' + file)
+            count += 1
+            log(str(count), force=True)
+
+    for folder in dirs:
+        count = scan_nfo2(path=path + '/' + folder, count=count)
+
+    return count
+
+
 class UpdateAllRatings(object):
     def __init__(self,params):
         self.dbtype = params.get('type')

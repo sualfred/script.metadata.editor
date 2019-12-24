@@ -7,6 +7,72 @@ from resources.lib.helper import *
 
 ########################
 
+class ReplacePath():
+    def __init__(self,file):
+        self.targetfile = file
+        self.root = self.read_file()
+        self.replace()
+        self.write_file()
+
+    def read_file(self):
+        file = xbmcvfs.File(self.targetfile)
+        content = file.read()
+        file.close()
+
+        if content:
+            try:
+                tree = ET.ElementTree(ET.fromstring(content))
+            except Exception as error:
+                log('ERROR %s -> %s' % (self.targetfile, error), force=True)
+
+            root = tree.getroot()
+            return root
+
+    def replace(self):
+        ''' temp '''
+
+        found1 = [element for element in self.root.iter() if element.text and '/sharedfolders/share/' in element.text]
+        found2 = [element for element in self.root.iter() if element.text and '/var/lib/emby/metadata/' in element.text]
+        found3 = [element for element in self.root.iter() if element.text and '\\\\192.168.2.250\\emby\\' in element.text]
+
+        if found1 or found2 or found3:
+            log('#########', force=True)
+            log(self.targetfile, force=True)
+            log('#########', force=True)
+
+        for f in found1:
+            old = '/sharedfolders'
+            new = '\\\\192.168.2.250'
+            test = f.text.replace(old,new).replace('/','\\')
+            log(f.text + '  ' + test, force=True)
+            f.text = test
+
+        for f in found2:
+            old = '/var/lib/emby'
+            new = '\\\\192.168.2.250\\emby-data'
+            test = f.text.replace(old,new).replace('/','\\')
+            log(f.text + '  ' + test, force=True)
+            f.text = test
+
+
+        for f in found3:
+            old = '\\\\192.168.2.250\\emby\\'
+            new = '\\\\192.168.2.250\\emby-data\\'
+            test = f.text.replace(old,new).replace('/','\\')
+            log(f.text + '  ' + test, force=True)
+            f.text = test
+
+        ''' temp '''
+
+    def write_file(self):
+        xml_prettyprint(self.root)
+        content = ET.tostring(self.root, encoding='UTF-8')
+
+        file = xbmcvfs.File(self.targetfile, 'w')
+        file.write(content)
+        file.close()
+
+
 class UpdateNFO():
     def __init__(self,file,elem,value,dbtype,dbid):
         self.elems = elem
