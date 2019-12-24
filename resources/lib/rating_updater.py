@@ -161,11 +161,29 @@ class UpdateRating(object):
             if self.tmdb:
                 self.get_tmdb()
 
+        # emby <ratings> and <votes>
+        if 'default' in self.ratings:
+            self.emby_ratings()
+
         # update db + nfo
         self.update_info()
 
         if self.done_msg:
             notification(ADDON.getLocalizedString(32030), xbmc.getLocalizedString(19256))
+
+    def emby_ratings(self):
+        # Emby For Kodi is storing the rating as 'default'
+        if self.imdb_rating:
+            self._update_ratings_dict(key='default',
+                                      rating=float(self.imdb_rating),
+                                      votes=int(self.imdb_votes)
+                                      )
+
+        elif self.tmdb_rating:
+            self._update_ratings_dict(key='default',
+                                      rating=float(self.tmdb_rating),
+                                      votes=int(self.tmdb_votes)
+                                      )
 
     def get_details(self):
         if self.dbtype == 'tvshow':
@@ -226,7 +244,10 @@ class UpdateRating(object):
         self.year = year[:4] if year else ''
 
         if self.tmdb_rating:
-            self._update_ratings_dict(key='themoviedb', rating=self.tmdb_rating, votes=self.tmdb_votes)
+            self._update_ratings_dict(key='themoviedb',
+                                      rating=self.tmdb_rating,
+                                      votes=self.tmdb_votes
+                                      )
 
         # set MPAA based on setting
         if not ADDON.getSettingBool('skip_mpaa'):
@@ -317,41 +338,36 @@ class UpdateRating(object):
 
         for child in root:
             # imdb ratings
-            imdb_rating = child.get('imdbRating')
-            imdb_votes = child.get('imdbVotes', 0)
+            imdb_rating = child.get('imdbRating', '')
+            imdb_votes = child.get('imdbVotes', '0')
 
-            if imdb_rating and imdb_rating != 'N/A':
-                votes = imdb_votes.replace(',', '') if imdb_votes != 'N/A' else 0
+            self.imdb_rating = imdb_rating.replace(',', '') if imdb_rating != 'N/A' else ''
+            self.imdb_votes = imdb_votes.replace(',', '') if imdb_votes != 'N/A' else 0
+
+            if self.imdb_rating:
                 self._update_ratings_dict(key='imdb',
-                                          rating=float(imdb_rating),
-                                          votes=int(votes)
+                                          rating=float(self.imdb_rating),
+                                          votes=int(self.imdb_votes)
                                           )
-
-                # Emby For Kodi is storing the rating as 'default'
-                if 'default' in self.ratings:
-                    self._update_ratings_dict(key='default',
-                                              rating=float(imdb_rating),
-                                              votes=int(votes)
-                                              )
 
             # regular rotten rating
             tomatometerallcritics = child.get('tomatoMeter')
-            tomatometerallcritics_votes = child.get('tomatoReviews', 0)
+            tomatometerallcritics_votes = child.get('tomatoReviews', '0')
 
             if tomatometerallcritics and tomatometerallcritics != 'N/A':
                 tomatometerallcritics = int(tomatometerallcritics) / 10
-                votes = tomatometerallcritics_votes if tomatometerallcritics_votes != 'N/A' else 0
+                votes = tomatometerallcritics_votes.replace(',', '') if tomatometerallcritics_votes != 'N/A' else 0
                 self._update_ratings_dict(key='tomatometerallcritics',
                                           rating=tomatometerallcritics,
                                           votes=int(votes))
 
             # user rotten rating
             tomatometeravgcritics = child.get('tomatoUserMeter')
-            tomatometeravgcritics_votes = child.get('tomatoUserReviews', 0)
+            tomatometeravgcritics_votes = child.get('tomatoUserReviews', '0')
 
             if tomatometeravgcritics and tomatometeravgcritics != 'N/A':
                 tomatometeravgcritics = int(tomatometeravgcritics) / 10
-                votes = tomatometeravgcritics_votes if tomatometeravgcritics_votes != 'N/A' else 0
+                votes = tomatometeravgcritics_votes.replace(',', '') if tomatometeravgcritics_votes != 'N/A' else 0
                 self._update_ratings_dict(key='tomatometeravgcritics',
                                           rating=tomatometeravgcritics,
                                           votes=int(votes))
