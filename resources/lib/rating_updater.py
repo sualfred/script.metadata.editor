@@ -107,6 +107,7 @@ class UpdateRating(object):
         self.tmdb_tv_status = None
         self.tmdb_mpaa = None
         self.tmdb_mpaa_fallback = None
+        self.imdb_rating = None
         self.update_uniqueid = False
         self.episodeguide = None
 
