@@ -54,15 +54,20 @@ class UpdateNFO():
 
     def run(self):
         with busy_dialog():
-            try:
-                if xbmcvfs.exists(self.targetfile):
-                    self.root = self.read_file()
-                    if len(self.root):
-                        self.handle_details()
-                        self.write_file()
+            if xbmcvfs.exists(self.targetfile):
+                self.root = self.read_file()
+                if len(self.root):
+                    self.handle_details()
+                    self.write_file()
+            '''try:
+                                                    if xbmcvfs.exists(self.targetfile):
+                                                        self.root = self.read_file()
+                                                        if len(self.root):
+                                                            self.handle_details()
+                                                            self.write_file()
 
-            except Exception as error:
-                log('Cannot update .nfo file: %s' % error, ERROR)
+                                                except Exception as error:
+                                                    log('Cannot update .nfo file: %s' % error, ERROR)'''
 
     def read_file(self):
         file = xbmcvfs.File(self.targetfile)
@@ -103,7 +108,7 @@ class UpdateNFO():
               {'key': 'tag', 'value': self.details.get('tag')},
               {'key': 'isuserfavorite', 'value': 'true' if 'Favorite movies' in self.details.get('tag', []) or 'Favorite tvshows' in self.details.get('tag', []) else 'false'}, #emby
               {'key': 'genre', 'value': self.details.get('genre')},
-              {'key': 'ratings', 'value': get_rounded_value(self.details.get('ratings'))},
+              {'key': 'ratings', 'value': self.details.get('ratings')},
               {'key': 'uniqueid', 'value': self.details.get('uniqueid')},
               {'key': 'status', 'value': self.details.get('status')},
               {'key': 'aired', 'value': self.details.get('firstaired')},

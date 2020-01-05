@@ -111,13 +111,16 @@ def get_key_item(items,key):
 
 
 def get_rounded_value(value):
-    if not value:
+    try:
+        if not isinstance(value, str) and not isinstance(value, float):
+            value = str(value)
+        if not isinstance(value, float):
+            value = float(value)
+
+        return round(value,1)
+
+    except Exception:
         return
-
-    value = float(value)
-    value = round(value,1)
-
-    return value
 
 
 def remove_empty(array):

@@ -11,20 +11,20 @@ from resources.lib.rating_updater import *
 class Main:
     def __init__(self):
         self._parse_argv()
-        self.dbid = self.params.get('dbid')
-        self.dbtype = self.params.get('type')
+        self.dbid = self.params.get('dbid', xbmc.getInfoLabel('ListItem.DBID'))
+        self.dbtype = self.params.get('type', xbmc.getInfoLabel('ListItem.DBType'))
 
-        if self.action == 'updaterating' or not self.params:
-            if winprop('UpdatingRatings.bool'):
-                if DIALOG.yesno(xbmc.getLocalizedString(14117), ADDON.getLocalizedString(32050)):
-                    winprop('CancelRatingUpdater.bool', True)
-                return
+        menu_items = [ADDON.getLocalizedString(32038), ADDON.getLocalizedString(32037), ADDON.getLocalizedString(32036), ADDON.getLocalizedString(32045)]
+        menu_actions = [['movies', 'tvshows', 'episodes'], 'movies', 'tvshows', 'episodes']
 
-            menu_items = [ADDON.getLocalizedString(32038), ADDON.getLocalizedString(32037), ADDON.getLocalizedString(32036), ADDON.getLocalizedString(32045)]
-            menu_actions = [['movies', 'tvshows', 'episodes'], 'movies', 'tvshows', 'episodes']
+        if not self.action and not self.dbid and not self.dbtype:
+            updateselector = DIALOG.contextmenu(menu_items)
+            if updateselector >= 0:
+                update_ratings(dbtype=menu_actions[updateselector])
 
-            if self.action:
-                if self.dbid and self.dbtype in ['movie', 'tvshow', 'episode']:
+        if self.dbid and self.dbtype:
+            if self.action == 'updaterating':
+                if self.dbtype in ['movie', 'tvshow', 'episode']:
                     update_ratings(dbid=self.dbid, dbtype=self.dbtype)
 
                 elif not self.dbtype:
@@ -36,25 +36,20 @@ class Main:
                 else:
                     DIALOG.ok(xbmc.getLocalizedString(257), ADDON.getLocalizedString(32049) + '.[CR]ID: ' + str(self.dbid) +  ' - ' + ADDON.getLocalizedString(32051) + ': ' + str(self.dbtype))
 
+            if self.action == 'togglewatchlist':
+                self._set(key='tag', valuetype='watchlist')
+
+            elif self.action == 'setgenre':
+                self._set(key='genre', valuetype='select')
+
+            elif self.action == 'settags':
+                self._set(key='tag', valuetype='select')
+
+            elif self.action == 'setuserrating':
+                self._set(key='userrating', valuetype='userrating')
+
             else:
-                updateselector = DIALOG.contextmenu(menu_items)
-                if updateselector >= 0:
-                    update_ratings(dbtype=menu_actions[updateselector])
-
-        elif self.action == 'togglewatchlist':
-            self._set(key='tag', valuetype='watchlist')
-
-        elif self.action == 'setgenre':
-            self._set(key='genre', valuetype='select')
-
-        elif self.action == 'settags':
-            self._set(key='tag', valuetype='select')
-
-        elif self.action == 'setuserrating':
-            self._set(key='userrating', valuetype='userrating')
-
-        else:
-            self._editor()
+                self._editor()
 
     def _parse_argv(self):
         args = sys.argv
@@ -82,4 +77,8 @@ class Main:
 
 
 if __name__ == '__main__':
+    if winprop('UpdatingRatings.bool'):
+        if DIALOG.yesno(xbmc.getLocalizedString(14117), ADDON.getLocalizedString(32050)):
+            winprop('CancelRatingUpdater.bool', True)
+            quit()
     Main()

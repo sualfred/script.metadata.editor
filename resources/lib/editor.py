@@ -7,6 +7,7 @@ from resources.lib.helper import *
 from resources.lib.json_map import *
 from resources.lib.functions import *
 from resources.lib.database import *
+from resources.lib.nfo_updater import *
 
 ########################
 
