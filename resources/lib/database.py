@@ -143,3 +143,24 @@ class Database(object):
                          properties=['title']
                          )
         self.data['tags'] = tags.get('result', {}).get('tags', [])
+
+    def artist(self):
+        artist = json_call('AudioLibrary.GetArtistDetails',
+                           properties=artist_properties,
+                           params={'artistid': int(self.dbid)}
+                           )
+        self.data['artist'] = [artist.get('result', {}).get('artistdetails')]
+
+    def album(self):
+        album = json_call('AudioLibrary.GetAlbumDetails',
+                           properties=album_properties,
+                           params={'albumid': int(self.dbid)}
+                           )
+        self.data['album'] = [album.get('result', {}).get('albumdetails')]
+
+    def song(self):
+        song = json_call('AudioLibrary.GetsongDetails',
+                           properties=song_properties,
+                           params={'songid': int(self.dbid)}
+                           )
+        self.data['song'] = [song.get('result', {}).get('songdetails')]

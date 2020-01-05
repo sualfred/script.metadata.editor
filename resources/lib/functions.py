@@ -140,7 +140,7 @@ def modify_array(dbtype,key,values):
         result = db.result()
 
         if key == 'genre':
-            if dbtype == 'musicvideo':
+            if dbtype in ['musicvideo', 'artist', 'album']:
                 for genre in result.get('audiogenres'):
                     all_values.append(genre)
             else:

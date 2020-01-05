@@ -21,6 +21,7 @@ class ContextMenu(object):
         db = Database(self.dbid, self.dbtype)
         getattr(db, self.dbtype)()
         self.details = db.result().get(self.dbtype)[0]
+        log(self.details, json=True, force=True)
 
         self.menu()
 

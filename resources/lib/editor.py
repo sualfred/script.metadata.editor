@@ -47,7 +47,9 @@ class EditDialog(object):
 
         self._handle_dbitem(value_type=type,
                             key=key,
-                            preset=preset
+                            preset=preset,
+                            dbid=self.dbid,
+                            dbtype=self.dbtype
                             )
         self.get_details()
         self.quit()
