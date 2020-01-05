@@ -49,7 +49,7 @@ else:
 ########################
 
 
-def log(txt,loglevel=DEBUG,json=False,force=True):
+def log(txt,loglevel=DEBUG,json=False,force=False):
     if loglevel in [DEBUG, WARNING, ERROR] or force:
         if force:
             loglevel = NOTICE

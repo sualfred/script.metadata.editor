@@ -54,20 +54,16 @@ class UpdateNFO():
 
     def run(self):
         with busy_dialog():
-            if xbmcvfs.exists(self.targetfile):
-                self.root = self.read_file()
-                if len(self.root):
-                    self.handle_details()
-                    self.write_file()
-            '''try:
-                                                    if xbmcvfs.exists(self.targetfile):
-                                                        self.root = self.read_file()
-                                                        if len(self.root):
-                                                            self.handle_details()
-                                                            self.write_file()
+            try:
+                if xbmcvfs.exists(self.targetfile):
+                    self.root = self.read_file()
 
-                                                except Exception as error:
-                                                    log('Cannot update .nfo file: %s' % error, ERROR)'''
+                    if len(self.root):
+                        self.handle_details()
+                        self.write_file()
+
+            except Exception as error:
+                log('Cannot update .nfo file: %s' % error, ERROR)
 
     def read_file(self):
         file = xbmcvfs.File(self.targetfile)
