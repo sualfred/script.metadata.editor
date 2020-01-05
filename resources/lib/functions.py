@@ -4,46 +4,9 @@
 ########################
 
 from resources.lib.helper import *
-from resources.lib.nfo_updater import *
+from resources.lib.database import *
 
 ########################
-
-def update_library(dbtype,key,value,dbid):
-    if dbtype in ['song', 'album', 'artist']:
-        library = 'Audio'
-    else:
-        library = 'Video'
-
-    if isinstance(key, list):
-        for item in key:
-            json_call('%sLibrary.Set%sDetails' % (library, dbtype),
-                      params={'%s' % item: value[key.index(item)], '%sid' % dbtype: int(dbid)},
-                      debug=LOG_JSON
-                      )
-
-    else:
-        json_call('%sLibrary.Set%sDetails' % (library, dbtype),
-                  params={'%s' % key: value, '%sid' % dbtype: int(dbid)},
-                  debug=LOG_JSON
-                  )
-
-
-def update_nfo(file,elem,value,dbtype,dbid):
-    if not ADDON.getSettingBool('nfo_updating'):
-        return
-
-    if dbtype == 'tvshow':
-        path = os.path.join(file,'tvshow.nfo')
-    else:
-        path = file.replace(os.path.splitext(file)[1], '.nfo')
-
-    UpdateNFO(path, elem, value, dbtype, dbid)
-
-    # support for additional movie.nfo
-    if dbtype == 'movie':
-        path = file.replace(os.path.basename(file), 'movie.nfo')
-        UpdateNFO(path, elem, value, dbtype, dbid)
-
 
 def set_ratings(ratings):
     providerlist = []
@@ -131,28 +94,23 @@ def set_ratings(ratings):
 def set_array(preset,dbid,dbtype,key):
     actionlist = [ADDON.getLocalizedString(32005), ADDON.getLocalizedString(32007), ADDON.getLocalizedString(32006)]
     array_action = DIALOG.select(xbmc.getLocalizedString(14241), actionlist)
+    array_list = get_list_items(preset)
 
     if array_action == 0:
-        array = preset.replace('; ',';').split(';')
-
         keyboard = xbmc.Keyboard()
         keyboard.doModal()
 
         if keyboard.isConfirmed():
             new_item = keyboard.getText()
 
-            if new_item not in array:
-                array.append(new_item)
+            if new_item not in array_list:
+                array_list.append(new_item)
 
-        return remove_empty(array)
+        return remove_empty(array_list)
 
     elif array_action == 1:
-        from resources.lib.dialog_selectvalue import SelectValue
-
-        array = SelectValue(params={'dbid': dbid, 'type': dbtype, 'key': key},
-                            editor=True)
-
-        return eval(str(array))
+        array = modify_array(dbtype, key, array_list)
+        return array
 
     elif array_action == 2:
         keyboard = xbmc.Keyboard(preset)
@@ -163,12 +121,54 @@ def set_array(preset,dbid,dbtype,key):
         else:
             array = preset
 
-        array = array.replace('; ',';').split(';')
-        return remove_empty(array)
+        return get_list_items(array)
 
     else:
-        array = preset.replace('; ',';').split(';')
-        return remove_empty(array)
+        return array_list
+
+
+def modify_array(dbtype,key,values):
+    modified = []
+    all_values = []
+
+    if not isinstance(values, list):
+        values = get_list_items(values)
+
+    if key in ['genre', 'tags']:
+        db = Database()
+        getattr(db, key)()
+        result = db.result()
+
+        if key == 'genre':
+            if dbtype == 'musicvideo':
+                for genre in result.get('audiogenres'):
+                    all_values.append(genre)
+            else:
+                for genre in result.get('videogenres'):
+                    all_values.append(genre)
+
+        elif key == 'tags':
+            for tag in result.get('tags'):
+                if tag not in values:
+                    all_values.append(tag)
+
+    all_values = list(set(values + all_values))
+    all_values.sort()
+    values.sort()
+
+    preselectlist = []
+    for item in values:
+        preselectlist.append(all_values.index(item))
+
+    selectdialog = DIALOG.multiselect(ADDON.getLocalizedString(32002), all_values, preselect=preselectlist)
+
+    if selectdialog == -1 or selectdialog is None:
+        return values
+
+    for index in selectdialog:
+        modified.append(all_values[index])
+
+    return modified
 
 
 def set_integer(preset=''):
@@ -276,63 +276,13 @@ def set_status(preset):
     return preset
 
 
-def omdb_call(imdbnumber=None,title=None,year=None,use_fallback=False):
-    api_key = ADDON.getSetting('omdb_api_key')
-    base_url = 'http://www.omdbapi.com/'
+def toggle_tag(preset):
+    tag = 'Watchlist'
+    tags = get_list_items(preset)
 
-    if imdbnumber:
-        url = '%s?apikey=%s&i=%s&plot=short&r=xml&tomatoes=true' % (base_url, api_key, imdbnumber)
-
-    elif use_fallback and title and year:
-        # it seems that urllib has issues with some asian letters
-        try:
-            title = urllib.quote(title)
-        except KeyError:
-            return
-
-        url = '%s?apikey=%s&t=%s&year=%s&plot=short&r=xml&tomatoes=true' % (base_url, api_key, title, year)
-
+    if tag in tags:
+        tags.remove(tag)
     else:
-        return
+        tags.append(tag)
 
-    try:
-        for i in range(1,10): # loop if heavy server load
-            request = requests.get(url)
-            if not str(request.status_code).startswith('5'):
-                break
-            xbmc.sleep(500)
-
-        if request.status_code != requests.codes.ok:
-            raise Exception
-
-        result = request.content
-        return result
-
-    except Exception:
-        return
-
-
-def tmdb_call(action,call=None,get=None,params=None):
-    args = {}
-    args['api_key'] = 'fc168650632c6597038cf7072a7c20da'
-
-    if params:
-        args.update(params)
-
-    call = '/' + str(call) if call else ''
-    get = '/' + get if get else ''
-
-    url = 'https://api.themoviedb.org/3/' + action + call + get
-    url = '{0}?{1}'.format(url, urlencode(args))
-
-    for i in range(1,10): # loop if heavy server load
-        request = requests.get(url)
-        if not str(request.status_code).startswith('5'):
-            break
-        xbmc.sleep(500)
-
-    result = {}
-    if request.status_code == requests.codes.ok:
-        result = request.json()
-
-    return result
+    return tags

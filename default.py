@@ -3,77 +3,58 @@
 ########################
 
 from resources.lib.helper import *
-from resources.lib.dialog_metadata import *
-from resources.lib.dialog_selectvalue import *
-from resources.lib.toggle_watchlist import *
+from resources.lib.editor import *
 from resources.lib.rating_updater import *
 
 ########################
 
 class Main:
     def __init__(self):
-        self.action = False
         self._parse_argv()
-        dbid = self.params.get('dbid')
-        dbtype = self.params.get('type')
+        self.dbid = self.params.get('dbid')
+        self.dbtype = self.params.get('type')
 
-        if not dbid and not dbtype and not self.action:
-            omdb_msg = self._omdb_msg()
-            if not omdb_msg:
+        if self.action == 'updaterating' or not self.params:
+            if winprop('UpdatingRatings.bool'):
+                if DIALOG.yesno(xbmc.getLocalizedString(14117), ADDON.getLocalizedString(32050)):
+                    winprop('CancelRatingUpdater.bool', True)
                 return
 
-            if not winprop('UpdatingRatings.bool'):
-                menuitems = [ADDON.getLocalizedString(32038), ADDON.getLocalizedString(32037), ADDON.getLocalizedString(32036), ADDON.getLocalizedString(32045)]
-            else:
-                menuitems = [ADDON.getLocalizedString(32041)]
+            menu_items = [ADDON.getLocalizedString(32038), ADDON.getLocalizedString(32037), ADDON.getLocalizedString(32036), ADDON.getLocalizedString(32045)]
+            menu_actions = [['movies', 'tvshows', 'episodes'], 'movies', 'tvshows', 'episodes']
 
-            updateselector = DIALOG.contextmenu(menuitems)
+            if self.action:
+                if self.dbid and self.dbtype in ['movie', 'tvshow', 'episode']:
+                    update_ratings(dbid=self.dbid, dbtype=self.dbtype)
 
-            if updateselector == 0:
-                if not winprop('UpdatingRatings.bool'):
-                    UpdateAllRatings({'type': 'movie'})
-                    UpdateAllRatings({'type': 'tvshow'})
-                    UpdateAllRatings({'type': 'episode'})
+                elif not self.dbtype:
+                    update_ratings(dbtype=menu_actions[0])
+
+                elif self.dbtype in menu_actions:
+                    update_ratings(dbtype=menu_actions[menu_actions.index(self.dbtype)])
 
                 else:
-                    winprop('CancelRatingUpdater.bool', True)
-
-            elif updateselector == 1:
-                UpdateAllRatings({'type': 'movie'})
-
-            elif updateselector == 2:
-                UpdateAllRatings({'type': 'tvshow'})
-
-            elif updateselector == 3:
-                UpdateAllRatings({'type': 'episode'})
-
-        elif self.action == 'updaterating':
-            omdb_msg = self._omdb_msg()
-            if not omdb_msg:
-                return
-
-            if not dbtype:
-                UpdateAllRatings({'type': 'movie'})
-                UpdateAllRatings({'type': 'tvshow'})
-                UpdateAllRatings({'type': 'episode'})
-
-            elif dbtype and not dbid:
-                UpdateAllRatings({'type': dbtype})
+                    DIALOG.ok(xbmc.getLocalizedString(257), ADDON.getLocalizedString(32049) + '.[CR]ID: ' + str(self.dbid) +  ' - ' + ADDON.getLocalizedString(32051) + ': ' + str(self.dbtype))
 
             else:
-                UpdateRating({'dbid': dbid, 'type': dbtype})
+                updateselector = DIALOG.contextmenu(menu_items)
+                if updateselector >= 0:
+                    update_ratings(dbtype=menu_actions[updateselector])
 
         elif self.action == 'togglewatchlist':
-            ToggleWatchlist({'dbid': dbid, 'type': dbtype})
+            self._set(key='tag', valuetype='watchlist')
 
         elif self.action == 'setgenre':
-            SelectValue({'dbid': dbid, 'type': dbtype, 'key': 'genre'})
+            self._set(key='genre', valuetype='select')
 
         elif self.action == 'settags':
-            SelectValue({'dbid': dbid, 'type': dbtype, 'key': 'tag'})
+            self._set(key='tag', valuetype='select')
+
+        elif self.action == 'setuserrating':
+            self._set(key='userrating', valuetype='userrating')
 
         else:
-            EditDialog(self.params)
+            self._editor()
 
     def _parse_argv(self):
         args = sys.argv
@@ -81,19 +62,24 @@ class Main:
         for arg in args:
             if arg == ADDON_ID:
                 continue
+
             if arg.startswith('action='):
                 self.action = arg[7:].lower()
             else:
+                self.action = None
                 try:
                     self.params[arg.split("=")[0].lower()] = "=".join(arg.split("=")[1:]).strip()
                 except:
                     self.params = {}
 
-    def _omdb_msg(self):
-        if not ADDON.getSetting('omdb_api_key'):
-            if not DIALOG.yesno(xbmc.getLocalizedString(14117), ADDON.getLocalizedString(32035)):
-                return False
-        return True
+    def _set(self,key,valuetype):
+        editor = EditDialog(dbid=self.dbid, dbtype=self.dbtype)
+        editor.set(key=key, type=valuetype)
+
+    def _editor(self):
+        editor = EditDialog(dbid=self.dbid, dbtype=self.dbtype)
+        editor.editor()
+
 
 if __name__ == '__main__':
     Main()

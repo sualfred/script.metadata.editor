@@ -7,18 +7,49 @@ from resources.lib.helper import *
 
 ########################
 
+def update_nfo(dbtype,dbid,details=None,file=None):
+    if not ADDON.getSettingBool('nfo_updating'):
+        return
+
+    if not details:
+        db = Database(dbid, dbtype)
+        getattr(db, dbtype)()
+        details = db.result().get(dbtype)[0]
+
+    if not details:
+        log('NFO updater: No item details found or provided --> ID: %s Type: %s' % (dbid, dbtype), ERROR)
+        return
+
+    if not file:
+        file = details.get('file')
+        if not file:
+            log('NFO updater: No item path available --> ID: %s Type: %s' % (dbid, dbtype), ERROR)
+            return
+
+    if dbtype == 'tvshow':
+        path = os.path.join(file,'tvshow.nfo')
+    else:
+        path = file.replace(os.path.splitext(file)[1], '.nfo')
+
+    UpdateNFO(file=path,
+              dbtype=dbtype,
+              dbid=dbid,
+              details=details)
+
+    # support for additional movie.nfo
+    if dbtype == 'movie':
+        UpdateNFO(file=file.replace(os.path.basename(file), 'movie.nfo'),
+                  dbtype=dbtype,
+                  dbid=dbid,
+                  details=details)
+
+
 class UpdateNFO():
-    def __init__(self,file,elem,value,dbtype,dbid):
-        self.elems = elem
-        self.values = value
+    def __init__(self,file,dbtype,dbid,details):
         self.targetfile = file
         self.dbtype = dbtype
         self.dbid = dbid
-
-        if not isinstance(self.elems, list):
-            self.elems = [self.elems]
-            self.values = [self.values]
-
+        self.details = details
         self.run()
 
     def run(self):
@@ -26,47 +57,12 @@ class UpdateNFO():
             try:
                 if xbmcvfs.exists(self.targetfile):
                     self.root = self.read_file()
-
                     if len(self.root):
-                        index = 0
-                        for elem in self.elems:
-                            self.elem = elem
-                            self.value = self.values[index]
-                            self.update_elem()
-                            index += 1
-
+                        self.handle_details()
                         self.write_file()
 
             except Exception as error:
-                log('Cannot find/access .nfo file for updating: %s' % error)
-
-    def update_elem(self):
-        if self.elem == 'ratings':
-            self.handle_ratings()
-
-        elif self.elem == 'uniqueid':
-            self.handle_uniqueid()
-
-        else:
-            ''' Key conversion/cleanup if nfo element has a different naming.
-                If Emby is using different elements, key + value will be
-                converted to a list to cover both.
-            '''
-            if self.elem == 'plotoutline':
-                self.elem = 'outline'
-
-            elif self.elem == 'writer':
-                self.elem = ['writer', 'credits']
-                self.value = [self.value, self.value]
-
-            elif self.elem == 'premiered':
-                self.elem = ['premiered', 'year']
-                self.value = [self.value, self.value[:4]]
-
-            elif self.elem == 'firstaired':
-                self.elem = 'aired'
-
-            self.handle_elem()
+                log('Cannot update .nfo file: %s' % error, ERROR)
 
     def read_file(self):
         file = xbmcvfs.File(self.targetfile)
@@ -78,48 +74,89 @@ class UpdateNFO():
             root = tree.getroot()
             return root
 
-    def handle_elem(self):
-        if not isinstance(self.elem, list):
-            self.elem = [self.elem]
-            self.value = [self.value]
+    def write_file(self):
+        xml_prettyprint(self.root)
+        log(self.root)
+        content = ET.tostring(self.root, encoding='UTF-8')
 
-        index = 0
-        for elem_item in self.elem:
-            for elem in self.root.findall(elem_item):
-                self.root.remove(elem)
+        file = xbmcvfs.File(self.targetfile, 'w')
+        file.write(content)
+        file.close()
 
-            if isinstance(self.value[index], list):
-                for item in self.value[index]:
-                    elem = ET.SubElement(self.root, elem_item)
-                    if item:
-                        elem.text = decode_string(item)
+    def handle_details(self):
+        li = [{'key': 'title', 'value': self.details.get('title')},
+              {'key': 'originaltitle', 'value': self.details.get('originaltitle')},
+              {'key': 'showtitle', 'value': self.details.get('showtitle')},
+              {'key': 'sorttitle', 'value': self.details.get('sorttitle')},
+              {'key': 'userrating', 'value': self.details.get('userrating')},
+              {'key': 'outline', 'value': self.details.get('plotoutline')},
+              {'key': 'plot', 'value': self.details.get('plot')},
+              {'key': 'tagline', 'value': self.details.get('tagline')},
+              {'key': 'mpaa', 'value': self.details.get('mpaa')},
+              {'key': 'premiered', 'value': self.details.get('premiered')},
+              {'key': 'year', 'value': self.details.get('premiered', '')[:4]}, #emby
+              {'key': 'country', 'value': self.details.get('country')},
+              {'key': 'studio', 'value': self.details.get('studio')},
+              {'key': 'director', 'value': self.details.get('director')},
+              {'key': 'credits', 'value': self.details.get('writer')},
+              {'key': 'writer', 'value': self.details.get('writer')}, #emby
+              {'key': 'tag', 'value': self.details.get('tag')},
+              {'key': 'isuserfavorite', 'value': 'true' if 'Favorite movies' in self.details.get('tag', []) or 'Favorite tvshows' in self.details.get('tag', []) else 'false'}, #emby
+              {'key': 'genre', 'value': self.details.get('genre')},
+              {'key': 'ratings', 'value': get_rounded_value(self.details.get('ratings'))},
+              {'key': 'uniqueid', 'value': self.details.get('uniqueid')},
+              {'key': 'status', 'value': self.details.get('status')},
+              {'key': 'aired', 'value': self.details.get('firstaired')},
+              {'key': 'playcount', 'value': self.details.get('playcount')},
+              {'key': 'watched', 'value': 'true' if self.details.get('playcount', 0) > 0 else 'false'}, #emby
+              {'key': 'lastplayed', 'value': self.details.get('lastplayed')}
+              ]
+
+        for item in li:
+            key = item.get('key')
+            value = item.get('value')
+
+            if key == 'ratings':
+                self.handle_ratings(value)
+
+            elif key == 'uniqueid':
+                self.handle_uniqueid(value, self.details.get('episodeguide', ''))
 
             else:
-                elem = ET.SubElement(self.root, elem_item)
-                if self.value[index]:
-                    value = self.value[index]
-                    elem.text = decode_string(value)
+                self.handle_elem(key, value)
 
-            index += 1
+    def handle_elem(self,key,value):
+        for elem in self.root.findall(key):
+            self.root.remove(elem)
 
-    def handle_ratings(self):
+        if isinstance(value, list):
+            for i in value:
+                if i:
+                    elem = ET.SubElement(self.root, key)
+                    elem.text = unicode_string(i)
+        else:
+            if value:
+                elem = ET.SubElement(self.root, key)
+                elem.text = unicode_string(value)
+
+    def handle_ratings(self,value):
         for elem in self.root.findall('ratings'):
             self.root.remove(elem)
 
         elem = ET.SubElement(self.root, 'ratings')
-        for item in self.value:
-            rating = float(self.value[item].get('rating', 0.0))
+        for item in value:
+            rating = float(value[item].get('rating', 0.0))
             rating = str(round(rating, 1))
-            votes = str(self.value[item].get('votes', 0))
+            votes = str(value[item].get('votes', 0))
 
             subelem = ET.SubElement(elem, 'rating')
             subelem.set('name', item)
             subelem.set('max', '10')
 
-            if self.value[item].get('default'):
+            if value[item].get('default'):
                 subelem.set('default', 'true')
 
-                # <votes>, <rating>
+                # Emby <votes>, <rating>
                 for key in ['rating', 'votes']:
                     for defaultelem in self.root.findall(key):
                         self.root.remove(defaultelem)
@@ -148,12 +185,9 @@ class UpdateNFO():
                 emby_rotten = ET.SubElement(self.root, 'criticrating')
                 emby_rotten.text = str(normalized_rating)
 
-    def handle_uniqueid(self):
-        uniqueids = self.value[0]
-        episodeguide = str(self.value[1])
-        default = ''
-
+    def handle_uniqueid(self,uniqueids,episodeguide):
         # find default uniqueid
+        default = ''
         if 'tvdb' in episodeguide:
             default = 'tvdb'
         elif 'tmdb' in episodeguide:
@@ -187,13 +221,14 @@ class UpdateNFO():
         for item in uniqueids:
             value = uniqueids.get(item, '')
 
-            elem = ET.SubElement(self.root, self.elem)
+            elem = ET.SubElement(self.root, 'uniqueid')
             elem.set('type', item)
             elem.text = value
 
             if default == item:
                 elem.set('default', 'true')
-                self._set_episodeguide(item, value)
+                if self.dbtype == 'tvshow':
+                    self._set_episodeguide(item, value)
 
         # Emby <imdbid>, <tmdbid>, etc.
         for item in uniqueids:
@@ -206,18 +241,7 @@ class UpdateNFO():
                 elem = ET.SubElement(self.root, elem_name)
                 elem.text = uniqueids.get(item, '')
 
-    def write_file(self):
-        xml_prettyprint(self.root)
-        content = ET.tostring(self.root, encoding='UTF-8')
-
-        file = xbmcvfs.File(self.targetfile, 'w')
-        file.write(content)
-        file.close()
-
     def _set_episodeguide(self,type,value):
-        if not self.dbtype == 'tvshow':
-            return
-
         post = False
         cache = ''
 

@@ -8,9 +8,7 @@ import sys
 
 from resources.lib.helper import *
 from resources.lib.json_map import *
-from resources.lib.dialog_metadata import *
-from resources.lib.dialog_selectvalue import *
-from resources.lib.toggle_watchlist import *
+from resources.lib.editor import *
 from resources.lib.rating_updater import *
 
 #################################################################################################
@@ -20,31 +18,11 @@ class ContextMenu(object):
         self.dbid = dbid
         self.dbtype = dbtype
 
-        if self.dbtype in ['movie', 'tvshow', 'season', 'episode', 'musicvideo']:
-            library = 'Video'
-        else:
-            library = 'Audio'
-
-        self.method_details = '%sLibrary.Get%sDetails' % (library, self.dbtype)
-        self.param = '%sid' % self.dbtype
-        self.key_details = '%sdetails' % self.dbtype
-        self.properties = eval('%s_properties' % self.dbtype)
-
-        self.details = self.get_details()
+        db = Database(self.dbid, self.dbtype)
+        getattr(db, self.dbtype)()
+        self.details = db.result().get(self.dbtype)[0]
 
         self.menu()
-
-    def get_details(self):
-        json_query = json_call(self.method_details,
-                               properties=self.properties,
-                               params={self.param: int(self.dbid)}
-                               )
-        try:
-            result = json_query['result'][self.key_details]
-            return result
-
-        except KeyError:
-            return
 
     def menu(self):
         itemlist = [ADDON.getLocalizedString(32010)]
@@ -67,29 +45,36 @@ class ContextMenu(object):
             contextdialog = DIALOG.contextmenu(itemlist)
 
             if contextdialog == 0:
-                EditDialog({'dbid': self.dbid, 'type': self.dbtype})
+                self._editor()
+
+            elif contextdialog == 1 and self.dbtype == 'episode':
+                self._ratings()
 
             elif contextdialog == 1:
-                if self.dbtype == 'episode':
-                    UpdateRating({'dbid': self.dbid, 'type': self.dbtype})
-
-                else:
-                    SelectValue({'dbid': self.dbid, 'type': self.dbtype, 'key': 'genre'})
+                self._set(key='genre', valuetype='select')
 
             elif contextdialog == 2:
-                SelectValue({'dbid': self.dbid, 'type': self.dbtype, 'key': 'tag'})
+                self._set(key='tag', valuetype='select')
 
             elif contextdialog == 3:
-                ToggleWatchlist({'dbid': self.dbid, 'type': self.dbtype})
+                self._set(key='tag', valuetype='watchlist')
 
             elif contextdialog == 4:
-                UpdateRating({'dbid': self.dbid, 'type': self.dbtype})
-
-            else:
-                return
+                self._ratings()
 
         else:
-            EditDialog({'dbid': self.dbid, 'type': self.dbtype})
+            self._editor()
+
+    def _set(self,key,valuetype):
+        editor = EditDialog(dbid=self.dbid, dbtype=self.dbtype)
+        editor.set(key=key, type=valuetype)
+
+    def _editor(self):
+        editor = EditDialog(dbid=self.dbid, dbtype=self.dbtype)
+        editor.editor()
+
+    def _ratings(self):
+        update_ratings(dbid=self.dbid, dbtype=self.dbtype)
 
 
 if __name__ == "__main__":

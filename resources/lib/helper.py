@@ -28,7 +28,7 @@ NOTICE = xbmc.LOGNOTICE
 WARNING = xbmc.LOGWARNING
 DEBUG = xbmc.LOGDEBUG
 ERROR = xbmc.LOGERROR
-LOG_JSON = ADDON.getSettingBool('LOG_JSON')
+LOG_JSON = ADDON.getSettingBool('json_log')
 
 DIALOG = xbmcgui.Dialog()
 
@@ -49,7 +49,7 @@ else:
 ########################
 
 
-def log(txt,loglevel=DEBUG,json=False,force=False):
+def log(txt,loglevel=DEBUG,json=False,force=True):
     if loglevel in [DEBUG, WARNING, ERROR] or force:
         if force:
             loglevel = NOTICE
@@ -67,6 +67,13 @@ def log(txt,loglevel=DEBUG,json=False,force=False):
         else:
             xbmc.log(msg=message, level=loglevel)
 
+def unicode_string(string):
+    if not PYTHON3 and isinstance(string, str):
+        string = string.decode('utf-8')
+
+    string = u'%s' % string
+
+    return string
 
 def remove_quotes(label):
     if not label:
@@ -92,6 +99,10 @@ def get_joined_items(item):
     return item
 
 
+def get_list_items(string):
+    return remove_empty(string.replace('; ',';').split(';'))
+
+
 def get_key_item(items,key):
     try:
         return items.get(key)
@@ -99,11 +110,14 @@ def get_key_item(items,key):
         return
 
 
-def get_rounded_value(item):
-    item = float(item)
-    item = round(item,1)
+def get_rounded_value(value):
+    if not value:
+        return
 
-    return item
+    value = float(value)
+    value = round(value,1)
+
+    return value
 
 
 def remove_empty(array):
@@ -126,6 +140,7 @@ def condition(condition):
 
 
 def encode_string(string):
+    log(string)
     if not isinstance(string, str):
         string = str(string)
 
@@ -136,11 +151,15 @@ def encode_string(string):
 
 
 def decode_string(string):
-    if not isinstance(string, str):
-        string = str(string)
+    log(string)
+    if not string:
+        string = ''
 
     if not PYTHON3 and isinstance(string, str):
         string = string.decode('utf-8')
+
+    if not isinstance(string, str):
+        string = str(string)
 
     return string
 
