@@ -13,6 +13,7 @@ from resources.lib.nfo_updater import *
 ########################
 
 RUN_IN_BACKGROUND = ADDON.getSettingBool('update_background')
+BUSYDIALOG = False if RUN_IN_BACKGROUND else True
 OMDB_FALLBACK = ADDON.getSettingBool('omdb_fallback_search')
 OMDB_API = ADDON.getSetting('omdb_api_key')
 COUNTRY_CODE = ADDON.getSetting('country_code')
@@ -20,6 +21,7 @@ SKIP_MPAA = ADDON.getSettingBool('mpaa_skip')
 SKIP_NOT_RATED = ADDON.getSettingBool('mpaa_skip_nr')
 MPAA_FALLBACK = ADDON.getSettingBool('mpaa_fallback')
 TMDB_LANGUAGE = ADDON.getSetting('tmdb_language')
+RATING_DEBUG = ADDON.getSetting('debug_rating_updater')
 
 ########################
 
@@ -36,20 +38,23 @@ def update_ratings(dbid=None,dbtype=None,content=None):
     if isinstance(dbtype, str):
         dbtype = dbtype.split('+')
 
-    db = Database(dbid=dbid, append=['episodes'])
-    for i in dbtype:
-        getattr(db, i)()
-    result = db.result()
+    with busy_dialog(force=BUSYDIALOG):
+        db = Database(dbid=dbid, append=['episodes'])
+        for i in dbtype:
+            log(i, force=True)
+            getattr(db, i)()
+        result = db.result()
 
-    # calc total items to process
-    total_items = 0
-    for i in result:
-        if result.get(i):
-            total_items = total_items + len(result[i])
+        # calc total items to process
+        total_items = 0
+        for i in result:
+            if result.get(i):
+                total_items = total_items + len(result[i])
 
     if total_items > 1:
         # show progress if 1< will be processed
         progressdialog = ProgressDialog(total_items)
+        log('progress started', force=True)
 
         for i in result:
             if i == 'movie':
@@ -75,6 +80,7 @@ def update_ratings(dbid=None,dbtype=None,content=None):
 
                 UpdateRating({'dbid': item.get('%sid' % i),
                               'type': i})
+                #xbmc.sleep(50)
 
             if progressdialog.canceled():
                 msg_text = ADDON.getLocalizedString(32042)
@@ -169,12 +175,14 @@ class UpdateRating(object):
         self.details = self.db.result().get(self.dbtype)[0]
 
     def run(self):
+        log('Run rating updater - %s: %s - ID: %s' % (self.dbtype, self.title, str(self.dbid)), force=RATING_DEBUG)
         self.imdb = self.uniqueid.get('imdb')
         self.tmdb = self.uniqueid.get('tmdb')
         self.tvdb = self.uniqueid.get('tvdb')
 
         # don't proceed for episodes if no IMDb is available
         if self.dbtype == 'episode' and not self.imdb:
+            log('Episode with no IMDb. Skip.', force=RATING_DEBUG)
             return
 
         # get the default used rating
@@ -187,24 +195,30 @@ class UpdateRating(object):
         if self.dbtype != 'episode':
             # get TMDb ID (if not available) by using the ID of IMDb or TVDb
             if not self.tmdb and self.imdb:
+                log('No TMDb. Try to get by IMDb ID %s' % self.imdb, force=RATING_DEBUG)
                 self.get_tmdb_externalid(self.imdb)
 
             elif not self.tmdb and self.tvdb:
+                log('No TMDb. Try to get by TVDb ID %s' % str(self.tvdb), force=RATING_DEBUG)
                 self.get_tmdb_externalid(self.tvdb)
 
             # get TMDb rating and IMDb number if not available
             if self.tmdb:
+                log('Fetch data by TMDb ID %s' % str(self.tmdb), force=RATING_DEBUG)
                 self.get_tmdb()
 
         # get Rotten, Metacritic and IMDb ratings of OMDb
         if not self.omdb_limit:
+            log('Fetch OMDb data', force=RATING_DEBUG)
             self.get_omdb()
 
         # if no TMDb ID was known before but OMDb return the IMDb ID -> try to get TMDb data again
         if self.dbtype != 'episode' and not self.tmdb and self.imdb:
+            log('Try to get TMDb ID by returned IMDb ID %s of OMDb' % self.imdb, force=RATING_DEBUG)
             self.get_tmdb_externalid(self.imdb)
 
             if self.tmdb:
+                log('Fetch data by TMDb ID %s' % str(self.tmdb), force=RATING_DEBUG)
                 self.get_tmdb()
 
         # emby <ratings> and <votes>
@@ -212,6 +226,7 @@ class UpdateRating(object):
             self.emby_ratings()
 
         # update db + nfo
+        log('Updating info', force=RATING_DEBUG)
         self.update_info()
 
     def emby_ratings(self):
@@ -491,25 +506,33 @@ class UpdateRating(object):
         else:
             return
 
-        for i in range(1,10): # loop if heavy server load
+        self._scraper_load(scraper='OMDb')
+        for i in range(1,3): # loop if heavy server load
+            log('OMDb call try %s/3' % str(i), force=RATING_DEBUG)
             request = requests.get(url)
             if not str(request.status_code).startswith('5'):
+                self._scraper_load(cancel=True)
                 break
             xbmc.sleep(500)
 
+
         if request.status_code == 401:
-            if DIALOG.yesno(xbmc.getLocalizedString(257), 'OMDB API limit reached. Please consider to become a Patreon to increase your daily call limitation. Proceed by only using The Movie DB?'):
+            log('OMDb returned 401', force=RATING_DEBUG)
+            if DIALOG.yesno(xbmc.getLocalizedString(257), ADDON.getLocalizedString(32033)):
+                log('OMDb limit reached and disabled for next calls', force=RATING_DEBUG)
                 self.omdb_limit = True
             else:
                 winprop('CancelRatingUpdater.bool', True)
             return
 
         if request.status_code != requests.codes.ok:
+            log('OMDb returned nothing', force=RATING_DEBUG)
             return
 
         result = request.content
 
         if not result or '<root response="False">' in result:
+            log('OMDb returned nothing', force=RATING_DEBUG)
             error_msg = 'OMDb error for "%s" IMDBd "%s" --> ' % (self.original_title, self.imdb)
             log(error_msg + str(omdb), WARNING)
             return
@@ -529,14 +552,26 @@ class UpdateRating(object):
         url = 'https://api.themoviedb.org/3/' + action + call + get
         url = '{0}?{1}'.format(url, urlencode(args))
 
-        for i in range(1,10): # loop if heavy server load
+        self._scraper_load(scraper='TMDb')
+        for i in range(1,3): # loop if heavy server load
+            log('TMDb call try %s/3' % str(i), force=RATING_DEBUG)
             request = requests.get(url)
             if not str(request.status_code).startswith('5'):
+                self._scraper_load(cancel=True)
                 break
             xbmc.sleep(500)
 
         result = {}
         if request.status_code == requests.codes.ok:
             result = request.json()
+        else:
+            log('TMDb returned nothing', force=RATING_DEBUG)
 
         return result
+
+    @staticmethod
+    def _scraper_load(scraper=None,cancel=False):
+        if cancel:
+            execute('CancelAlarm(ScraperDelay,silent)')
+        else:
+            execute('AlarmClock(ScraperDelay,Notification(%s, %s, 3000),00:05,silent)' % (scraper, ADDON.getLocalizedString(32024)))

@@ -279,8 +279,11 @@ def reload_widgets():
 
 
 @contextmanager
-def busy_dialog():
-    if not winprop('UpdatingRatings.bool'):
+def busy_dialog(force=False):
+    if force:
+        execute('ActivateWindow(busydialognocancel)')
+
+    elif not winprop('UpdatingRatings.bool'):
         # NFO writing usually only takes < 1s. Just show BusyDialog if it takes longer for whatever reason.
         execute('AlarmClock(BusyAlarmDelay,ActivateWindow(busydialognocancel),00:02,silent)')
 

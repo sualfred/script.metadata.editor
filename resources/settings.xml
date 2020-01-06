@@ -17,5 +17,6 @@
 		<setting label="$ADDON[script.metadata.editor 32030]" type="lsep"/>
 		<setting label="$ADDON[script.metadata.editor 32031]" type="text" id="omdb_api_key"/>
 		<setting label="$ADDON[script.metadata.editor 32028]" type="bool" id="update_background" default="false"/>
+		<setting label="$LOCALIZE[20191]" type="bool" id="debug_rating_updater" default="false"/>
 	</category>
 </settings>

@@ -144,6 +144,11 @@ msgctxt "#32026"
 msgid "Scraper settings"
 msgstr ""
 
+#: /resources/lib/rating_updater.py
+msgctxt "#32024"
+msgid "Heavy server load. Please wait."
+msgstr ""
+
 #: /resources/settings.xml
 msgctxt "#32027"
 msgid "TV show library is based on informations of"
@@ -182,6 +187,11 @@ msgstr ""
 #: /default.py
 msgctxt "#32036"
 msgid "Update TV show ratings"
+msgstr ""
+
+#: /resources/lib/rating_updater.py
+msgctxt "#32033"
+msgid "OMDB API limit reached. Please consider to become a Patreon to increase your daily call limitation. Proceed by only using The Movie DB?"
 msgstr ""
 
 #: /default.py
