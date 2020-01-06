@@ -137,7 +137,7 @@ class Database(object):
 
     def _items(self,library,dbtype,params=None,query_filter=None):
         items = json_call('%sLibrary.Get%ss' % (library, dbtype),
-                          properties=eval('%s_properties' % dbtype),
+                          properties=eval('%ss_properties' % dbtype),
                           params=params,
                           query_filter=query_filter
                           )

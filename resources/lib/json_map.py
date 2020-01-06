@@ -37,6 +37,11 @@ movie_properties = [
                     'uniqueid'
                     ]
 
+movies_properties = [
+                    'title',
+                    'year'
+                    ]
+
 episode_properties = [
                     'title',
                     'playcount',
@@ -64,6 +69,11 @@ episode_properties = [
                     'uniqueid'
                     ]
 
+episodes_properties = [
+                    'title',
+                    'showtitle'
+                    ]
+
 season_properties = [
                     'season',
                     'episode',
@@ -72,6 +82,12 @@ season_properties = [
                     'watchedepisodes',
                     'showtitle',
                     'playcount',
+                    'tvshowid'
+                    ]
+
+seasons_properties = [
+                    'season',
+                    'showtitle',
                     'tvshowid'
                     ]
 
@@ -105,6 +121,11 @@ tvshow_properties = [
                     'uniqueid'
                     ]
 
+tvshows_properties = [
+                    'title',
+                    'year'
+                    ]
+
 musicvideo_properties = [
                     'title',
                     'playcount',
@@ -131,6 +152,11 @@ musicvideo_properties = [
                     'premiered'
                     ]
 
+musicvideos_properties = [
+                    'title',
+                    'year'
+                    ]
+
 artist_properties = [
                     'instrument',
                     'style',
@@ -152,6 +178,8 @@ artist_properties = [
                     'isalbumartist',
                     'disambiguation'
                     ]
+
+artists_properties = artist_properties
 
 album_properties = [
                     'title',
@@ -177,6 +205,11 @@ album_properties = [
                     'compilation',
                     'releasetype',
                     'dateadded'
+                    ]
+
+albums_properties = [
+                    'title',
+                    'year'
                     ]
 
 song_properties = [
@@ -218,9 +251,7 @@ song_properties = [
                     'displaylyricist'
                     ]
 
-season_properties = [
-                    'season',
-                    'showtitle',
-                    'tvshowid',
-                    'userrating'
+songs_properties = [
+                    'title',
+                    'artist'
                     ]
