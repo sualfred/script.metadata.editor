@@ -118,7 +118,7 @@ class Database(object):
         self.data['moviegenres'] = movie
         self.data['tvshowgenres'] = tvshow
         self.data['musicvideogenres'] = musicvideo
-        self.data['musicgenres'] = audio
+        self.data['musicgenres'] = music
         self.data['videogenres'] = list(set(movie + tvshow + musicvideo))
         self.data['audiogenres'] = list(set(music + musicvideo))
 
