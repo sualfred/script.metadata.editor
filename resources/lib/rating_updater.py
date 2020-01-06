@@ -506,14 +506,18 @@ class UpdateRating(object):
         else:
             return
 
-        self._scraper_load(scraper='OMDb')
         for i in range(1,3): # loop if heavy server load
             log('OMDb call try %s/3' % str(i), force=RATING_DEBUG)
-            request = requests.get(url)
-            if not str(request.status_code).startswith('5'):
-                self._scraper_load(cancel=True)
-                break
-            xbmc.sleep(500)
+            try:
+                request = requests.get(url, timeout=5)
+                if not str(request.status_code).startswith('5'):
+                    break
+                elif i == 1:
+                    notification('OMDb', ADDON.getLocalizedString(32024))
+
+            except ConnectionError:
+                if i < 3:
+                    xbmc.sleep(500)
 
 
         if request.status_code == 401:
@@ -552,14 +556,18 @@ class UpdateRating(object):
         url = 'https://api.themoviedb.org/3/' + action + call + get
         url = '{0}?{1}'.format(url, urlencode(args))
 
-        self._scraper_load(scraper='TMDb')
         for i in range(1,3): # loop if heavy server load
             log('TMDb call try %s/3' % str(i), force=RATING_DEBUG)
-            request = requests.get(url)
-            if not str(request.status_code).startswith('5'):
-                self._scraper_load(cancel=True)
-                break
-            xbmc.sleep(500)
+            try:
+                request = requests.get(url, timeout=5)
+                if not str(request.status_code).startswith('5'):
+                    break
+                elif i == 1:
+                    notification('TMDb', ADDON.getLocalizedString(32024))
+
+            except ConnectionError:
+                if i < 3:
+                    xbmc.sleep(500)
 
         result = {}
         if request.status_code == requests.codes.ok:
@@ -568,10 +576,3 @@ class UpdateRating(object):
             log('TMDb returned nothing', force=RATING_DEBUG)
 
         return result
-
-    @staticmethod
-    def _scraper_load(scraper=None,cancel=False):
-        if cancel:
-            execute('CancelAlarm(ScraperDelay,silent)')
-        else:
-            execute('AlarmClock(ScraperDelay,Notification(%s, %s, 3000),00:05,silent)' % (scraper, ADDON.getLocalizedString(32024)))
