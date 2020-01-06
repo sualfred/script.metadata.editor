@@ -10,19 +10,31 @@ from resources.lib.rating_updater import *
 
 class Main:
     def __init__(self):
+        self.action = None
         self._parse_argv()
         self.dbid = self.params.get('dbid', xbmc.getInfoLabel('ListItem.DBID'))
         self.dbtype = self.params.get('type', xbmc.getInfoLabel('ListItem.DBType'))
-
+        self.option = self.params.get('option')
+        log(self.action, force=True)
+        log(self.option, force=True)
         menu_items = [ADDON.getLocalizedString(32038), ADDON.getLocalizedString(32037), ADDON.getLocalizedString(32036), ADDON.getLocalizedString(32045)]
         menu_actions = [['movies', 'tvshows', 'episodes'], 'movies', 'tvshows', 'episodes']
 
-        if not self.action and not self.dbid and not self.dbtype:
+        if not self.action and not self.dbid and not self.dbtype and not self.option:
             updateselector = DIALOG.contextmenu(menu_items)
             if updateselector >= 0:
                 update_ratings(dbtype=menu_actions[updateselector])
 
-        if self.dbid and self.dbtype:
+        elif self.action == 'updaterating' and self.option:
+            content = []
+            for i in self.option.split('+'):
+                if i in ['movies', 'tvshows', 'episodes']:
+                    content.append(i)
+
+            if content:
+                update_ratings(dbtype=content)
+
+        elif self.dbid and self.dbtype:
             if self.action == 'updaterating':
                 if self.dbtype in ['movie', 'tvshow', 'episode']:
                     update_ratings(dbid=self.dbid, dbtype=self.dbtype)
@@ -53,6 +65,7 @@ class Main:
 
     def _parse_argv(self):
         args = sys.argv
+        log(args, force=True)
 
         for arg in args:
             if arg == ADDON_ID:
@@ -61,7 +74,6 @@ class Main:
             if arg.startswith('action='):
                 self.action = arg[7:].lower()
             else:
-                self.action = None
                 try:
                     self.params[arg.split("=")[0].lower()] = "=".join(arg.split("=")[1:]).strip()
                 except:
