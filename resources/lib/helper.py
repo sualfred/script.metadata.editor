@@ -143,7 +143,6 @@ def condition(condition):
 
 
 def encode_string(string):
-    log(string)
     if not isinstance(string, str):
         string = str(string)
 
@@ -154,7 +153,6 @@ def encode_string(string):
 
 
 def decode_string(string):
-    log(string)
     if not string:
         string = ''
 

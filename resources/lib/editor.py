@@ -47,9 +47,7 @@ class EditDialog(object):
 
         self._handle_dbitem(value_type=type,
                             key=key,
-                            preset=preset,
-                            dbid=self.dbid,
-                            dbtype=self.dbtype
+                            preset=preset
                             )
         self.get_details()
         self.quit()
@@ -88,8 +86,6 @@ class EditDialog(object):
         winprop('SelectDialogPreselect', str(self.editdialog))
 
         self._handle_dbitem(value_type=self.typelist[self.editdialog],
-                            dbid=self.dbid,
-                            dbtype=self.dbtype,
                             key=self.keylist[self.editdialog],
                             preset=self.presetlist[self.editdialog],
                             option=self.optionlist[self.editdialog]
@@ -261,15 +257,15 @@ class EditDialog(object):
         self.optionlist.append(option)
         self.presetlist.append('' if not value else value)
 
-    def _handle_dbitem(self,key,value_type,dbid=None,dbtype=None,preset=None,option=None):
+    def _handle_dbitem(self,key,value_type,preset=None,option=None):
         if preset:
             preset = preset.replace('n/a','')
 
         if value_type == 'array':
-            value = set_array(preset, dbid, dbtype, key)
+            value = set_array(self.dbtype, key, preset)
 
         elif value_type == 'select':
-            value = modify_array(dbtype, key, preset)
+            value = modify_array(self.dbtype, key, preset)
 
         elif value_type == 'string':
             value = set_string(preset)

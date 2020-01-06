@@ -77,7 +77,6 @@ class UpdateNFO():
 
     def write_file(self):
         xml_prettyprint(self.root)
-        log(self.root)
         content = ET.tostring(self.root, encoding='UTF-8')
 
         file = xbmcvfs.File(self.targetfile, 'w')

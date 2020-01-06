@@ -42,66 +42,50 @@ class Database(object):
                       )
 
     def movies(self):
-        movies = json_call('VideoLibrary.GetMovies',
-                           properties=['title', 'year']
-                           )
-
-        self.data['movie'] = movies.get('result', {}).get('movies', [])
+        self._items('video', 'movie')
 
     def movie(self):
-        tvshow = json_call('VideoLibrary.GetMovieDetails',
-                           properties=movie_properties,
-                           params={'movieid': int(self.dbid)}
-                           )
-        self.data['movie'] = [tvshow.get('result', {}).get('moviedetails')]
+        self._item('video', 'movie')
 
     def tvshows(self):
-        tvshows = json_call('VideoLibrary.GetTVShows',
-                            properties=['title', 'year']
-                            )
-        self.data['tvshow'] = tvshows.get('result', {}).get('tvshows', [])
+        self._items('video', 'tvshow')
 
     def tvshow(self):
-        tvshow = json_call('VideoLibrary.GetTVShowDetails',
-                           properties=tvshow_properties,
-                           params={'tvshowid': int(self.dbid)}
-                           )
-        tvshow_details = tvshow.get('result', {}).get('tvshowdetails')
-        self.data['tvshow'] = [tvshow_details]
+        self._item('video', 'tvshow')
 
-        if tvshow_details:
-            if 'episodes' in self.append:
-                tvshowid = tvshow_details.get('tvshowid')
-                episodes = json_call('VideoLibrary.GetEpisodes',
-                                     properties=['title', 'showtitle'],
-                                     params={'tvshowid': int(tvshowid)}
-                                     )
-                self.data['episode'] = episodes.get('result', {}).get('episodes', [])
+        if self.data['tvshow'] and 'episodes' in self.append:
+            tvshowid = self.data['tvshow'][0].get('tvshowid')
+            self._items('video', 'episode', {'tvshowid': int(tvshowid)})
 
     def episode(self):
-        episode = json_call('VideoLibrary.GetEpisodeDetails',
-                            properties=episode_properties,
-                            params={'episodeid': int(self.dbid)}
-                            )
-        self.data['episode'] = [episode.get('result', {}).get('episodedetails')]
+        self._item('video', 'episode')
 
     def episodes(self):
-        episodes = json_call('VideoLibrary.GetEpisodes',
-                             properties=['title', 'showtitle']
-                             )
-        self.data['episode'] = episodes.get('result', {}).get('episodes', [])
+        self._items('video', 'episode')
 
     def musicvideo(self):
-        musicvideo = json_call('VideoLibrary.GetMusicVideoDetails',
-                           properties=musicvideo_properties
-                           )
-        self.data['musicvideo'] = [musicvideo.get('result', {}).get('muiscvideodetails')]
+        self._item('video', 'musicvideo')
 
     def musicvideos(self):
-        musicvideos = json_call('VideoLibrary.GetMusicVideos',
-                           properties=['title', 'year']
-                           )
-        self.data['musicvideo'] = musicvideos.get('result', {}).get('musicvideos', [])
+        self._items('video', 'musicvideo')
+
+    def artist(self):
+        self._item('audio', 'artist')
+
+    def artists(self):
+        self._items('audio', 'artist')
+
+    def album(self):
+        self._item('audio', 'album')
+
+    def albums(self):
+        self._items('audio', 'album')
+
+    def song(self):
+        self._item('audio', 'song')
+
+    def songs(self):
+        self._items('audio', 'song')
 
     def genre(self):
         movie = []
@@ -144,23 +128,17 @@ class Database(object):
                          )
         self.data['tags'] = tags.get('result', {}).get('tags', [])
 
-    def artist(self):
-        artist = json_call('AudioLibrary.GetArtistDetails',
-                           properties=artist_properties,
-                           params={'artistid': int(self.dbid)}
-                           )
-        self.data['artist'] = [artist.get('result', {}).get('artistdetails')]
+    def _item(self,library,dbtype):
+        item = json_call('%sLibrary.Get%sDetails' % (library, dbtype),
+                         properties=eval('%s_properties' % dbtype),
+                         params={'%sid' % dbtype: int(self.dbid)}
+                         )
+        self.data[dbtype] = [item.get('result', {}).get('%sdetails' % dbtype)]
 
-    def album(self):
-        album = json_call('AudioLibrary.GetAlbumDetails',
-                           properties=album_properties,
-                           params={'albumid': int(self.dbid)}
-                           )
-        self.data['album'] = [album.get('result', {}).get('albumdetails')]
-
-    def song(self):
-        song = json_call('AudioLibrary.GetsongDetails',
-                           properties=song_properties,
-                           params={'songid': int(self.dbid)}
-                           )
-        self.data['song'] = [song.get('result', {}).get('songdetails')]
+    def _items(self,library,dbtype,params=None,query_filter=None):
+        items = json_call('%sLibrary.Get%ss' % (library, dbtype),
+                          properties=eval('%s_properties' % dbtype),
+                          params=params,
+                          query_filter=query_filter
+                          )
+        self.data[dbtype] = items.get('result', {}).get('%ss' % dbtype, [])

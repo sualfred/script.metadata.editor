@@ -418,16 +418,10 @@ class UpdateRating(object):
                     break
 
         # update to library
-        json_call('VideoLibrary.Set%sDetails' % self.dbtype,
-                  params={'ratings': self.ratings, '%sid' % self.dbtype: int(self.dbid)},
-                  debug=LOG_JSON
-                  )
+        self._set_value(key='ratings', value=self.ratings)
 
         if self.update_uniqueid:
-            json_call('VideoLibrary.Set%sDetails' % self.dbtype,
-                      params={'uniqueid': self.uniqueid, '%sid' % self.dbtype: int(self.dbid)},
-                      debug=LOG_JSON
-                      )
+            self._set_value(key='uniqueid', value=self.uniqueid)
 
         # episode guide verification
         if self.episodeguide:

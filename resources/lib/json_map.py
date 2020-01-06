@@ -24,7 +24,7 @@ movie_properties = [
                     'userrating',
                     'resume',
                     'art',
-                    'streamdetails',
+                    #'streamdetails',
                     'mpaa',
                     'director',
                     'writer',
@@ -54,7 +54,7 @@ episode_properties = [
                     'tvshowid',
                     'firstaired',
                     'art',
-                    'streamdetails',
+                    #'streamdetails',
                     'runtime',
                     'director',
                     'writer',
@@ -117,7 +117,7 @@ musicvideo_properties = [
                     'artist',
                     'genre',
                     'track',
-                    'streamdetails',
+                    #'streamdetails',
                     'lastplayed',
                     'fanart',
                     'thumbnail',
@@ -216,4 +216,11 @@ song_properties = [
                     'displayconductor',
                     'displayorchestra',
                     'displaylyricist'
+                    ]
+
+season_properties = [
+                    'season',
+                    'showtitle',
+                    'tvshowid',
+                    'userrating'
                     ]

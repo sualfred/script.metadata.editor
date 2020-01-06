@@ -91,7 +91,7 @@ def set_ratings(ratings):
     return ratings
 
 
-def set_array(preset,dbid,dbtype,key):
+def set_array(dbtype,key,preset):
     actionlist = [ADDON.getLocalizedString(32005), ADDON.getLocalizedString(32007), ADDON.getLocalizedString(32006)]
     array_action = DIALOG.select(xbmc.getLocalizedString(14241), actionlist)
     array_list = get_list_items(preset)
@@ -155,6 +155,12 @@ def modify_array(dbtype,key,values):
     all_values = list(set(values + all_values))
     all_values.sort()
     values.sort()
+
+    # open common array dialog if all_values are empty
+    if not all_values:
+        notification(ADDON.getLocalizedString(32000), ADDON.getLocalizedString(32048))
+        value = set_array(dbtype, key, '')
+        return value
 
     preselectlist = []
     for item in values:
