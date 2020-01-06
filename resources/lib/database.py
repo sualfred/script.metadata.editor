@@ -24,8 +24,6 @@ class Database(object):
 
             self.set_details = '%sLibrary.Set%sDetails' % (library, dbtype)
             self.param = '%sid' % dbtype
-            self.key_details = '%sdetails' % dbtype
-            self.properties = eval('%s_properties' % dbtype)
 
     def result(self):
         return self.data
@@ -130,14 +128,14 @@ class Database(object):
 
     def _item(self,library,dbtype):
         item = json_call('%sLibrary.Get%sDetails' % (library, dbtype),
-                         properties=eval('%s_properties' % dbtype),
+                         properties=JSON_MAP.get('%s_properties' % dbtype),
                          params={'%sid' % dbtype: int(self.dbid)}
                          )
         self.data[dbtype] = [item.get('result', {}).get('%sdetails' % dbtype)]
 
     def _items(self,library,dbtype,params=None,query_filter=None):
         items = json_call('%sLibrary.Get%ss' % (library, dbtype),
-                          properties=eval('%ss_properties' % dbtype),
+                          properties=JSON_MAP.get('%ss_properties' % dbtype),
                           params=params,
                           query_filter=query_filter
                           )
