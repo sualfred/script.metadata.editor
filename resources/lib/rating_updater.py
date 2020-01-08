@@ -521,24 +521,25 @@ class UpdateRating(object):
 
 
         if request.status_code == 401:
-            log('OMDb returned 401', force=RATING_DEBUG)
+            log('OMDb error --> API limit reached', WARNING)
             if DIALOG.yesno(xbmc.getLocalizedString(257), ADDON.getLocalizedString(32033)):
                 log('OMDb limit reached and disabled for next calls', force=RATING_DEBUG)
                 self.omdb_limit = True
             else:
+                log('OMDb limit reached and rating updater canceled', force=RATING_DEBUG)
                 winprop('CancelRatingUpdater.bool', True)
             return
 
-        if request.status_code != requests.codes.ok:
-            log('OMDb returned nothing', force=RATING_DEBUG)
+        elif request.status_code != requests.codes.ok:
+            error_msg = 'OMDb error for "%s" IMDBd "%s". Error code --> ' % (self.original_title, self.imdb)
+            log(error_msg + str(request.status_code), WARNING)
             return
 
         result = request.content
 
         if not result or '<root response="False">' in result:
-            log('OMDb returned nothing', force=RATING_DEBUG)
-            error_msg = 'OMDb error for "%s" IMDBd "%s" --> ' % (self.original_title, self.imdb)
-            log(error_msg + str(omdb), WARNING)
+            error_msg = 'OMDb error for "%s" IMDBd "%s". Result --> ' % (self.original_title, self.imdb)
+            log(error_msg + str(result), WARNING)
             return
 
         return result
