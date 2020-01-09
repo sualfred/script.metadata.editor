@@ -109,7 +109,8 @@ class UpdateNFO():
               {'key': 'aired', 'value': self.details.get('firstaired')},
               {'key': 'playcount', 'value': self.details.get('playcount')},
               {'key': 'watched', 'value': 'true' if self.details.get('playcount', 0) > 0 else 'false'}, #emby
-              {'key': 'lastplayed', 'value': self.details.get('lastplayed')}
+              {'key': 'lastplayed', 'value': self.details.get('lastplayed')},
+              {'key': 'dateadded', 'value': self.details.get('dateadded')}
               ]
 
         for item in li:
@@ -126,18 +127,19 @@ class UpdateNFO():
                 self.handle_elem(key, value)
 
     def handle_elem(self,key,value):
-        for elem in self.root.findall(key):
-            self.root.remove(elem)
+        if key != 'status' or (key == 'status' and value): # Keep status value. Required for leia because status isn't returned thru json.
+            for elem in self.root.findall(key):
+                self.root.remove(elem)
 
         if isinstance(value, list):
             for i in value:
                 if i:
                     elem = ET.SubElement(self.root, key)
                     elem.text = unicode_string(i)
-        else:
-            if value:
-                elem = ET.SubElement(self.root, key)
-                elem.text = unicode_string(value)
+
+        elif value:
+            elem = ET.SubElement(self.root, key)
+            elem.text = unicode_string(value)
 
     def handle_ratings(self,value):
         for elem in self.root.findall('ratings'):

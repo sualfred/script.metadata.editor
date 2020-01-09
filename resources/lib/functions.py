@@ -90,6 +90,33 @@ def set_ratings(ratings):
 
     return ratings
 
+def set_movieset(preset):
+    db = Database()
+    db.sets()
+    sets = db.result().get('set', [])
+
+    selectlist = []
+    for item in sets:
+        selectlist.append(item.get('title'))
+    selectlist.sort()
+    selectlist.insert(0, xbmc.getLocalizedString(231))
+    selectlist.insert(1, ADDON.getLocalizedString(32005))
+
+    preselect = selectlist.index(preset) if preset in selectlist else -1
+
+    selectdialog = DIALOG.select(xbmc.getLocalizedString(20466), selectlist, preselect=preselect)
+
+    if selectdialog == 0:
+        return ''
+
+    elif selectdialog == 1:
+        value = set_string()
+        return value
+
+    elif selectdialog > 1:
+        return selectlist[selectdialog]
+
+    return preset
 
 def set_array(dbtype,key,preset):
     actionlist = [ADDON.getLocalizedString(32005), ADDON.getLocalizedString(32007), ADDON.getLocalizedString(32006)]
@@ -242,7 +269,7 @@ def set_time(preset):
     return preset
 
 
-def set_string(preset):
+def set_string(preset=''):
     value = preset.replace('\n', '[CR]')
     keyboard = xbmc.Keyboard(value)
     keyboard.doModal()

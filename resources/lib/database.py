@@ -18,17 +18,22 @@ class Database(object):
             if dbtype in ['movie', 'tvshow', 'season', 'episode', 'musicvideo']:
                 library = 'Video'
                 self.data['nfo'] = True
+
+            elif dbtype in ['set']:
+                library = 'Video'
+                self.data['nfo'] = False
+
             else:
                 library = 'Audio'
                 self.data['nfo'] = False
 
-            self.set_details = '%sLibrary.Set%sDetails' % (library, dbtype)
+            self.set_details = '%sLibrary.Set%sDetails' % (library, dbtype.replace('set', 'movieset'))
             self.param = '%sid' % dbtype
 
     def result(self):
         return self.data
 
-    def set(self,key,value):
+    def write(self,key,value):
         if not isinstance(key, list):
             key = [key]
             value = [value]
@@ -44,6 +49,12 @@ class Database(object):
 
     def movie(self):
         self._item('video', 'movie')
+
+    def sets(self):
+        self._items('video', 'set')
+
+    def set(self):
+        self._item('video', 'set')
 
     def tvshows(self):
         self._items('video', 'tvshow')
@@ -127,16 +138,17 @@ class Database(object):
         self.data['tags'] = tags.get('result', {}).get('tags', [])
 
     def _item(self,library,dbtype):
-        item = json_call('%sLibrary.Get%sDetails' % (library, dbtype),
+        item = json_call('%sLibrary.Get%sDetails' % (library, dbtype.replace('set', 'movieset')),
                          properties=JSON_MAP.get('%s_properties' % dbtype),
                          params={'%sid' % dbtype: int(self.dbid)}
                          )
         self.data[dbtype] = [item.get('result', {}).get('%sdetails' % dbtype)]
 
     def _items(self,library,dbtype,params=None,query_filter=None):
-        items = json_call('%sLibrary.Get%ss' % (library, dbtype),
+        items = json_call('%sLibrary.Get%ss' % (library, dbtype.replace('set', 'movieset')),
                           properties=JSON_MAP.get('%ss_properties' % dbtype),
                           params=params,
                           query_filter=query_filter
                           )
         self.data[dbtype] = items.get('result', {}).get('%ss' % dbtype, [])
+        log(self.data, force=True)

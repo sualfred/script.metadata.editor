@@ -19,6 +19,7 @@ class EditDialog(object):
 
         self.db = Database(dbid=self.dbid, dbtype=self.dbtype)
         self.nfo_support = self.db.result().get('nfo')
+        self.status = None
         self.get_details()
 
     def get_details(self):
@@ -54,6 +55,10 @@ class EditDialog(object):
 
     def quit(self):
         if self.file:
+
+            if self.status:
+                self.details['status'] = self.status
+
             update_nfo(file=self.file,
                        dbtype=self.dbtype,
                        dbid=self.dbid,
@@ -131,7 +136,7 @@ class EditDialog(object):
             self._create_list(xbmc.getLocalizedString(202), 'tagline', value=details.get('tagline'), type='string')
             self._create_list(xbmc.getLocalizedString(207), 'plot', value=details.get('plot'), type='string')
             self._create_list(xbmc.getLocalizedString(203), 'plotoutline', value=details.get('plotoutline'), type='string')
-            self._create_list(xbmc.getLocalizedString(20457), 'set', value=details.get('set'), type='string')
+            self._create_list(xbmc.getLocalizedString(20457), 'set', value=details.get('set'), type='movieset')
             self._create_list(xbmc.getLocalizedString(563) + ' / ' + xbmc.getLocalizedString(205), 'ratings', value=ratings_default, type='ratings', option=ratings)
             self._create_list(ADDON.getLocalizedString(32001), 'userrating', value=str(details.get('userrating')), type='userrating')
             self._create_list(xbmc.getLocalizedString(20074), 'mpaa', value=details.get('mpaa'), type='string')
@@ -167,7 +172,6 @@ class EditDialog(object):
             self._create_list('aniDB ID', 'uniqueid', value=uniqueid.get('anidb'), type='uniqueid', option={'type': 'anidb', 'uniqueids': uniqueid, 'episodeguide': details.get('episodeguide')})
             self._create_list(xbmc.getLocalizedString(570), 'dateadded', value=details.get('dateadded'), type='datetime')
             self._create_list(xbmc.getLocalizedString(568), 'lastplayed', value=details.get('lastplayed'), type='datetime')
-            self._create_list(xbmc.getLocalizedString(567), 'playcount', value=str(details.get('playcount', 0)), type='integer')
 
         elif self.dbtype == 'episode':
             self._create_list(xbmc.getLocalizedString(369), 'title', value=details.get('title'), type='string')
@@ -186,6 +190,10 @@ class EditDialog(object):
             self._create_list(xbmc.getLocalizedString(568), 'lastplayed', value=details.get('lastplayed'), type='datetime')
             self._create_list(xbmc.getLocalizedString(567), 'playcount', value=str(details.get('playcount', 0)), type='integer')
 
+        elif self.dbtype == 'set':
+            self._create_list(xbmc.getLocalizedString(369), 'title', value=details.get('title'), type='string')
+            self._create_list(xbmc.getLocalizedString(207), 'plot', value=details.get('plot'), type='string')
+
         elif self.dbtype == 'musicvideo':
             self._create_list(xbmc.getLocalizedString(369), 'title', value=details.get('title'), type='string')
             self._create_list(xbmc.getLocalizedString(557), 'artist', value=get_joined_items(details.get('artist')), type='array')
@@ -196,8 +204,8 @@ class EditDialog(object):
             self._create_list(xbmc.getLocalizedString(515), 'genre', value=get_joined_items(details.get('genre')), type='array')
             self._create_list(xbmc.getLocalizedString(20339), 'director', value=get_joined_items(details.get('director')), type='array')
             self._create_list(xbmc.getLocalizedString(572), 'studio', value=get_joined_items(details.get('studio')), type='array')
-            self._create_list(xbmc.getLocalizedString(563), 'rating', value=str(get_rounded_value(details.get('rating'))), type='float')
-            self._create_list(ADDON.getLocalizedString(32001), 'userrating', value=details.get('userrating'), type='userrating')
+            # self._create_list(xbmc.getLocalizedString(563), 'rating', value=str(get_rounded_value(details.get('rating'))), type='integer')  broken in kodi? cannot be set
+            self._create_list(ADDON.getLocalizedString(32001), 'userrating', value=str(details.get('userrating')), type='userrating')
             self._create_list(xbmc.getLocalizedString(20459), 'tag', value=get_joined_items(details.get('tag')), type='array')
             self._create_list(xbmc.getLocalizedString(570), 'dateadded', value=details.get('dateadded'), type='datetime')
             self._create_list(xbmc.getLocalizedString(568), 'lastplayed', value=details.get('lastplayed'), type='datetime')
@@ -237,7 +245,7 @@ class EditDialog(object):
             self._create_list(xbmc.getLocalizedString(567), 'playcount', value=str(details.get('playcount', 0)), type='integer')
 
     def _create_list(self,label,key,type,value,option=None):
-        if type in ['uniqueid', 'status']:
+        if type in ['uniqueid', 'status', 'movieset']:
             icon = 'string'
         elif type == ('userrating'):
             icon = 'integer'
@@ -293,9 +301,13 @@ class EditDialog(object):
 
         elif value_type == 'status':
             value = set_status(preset)
+            self.status = value
 
         elif value_type == 'watchlist':
             value = toggle_tag(preset)
+
+        elif value_type == 'movieset':
+            value = set_movieset(preset)
 
         elif value_type == ('uniqueid'):
             returned_value = set_string(preset)
@@ -320,4 +332,4 @@ class EditDialog(object):
 
             nfo_value = [updated_dict, option.get('episodeguide')]
 
-        self.db.set(key=key, value=value)
+        self.db.write(key=key, value=value)

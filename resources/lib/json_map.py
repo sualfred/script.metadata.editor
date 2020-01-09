@@ -42,6 +42,15 @@ JSON_MAP = {
         'year'
     ],
 
+    'set_properties': [
+        'title',
+        'plot'
+    ],
+
+    'sets_properties': [
+        'title'
+    ],
+
     'episode_properties': [
         'title',
         'playcount',

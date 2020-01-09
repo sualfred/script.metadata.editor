@@ -51,13 +51,13 @@ class ContextMenu(object):
                 self._ratings()
 
             elif contextdialog == 1:
-                self._set(key='genre', valuetype='select')
+                self._write(key='genre', valuetype='select')
 
             elif contextdialog == 2:
-                self._set(key='tag', valuetype='select')
+                self._write(key='tag', valuetype='select')
 
             elif contextdialog == 3:
-                self._set(key='tag', valuetype='watchlist')
+                self._write(key='tag', valuetype='watchlist')
 
             elif contextdialog == 4:
                 self._ratings()
@@ -65,9 +65,9 @@ class ContextMenu(object):
         else:
             self._editor()
 
-    def _set(self,key,valuetype):
+    def _write(self,key,valuetype):
         editor = EditDialog(dbid=self.dbid, dbtype=self.dbtype)
-        editor.set(key=key, type=valuetype)
+        editor.write(key=key, type=valuetype)
 
     def _editor(self):
         editor = EditDialog(dbid=self.dbid, dbtype=self.dbtype)

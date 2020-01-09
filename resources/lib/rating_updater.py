@@ -488,7 +488,7 @@ class UpdateRating(object):
         self.update_uniqueid = True
 
     def _set_value(self,key,value):
-        self.db.set(key=key, value=value)
+        self.db.write(key=key, value=value)
 
     def _omdb(self):
         if self.imdb:
