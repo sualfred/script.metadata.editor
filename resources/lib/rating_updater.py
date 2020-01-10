@@ -370,12 +370,8 @@ class UpdateRating(object):
 
         for child in root:
             # imdb ratings
-            imdb_rating = child.get('imdbRating', '')
-            imdb_votes = child.get('imdbVotes', '0')
-
-            self.imdb_rating = imdb_rating.replace(',', '') if imdb_rating != 'N/A' else ''
-            self.imdb_votes = imdb_votes.replace(',', '') if imdb_votes != 'N/A' else 0
-
+            self.imdb_rating = child.get('imdbRating', '').replace('N/A', '')
+            self.imdb_votes = child.get('imdbVotes', '0').replace('N/A', '').replace(',', '')
             if self.imdb_rating:
                 self._update_ratings_dict(key='imdb',
                                           rating=float(self.imdb_rating),
@@ -383,37 +379,38 @@ class UpdateRating(object):
                                           )
 
             # regular rotten rating
-            tomatometerallcritics = child.get('tomatoMeter')
-            tomatometerallcritics_votes = child.get('tomatoReviews', '0')
+            tomatometerallcritics = child.get('tomatometerallcritics', '').replace('N/A', '')
+            tomatometerallcritics_avg = child.get('tomatoRating', '').replace('N/A', '')
+            tomatometerallcritics_votes = child.get('tomatoReviews', '0').replace('N/A', '0').replace(',', '')
 
-            if tomatometerallcritics and tomatometerallcritics != 'N/A':
-                votes = tomatometerallcritics_votes.replace(',', '') if tomatometerallcritics_votes != 'N/A' else 0
+            if tomatometerallcritics:
                 self._update_ratings_dict(key='tomatometerallcritics',
-                                          rating= int(tomatometerallcritics) / 10,
-                                          votes=int(votes))
+                                          rating=int(tomatometerallcritics) / 10,
+                                          votes=int(tomatometerallcritics_votes))
 
+            if tomatometerallcritics_avg:
                 self._update_ratings_dict(key='tomatometeravgcritics',
-                                          rating=float(child.get('tomatoRating', 0.0)),
-                                          votes=int(votes))
+                                          rating=float(tomatometerallcritics_avg),
+                                          votes=int(tomatometerallcritics_votes))
 
             # user rotten rating
-            tomatometerallaudience = child.get('tomatoUserMeter')
-            tomatometerallaudience_votes = child.get('tomatoUserReviews', '0')
+            tomatometerallaudience = child.get('tomatoUserMeter', '').replace('N/A', '')
+            tomatometerallaudience_avg = child.get('tomatoUserRating', '').replace('N/A', '')
+            tomatometerallaudience_votes = child.get('tomatoUserReviews', '0').replace('N/A', '0').replace(',', '')
 
-            if tomatometerallaudience and tomatometerallaudience != 'N/A':
-                votes = tomatometerallaudience_votes.replace(',', '') if tomatometerallaudience_votes != 'N/A' else 0
+            if tomatometerallaudience:
                 self._update_ratings_dict(key='tomatometerallaudience',
                                           rating=int(tomatometerallaudience) / 10,
-                                          votes=int(votes))
+                                          votes=int(tomatometerallaudience_votes))
 
+            if tomatometerallaudience_avg:
                 self._update_ratings_dict(key='tomatometeravgaudience',
-                                          rating=float(child.get('tomatoUserRating', 0.0)),
-                                          votes=int(votes))
+                                          rating=float(tomatometerallaudience_avg),
+                                          votes=int(tomatometerallaudience_votes))
 
             # metacritic
-            metacritic = child.get('metascore')
-
-            if metacritic and metacritic != 'N/A':
+            metacritic = child.get('metascore', '').replace('N/A', '')
+            if metacritic:
                 metacritic = int(metacritic) / 10
                 self._update_ratings_dict(key='metacritic',
                                           rating=metacritic,
