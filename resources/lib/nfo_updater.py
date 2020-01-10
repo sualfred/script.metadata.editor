@@ -94,6 +94,7 @@ class UpdateNFO():
               {'key': 'tagline', 'value': self.details.get('tagline')},
               {'key': 'mpaa', 'value': self.details.get('mpaa')},
               {'key': 'premiered', 'value': self.details.get('premiered')},
+              {'key': 'releasedate', 'value': self.details.get('releasedate')}, #emby
               {'key': 'year', 'value': self.details.get('premiered', '')[:4]}, #emby
               {'key': 'country', 'value': self.details.get('country')},
               {'key': 'studio', 'value': self.details.get('studio')},
@@ -233,15 +234,27 @@ class UpdateNFO():
                     self._set_episodeguide(item, value)
 
         # Emby <imdbid>, <tmdbid>, etc.
+        emby_uniqueids = {}
         for item in uniqueids:
-            elem_name = item + 'id'
+            if item == 'imdb':
+                emby_uniqueids['imdbid'] = uniqueids.get(item)
+                emby_uniqueids['imdb_id'] = uniqueids.get(item) # emby is using a underscore for tvshows Oo
 
-            for elem in self.root.findall(elem_name):
+            elif item == 'tmdbcollection':
+                emby_uniqueids['collectionnumber'] = uniqueids.get(item)
+
+            elif item.lower() in ['zap2it', 'tvrage', 'tvdb', 'tmdb']:
+                emby_uniqueids['%sid' % item] = uniqueids.get(item)
+
+        for item in emby_uniqueids:
+            for elem in self.root.findall(item):
                 self.root.remove(elem)
 
+            value = emby_uniqueids.get(item)
+
             if value:
-                elem = ET.SubElement(self.root, elem_name)
-                elem.text = uniqueids.get(item, '')
+                elem = ET.SubElement(self.root, item)
+                elem.text = value
 
     def _set_episodeguide(self,type,value):
         post = False

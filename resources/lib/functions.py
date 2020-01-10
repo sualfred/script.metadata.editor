@@ -244,7 +244,7 @@ def set_float(preset='',heading=ADDON.getLocalizedString(32011)):
 def set_date(preset):
     try:
         conv = time.strptime(preset,'%Y-%m-%d')
-        conv = time.strftime('%d/%m/%Y',conv)
+        conv = time.strftime('%d/%m/%Y', conv)
 
     except Exception:
         conv = '01/01/1900'
