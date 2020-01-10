@@ -194,6 +194,11 @@ msgctxt "#32033"
 msgid "OMDB API limit reached. Please consider to become a Patreon to increase your daily call limitation. Proceed by only using The Movie DB?"
 msgstr ""
 
+#: /resources/settings.xml
+msgctxt "#32034"
+msgid "Create .nfo file if missing"
+msgstr ""
+
 #: /default.py
 msgctxt "#32037"
 msgid "Update movie ratings"

@@ -38,10 +38,13 @@ def update_nfo(dbtype,dbid,details=None,file=None):
 
     # support for additional movie.nfo
     if dbtype == 'movie':
-        UpdateNFO(file=file.replace(os.path.basename(file), 'movie.nfo'),
-                  dbtype=dbtype,
-                  dbid=dbid,
-                  details=details)
+        path = file.replace(os.path.basename(file), 'movie.nfo')
+
+        if xbmcvfs.exists(path):
+            UpdateNFO(file=path,
+                      dbtype=dbtype,
+                      dbid=dbid,
+                      details=details)
 
 
 class UpdateNFO():
@@ -50,6 +53,7 @@ class UpdateNFO():
         self.dbtype = dbtype
         self.dbid = dbid
         self.details = details
+        self.root = None
         self.run()
 
     def run(self):
@@ -58,12 +62,17 @@ class UpdateNFO():
                 if xbmcvfs.exists(self.targetfile):
                     self.root = self.read_file()
 
-                    if len(self.root):
-                        self.handle_details()
-                        self.write_file()
+                elif ADDON.getSettingBool('create_nfo'):
+                    self.root = ET.Element(self.dbtype.replace('episode', 'episodedetails'))
+
+                else:
+                    raise Exception('File not found')
+
+                self.handle_details()
+                self.write_file()
 
             except Exception as error:
-                log('Cannot update .nfo file: %s' % error, ERROR)
+                log('Cannot process .nfo file: %s --> %s' % (self.targetfile, error), ERROR)
 
     def read_file(self):
         file = xbmcvfs.File(self.targetfile)
