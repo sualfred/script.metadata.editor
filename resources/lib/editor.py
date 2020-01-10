@@ -154,6 +154,11 @@ class EditDialog(object):
             self._create_list(xbmc.getLocalizedString(567), 'playcount', value=str(details.get('playcount', 0)), type='integer')
 
         elif self.dbtype == 'tvshow':
+            if KODI_VERSION < 19:
+                status = ADDON.getLocalizedString(32022)
+            else:
+                status = details.get('status', '')
+
             self._create_list(xbmc.getLocalizedString(369), 'title', value=details.get('title'), type='string')
             self._create_list(xbmc.getLocalizedString(20376),'originaltitle', value=details.get('originaltitle'), type='string')
             self._create_list(xbmc.getLocalizedString(171), 'sorttitle', value=details.get('sorttitle'), type='string')
@@ -165,7 +170,7 @@ class EditDialog(object):
             self._create_list(xbmc.getLocalizedString(20074), 'mpaa', value=details.get('mpaa'), type='string')
             self._create_list(xbmc.getLocalizedString(572), 'studio', value=get_joined_items(details.get('studio')), type='array')
             self._create_list(xbmc.getLocalizedString(20459), 'tag', value=get_joined_items(details.get('tag')), type='array')
-            self._create_list(xbmc.getLocalizedString(126), 'status', value=ADDON.getLocalizedString(32022), type='status')
+            self._create_list(xbmc.getLocalizedString(126), 'status', value=status, type='status')
             self._create_list('IMDb ID', 'uniqueid', value=uniqueid.get('imdb'), type='uniqueid', option={'type': 'imdb', 'uniqueids': uniqueid, 'episodeguide': details.get('episodeguide')})
             self._create_list('TMDb ID', 'uniqueid', value=uniqueid.get('tmdb'), type='uniqueid', option={'type': 'tmdb', 'uniqueids': uniqueid, 'episodeguide': details.get('episodeguide')})
             self._create_list('TVDb ID', 'uniqueid', value=uniqueid.get('tvdb'), type='uniqueid', option={'type': 'tvdb', 'uniqueids': uniqueid, 'episodeguide': details.get('episodeguide')})

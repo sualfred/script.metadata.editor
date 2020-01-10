@@ -29,6 +29,7 @@ WARNING = xbmc.LOGWARNING
 DEBUG = xbmc.LOGDEBUG
 ERROR = xbmc.LOGERROR
 LOG_JSON = ADDON.getSettingBool('json_log')
+KODI_VERSION = int(xbmc.getInfoLabel('System.BuildVersion')[:2])
 
 DIALOG = xbmcgui.Dialog()
 
