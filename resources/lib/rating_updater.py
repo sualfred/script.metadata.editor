@@ -494,14 +494,14 @@ class UpdateRating(object):
         if self.imdb:
             url = 'http://www.omdbapi.com/?apikey=%s&i=%s&plot=short&r=xml&tomatoes=true' % (OMDB_API, self.imdb)
 
-        elif OMDB_FALLBACK and self.dbtype != 'episode' and title and year:
+        elif OMDB_FALLBACK and self.dbtype != 'episode' and self.original_title and self.year:
             # urllib has issues with some asian letters
             try:
-                title = urllib.quote(title)
+                title = urllib.quote(self.original_title)
             except KeyError:
                 return
 
-            url = 'http://www.omdbapi.com/?apikey=%s&t=%s&year=%s&plot=short&r=xml&tomatoes=true' % (OMDB_API, title, year)
+            url = 'http://www.omdbapi.com/?apikey=%s&t=%s&year=%s&plot=short&r=xml&tomatoes=true' % (OMDB_API, title, self.year)
 
         else:
             return
