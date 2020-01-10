@@ -363,6 +363,8 @@ class UpdateRating(object):
         if not omdb:
             return
 
+        log(omdb, force=True)
+
         tree = ET.ElementTree(ET.fromstring(omdb))
         root = tree.getroot()
 
@@ -385,10 +387,13 @@ class UpdateRating(object):
             tomatometerallcritics_votes = child.get('tomatoReviews', '0')
 
             if tomatometerallcritics and tomatometerallcritics != 'N/A':
-                tomatometerallcritics = int(tomatometerallcritics) / 10
                 votes = tomatometerallcritics_votes.replace(',', '') if tomatometerallcritics_votes != 'N/A' else 0
                 self._update_ratings_dict(key='tomatometerallcritics',
-                                          rating=tomatometerallcritics,
+                                          rating= int(tomatometerallcritics) / 10,
+                                          votes=int(votes))
+
+                self._update_ratings_dict(key='tomatometeravgcritics',
+                                          rating=float(child.get('tomatoRating', 0.0)),
                                           votes=int(votes))
 
             # user rotten rating
@@ -396,10 +401,13 @@ class UpdateRating(object):
             tomatometerallaudience_votes = child.get('tomatoUserReviews', '0')
 
             if tomatometerallaudience and tomatometerallaudience != 'N/A':
-                tomatometerallaudience = int(tomatometerallaudience) / 10
                 votes = tomatometerallaudience_votes.replace(',', '') if tomatometerallaudience_votes != 'N/A' else 0
                 self._update_ratings_dict(key='tomatometerallaudience',
-                                          rating=tomatometerallaudience,
+                                          rating=int(tomatometerallaudience) / 10,
+                                          votes=int(votes))
+
+                self._update_ratings_dict(key='tomatometeravgaudience',
+                                          rating=float(child.get('tomatoUserRating', 0.0)),
                                           votes=int(votes))
 
             # metacritic
