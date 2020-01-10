@@ -392,14 +392,14 @@ class UpdateRating(object):
                                           votes=int(votes))
 
             # user rotten rating
-            tomatometeravgcritics = child.get('tomatoUserMeter')
-            tomatometeravgcritics_votes = child.get('tomatoUserReviews', '0')
+            tomatometerallaudience = child.get('tomatoUserMeter')
+            tomatometerallaudience_votes = child.get('tomatoUserReviews', '0')
 
-            if tomatometeravgcritics and tomatometeravgcritics != 'N/A':
-                tomatometeravgcritics = int(tomatometeravgcritics) / 10
-                votes = tomatometeravgcritics_votes.replace(',', '') if tomatometeravgcritics_votes != 'N/A' else 0
-                self._update_ratings_dict(key='tomatometeravgcritics',
-                                          rating=tomatometeravgcritics,
+            if tomatometerallaudience and tomatometerallaudience != 'N/A':
+                tomatometerallaudience = int(tomatometerallaudience) / 10
+                votes = tomatometerallaudience_votes.replace(',', '') if tomatometerallaudience_votes != 'N/A' else 0
+                self._update_ratings_dict(key='tomatometerallaudience',
+                                          rating=tomatometerallaudience,
                                           votes=int(votes))
 
             # metacritic
