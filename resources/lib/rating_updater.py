@@ -363,8 +363,6 @@ class UpdateRating(object):
         if not omdb:
             return
 
-        log(omdb, force=True)
-
         tree = ET.ElementTree(ET.fromstring(omdb))
         root = tree.getroot()
 
@@ -520,7 +518,7 @@ class UpdateRating(object):
                 elif i == 1:
                     notification('OMDb', ADDON.getLocalizedString(32024))
 
-            except ConnectionError:
+            except Exception:
                 if i < 3:
                     xbmc.sleep(500)
 
@@ -571,7 +569,7 @@ class UpdateRating(object):
                 elif i == 1:
                     notification('TMDb', ADDON.getLocalizedString(32024))
 
-            except ConnectionError:
+            except Exception:
                 if i < 3:
                     xbmc.sleep(500)
 
