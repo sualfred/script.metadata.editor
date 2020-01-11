@@ -75,6 +75,7 @@ class ContextMenu(object):
             update_ratings(dbid=self.dbid, dbtype=self.dbtype)
 
         elif action == 5:
+            winprop('updatenfo.bool', True)
             update_nfo(dbid=self.dbid, dbtype=self.dbtype, details=self.details)
 
 

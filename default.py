@@ -60,6 +60,7 @@ class Main:
                 self._write(key='userrating', valuetype='userrating')
 
             elif self.action == 'updatenfo':
+                winprop('updatenfo.bool', True)
                 update_nfo(dbid=self.dbid, dbtype=self.dbtype, forced=True)
 
             else:

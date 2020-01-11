@@ -71,9 +71,18 @@ class UpdateNFO():
 
                 self.handle_details()
                 self.write_file()
+                success = True
 
             except Exception as error:
                 log('Cannot process .nfo file: %s --> %s' % (self.targetfile, error), ERROR)
+                success = False
+
+        if winprop('updatenfo.bool'):
+            if success:
+                notification(ADDON.getLocalizedString(32046), xbmc.getLocalizedString(20177))
+            else:
+                notification(ADDON.getLocalizedString(32046), xbmc.getLocalizedString(257))
+            winprop('updatenfo', clear=True)
 
     def read_file(self):
         file = xbmcvfs.File(self.targetfile)
