@@ -379,7 +379,7 @@ class UpdateRating(object):
         for child in root:
             # imdb ratings
             self.imdb_rating = child.get('imdbRating', '').replace('N/A', '')
-            self.imdb_votes = child.get('imdbVotes', '0').replace('N/A', '').replace(',', '')
+            self.imdb_votes = child.get('imdbVotes', '0').replace('N/A', '0').replace(',', '')
             if self.imdb_rating:
                 self._update_ratings_dict(key='imdb',
                                           rating=float(self.imdb_rating),

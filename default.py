@@ -62,6 +62,7 @@ class Main:
             elif self.action == 'updatenfo':
                 winprop('updatenfo.bool', True)
                 update_nfo(dbid=self.dbid, dbtype=self.dbtype, forced=True)
+                winprop('updatenfo', clear=True)
 
             else:
                 self._editor()

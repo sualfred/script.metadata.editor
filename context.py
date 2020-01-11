@@ -77,6 +77,7 @@ class ContextMenu(object):
         elif action == 5:
             winprop('updatenfo.bool', True)
             update_nfo(dbid=self.dbid, dbtype=self.dbtype, details=self.details)
+            winprop('updatenfo', clear=True)
 
 
 if __name__ == "__main__":
