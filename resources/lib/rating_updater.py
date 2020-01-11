@@ -254,7 +254,13 @@ class UpdateRating(object):
 
         self.tmdb_rating = result.get('vote_average')
         self.tmdb_votes = result.get('vote_count')
-        self.original_title = result.get('original_name')
+
+        if not self.original_title:
+            self.original_title = result.get('original_title') or resultresult.get('original_name')
+
+            # update original title if missing
+            if self.original_title:
+                self._set_value('originaltitle', self.original_title)
 
         if self.tmdb_type == 'tv':
             year = result.get('first_air_date')
@@ -509,7 +515,9 @@ class UpdateRating(object):
         else:
             return
 
-        for i in range(1,3): # loop if heavy server load
+        error_msg = 'OMDb error for "%s (%s)" IMDBd "%s". Error --> ' % (self.original_title, self.year, self.imdb)
+
+        for i in range(1,4): # loop if heavy server load
             log('OMDb call try %s/3' % str(i), force=RATING_DEBUG)
             try:
                 request = requests.get(url, timeout=5)
@@ -521,7 +529,9 @@ class UpdateRating(object):
             except Exception:
                 if i < 3:
                     xbmc.sleep(500)
-
+                else:
+                    log(error_msg + '408', WARNING)
+                    return
 
         if request.status_code == 401:
             log('OMDb error --> API limit reached', WARNING)
@@ -534,20 +544,19 @@ class UpdateRating(object):
             return
 
         elif request.status_code != requests.codes.ok:
-            error_msg = 'OMDb error for "%s" IMDBd "%s". Error code --> ' % (self.original_title, self.imdb)
             log(error_msg + str(request.status_code), WARNING)
             return
 
         result = request.content
 
         if not result or '<root response="False">' in result:
-            error_msg = 'OMDb error for "%s" IMDBd "%s". Result --> ' % (self.original_title, self.imdb)
-            log(error_msg + str(result), WARNING)
+            log(error_msg + 'Result = ' + str(result), WARNING)
             return
 
         return result
 
     def _tmdb(self,action,call=None,get=None,params=None):
+        result = {}
         args = {}
         args['api_key'] = 'fc168650632c6597038cf7072a7c20da'
 
@@ -560,7 +569,7 @@ class UpdateRating(object):
         url = 'https://api.themoviedb.org/3/' + action + call + get
         url = '{0}?{1}'.format(url, urlencode(args))
 
-        for i in range(1,3): # loop if heavy server load
+        for i in range(1,4): # loop if heavy server load
             log('TMDb call try %s/3' % str(i), force=RATING_DEBUG)
             try:
                 request = requests.get(url, timeout=5)
@@ -572,8 +581,10 @@ class UpdateRating(object):
             except Exception:
                 if i < 3:
                     xbmc.sleep(500)
+                else:
+                    log('TMDb connection error', force=RATING_DEBUG)
+                    return result
 
-        result = {}
         if request.status_code == requests.codes.ok:
             result = request.json()
         else:
