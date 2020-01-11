@@ -4,6 +4,7 @@
 ########################
 
 from resources.lib.helper import *
+from resources.lib.database import *
 
 ########################
 
@@ -233,14 +234,15 @@ class UpdateNFO():
         for item in uniqueids:
             value = uniqueids.get(item, '')
 
-            elem = ET.SubElement(self.root, 'uniqueid')
-            elem.set('type', item)
-            elem.text = value
+            if value:
+                elem = ET.SubElement(self.root, 'uniqueid')
+                elem.set('type', item)
+                elem.text = value
 
-            if default == item:
-                elem.set('default', 'true')
-                if self.dbtype == 'tvshow':
-                    self._set_episodeguide(item, value)
+                if default == item:
+                    elem.set('default', 'true')
+                    if self.dbtype == 'tvshow':
+                        self._set_episodeguide(item, value)
 
         # Emby <imdbid>, <tmdbid>, etc.
         emby_uniqueids = {}

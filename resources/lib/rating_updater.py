@@ -53,7 +53,6 @@ def update_ratings(dbid=None,dbtype=None,content=None):
     if total_items > 1:
         # show progress if 1< will be processed
         progressdialog = ProgressDialog(total_items)
-        log('progress started', force=True)
 
         for i in result:
             if i == 'movie':
