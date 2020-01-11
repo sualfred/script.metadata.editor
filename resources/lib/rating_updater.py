@@ -277,7 +277,7 @@ class UpdateRating(object):
             self.year = premiered[:4]
 
             if ADDON.getSettingBool('update_premiered') or not self.premiered:
-                self._set_value('premiered', year)
+                self._set_value('premiered', premiered)
 
         if self.tmdb_rating:
             self._update_ratings_dict(key='themoviedb',
