@@ -68,8 +68,6 @@ class Main:
 
     def _parse_argv(self):
         args = sys.argv
-        log(args, force=True)
-
         for arg in args:
             if arg == ADDON_ID:
                 continue

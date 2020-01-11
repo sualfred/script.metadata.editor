@@ -151,4 +151,3 @@ class Database(object):
                           query_filter=query_filter
                           )
         self.data[dbtype] = items.get('result', {}).get('%ss' % dbtype, [])
-        log(self.data, force=True)
