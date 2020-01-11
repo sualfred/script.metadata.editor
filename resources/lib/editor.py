@@ -66,7 +66,6 @@ class EditDialog(object):
                        )
 
         reload_widgets()
-        exit()
 
     def dialog(self):
         preselect = winprop('SelectDialogPreselect')
@@ -87,18 +86,19 @@ class EditDialog(object):
             winprop('SelectDialogPreselect', clear=True)
             self.quit()
 
-        # Edit value based on the type
-        winprop('SelectDialogPreselect', str(self.editdialog))
+        else:
+            # Edit value based on the type
+            winprop('SelectDialogPreselect', str(self.editdialog))
 
-        self._handle_dbitem(value_type=self.typelist[self.editdialog],
-                            key=self.keylist[self.editdialog],
-                            preset=self.presetlist[self.editdialog],
-                            option=self.optionlist[self.editdialog]
-                            )
+            self._handle_dbitem(value_type=self.typelist[self.editdialog],
+                                key=self.keylist[self.editdialog],
+                                preset=self.presetlist[self.editdialog],
+                                option=self.optionlist[self.editdialog]
+                                )
 
-        # Refetch updated data and return to entry_point to populate the changes in the dialog
-        self.get_details()
-        self.editor()
+            # Refetch updated data and return to entry_point to populate the changes in the dialog
+            self.get_details()
+            self.editor()
 
     def generate_list(self):
         details = self.details

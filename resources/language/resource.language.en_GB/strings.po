@@ -283,3 +283,18 @@ msgstr ""
 msgctxt "#32053"
 msgid "Don't store \"NR\" (Not rated) MPAA rating"
 msgstr ""
+
+#: /service.py
+msgctxt "#32054"
+msgid "Do you want to rate the following item?"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32055"
+msgid "Automatically update changed watched states to .nfo"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32056"
+msgid "Rate your media if playback has ended"
+msgstr ""

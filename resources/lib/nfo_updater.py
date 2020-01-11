@@ -10,6 +10,7 @@ from resources.lib.database import *
 
 def update_nfo(dbtype,dbid,details=None,file=None, forced=False):
     if not forced and not ADDON.getSettingBool('nfo_updating'):
+        winprop('updatenfo', clear=True)
         return
 
     if not details:

@@ -82,7 +82,7 @@ class Main:
 
     def _write(self,key,valuetype):
         editor = EditDialog(dbid=self.dbid, dbtype=self.dbtype)
-        editor.write(key=key, type=valuetype)
+        editor.set(key=key, type=valuetype)
 
     def _editor(self):
         editor = EditDialog(dbid=self.dbid, dbtype=self.dbtype)
