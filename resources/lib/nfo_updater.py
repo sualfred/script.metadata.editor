@@ -8,8 +8,8 @@ from resources.lib.database import *
 
 ########################
 
-def update_nfo(dbtype,dbid,details=None,file=None):
-    if not ADDON.getSettingBool('nfo_updating'):
+def update_nfo(dbtype,dbid,details=None,file=None, forced=False):
+    if not forced and not ADDON.getSettingBool('nfo_updating'):
         return
 
     if not details:

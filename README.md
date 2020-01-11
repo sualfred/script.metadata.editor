@@ -77,6 +77,7 @@ RunScript calls:
 *  `RunScript(script.metadata.editor,action=setgenres,dbid=$INFO[ListItem.DBID],type=$INFO[ListItem.DBType])` = opens genre selector
 *  `RunScript(script.metadata.editor,action=settags,dbid=$INFO[ListItem.DBID],type=$INFO[ListItem.DBType])` = opens tags selector
 *  `RunScript(script.metadata.editor,action=togglewatchlist,dbid=$INFO[ListItem.DBID],type=$INFO[ListItem.DBType])` = toggle watchlist tag
+*  `RunScript(script.metadata.editor,action=updatenfo,dbid=$INFO[ListItem.DBID],type=$INFO[ListItem.DBType])` = updates the .nfo
 
 RunScript calls for updating ratings:
 *  `RunScript(script.metadata.editor)` = Shows select dialog to update movies, shows and episodes or all of them

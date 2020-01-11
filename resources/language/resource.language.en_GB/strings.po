@@ -254,6 +254,11 @@ msgctxt "#32048"
 msgid "No items found"
 msgstr ""
 
+#: /context.py
+msgctxt "#32046"
+msgid "Update .nfo"
+msgstr ""
+
 #: /default.py
 msgctxt "#32049"
 msgid "Incomplete arguments or content type not supported"

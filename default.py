@@ -59,6 +59,9 @@ class Main:
             elif self.action == 'setuserrating':
                 self._write(key='userrating', valuetype='userrating')
 
+            elif self.action == 'updatenfo':
+                update_nfo(dbid=self.dbid, dbtype=self.dbtype, forced=True)
+
             else:
                 self._editor()
 

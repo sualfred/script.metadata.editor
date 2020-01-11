@@ -22,59 +22,60 @@ class ContextMenu(object):
         getattr(db, self.dbtype)()
         self.details = db.result().get(self.dbtype)[0]
 
-        self.menu()
-
-    def menu(self):
-        itemlist = [ADDON.getLocalizedString(32010)]
-
-        if 'genre' in self.details and self.dbtype != 'song':
-            itemlist.append(ADDON.getLocalizedString(32004))
-
-        if 'tag' in self.details:
-            itemlist.append(ADDON.getLocalizedString(32003))
-
-            if 'Watchlist' in self.details.get('tag'):
-                itemlist.append(ADDON.getLocalizedString(32008))
-            else:
-                itemlist.append(ADDON.getLocalizedString(32009))
-
-        if self.dbtype in ['movie', 'tvshow', 'episode']:
-            itemlist.append(ADDON.getLocalizedString(32039))
+        itemlist, actionlist = self._generate_menu()
 
         if len(itemlist) > 1:
             contextdialog = DIALOG.contextmenu(itemlist)
-
-            if contextdialog == 0:
-                self._editor()
-
-            elif contextdialog == 1 and self.dbtype == 'episode':
-                self._ratings()
-
-            elif contextdialog == 1:
-                self._write(key='genre', valuetype='select')
-
-            elif contextdialog == 2:
-                self._write(key='tag', valuetype='select')
-
-            elif contextdialog == 3:
-                self._write(key='tag', valuetype='watchlist')
-
-            elif contextdialog == 4:
-                self._ratings()
+            if contextdialog >= 0:
+                self._exec(actionlist[contextdialog])
 
         else:
-            self._editor()
+            self._exec(actionlist[0])
 
-    def _write(self,key,valuetype):
+    def _generate_menu(self):
+        if self.dbtype in ['movie', 'tvshow']:
+            watchlist_label = ADDON.getLocalizedString(32008) if 'Watchlist' in self.details.get('tag') else ADDON.getLocalizedString(32009)
+            menu = [ADDON.getLocalizedString(32010), ADDON.getLocalizedString(32004), ADDON.getLocalizedString(32003), watchlist_label, ADDON.getLocalizedString(32039)]
+            actions = [0, 1, 2, 3, 4]
+
+        elif self.dbtype == 'episode':
+            menu = [ADDON.getLocalizedString(32010), ADDON.getLocalizedString(32039)]
+            actions = [0, 4]
+
+        elif self.dbtype in ['artist', 'album']:
+            menu = [ADDON.getLocalizedString(32010), ADDON.getLocalizedString(32004)]
+            actions = [0, 1]
+
+        else:
+            menu = [ADDON.getLocalizedString(32010)]
+            actions = [0]
+
+        if ADDON.getSettingBool('nfo_updating') and self.dbtype in ['movie', 'tvshow', 'episode']:
+            menu.append(ADDON.getLocalizedString(32046))
+            actions.append(5)
+
+        return menu, actions
+
+    def _exec(self,action):
         editor = EditDialog(dbid=self.dbid, dbtype=self.dbtype)
-        editor.write(key=key, type=valuetype)
 
-    def _editor(self):
-        editor = EditDialog(dbid=self.dbid, dbtype=self.dbtype)
-        editor.editor()
+        if action == 0:
+            editor.editor()
 
-    def _ratings(self):
-        update_ratings(dbid=self.dbid, dbtype=self.dbtype)
+        elif action == 1:
+            editor.set(key='genre', valuetype='select')
+
+        elif action == 2:
+            editor.set(key='tag', valuetype='select')
+
+        elif action == 3:
+            editor.set(key='tag', valuetype='watchlist')
+
+        elif action == 4 :
+            update_ratings(dbid=self.dbid, dbtype=self.dbtype)
+
+        elif action == 5:
+            update_nfo(dbid=self.dbid, dbtype=self.dbtype, details=self.details)
 
 
 if __name__ == "__main__":
