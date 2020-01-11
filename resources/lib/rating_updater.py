@@ -41,7 +41,6 @@ def update_ratings(dbid=None,dbtype=None,content=None):
     with busy_dialog(force=BUSYDIALOG):
         db = Database(dbid=dbid, append=['episodes'])
         for i in dbtype:
-            log(i, force=True)
             getattr(db, i)()
         result = db.result()
 
@@ -158,6 +157,7 @@ class UpdateRating(object):
         self.ratings = self.details.get('ratings', {})
         self.file = self.details.get('file')
         self.year = self.details.get('year')
+        self.premiered = self.details.get('premiered') or self.details.get('firstaired')
         self.title = self.details.get('title')
         self.original_title = self.details.get('originaltitle') or self.title
         self.tags = self.details.get('tag')
@@ -263,7 +263,7 @@ class UpdateRating(object):
                 self._set_value('originaltitle', self.original_title)
 
         if self.tmdb_type == 'tv':
-            year = result.get('first_air_date')
+            premiered = result.get('first_air_date')
             self.tmdb_tv_status = result.get('status')
 
             # update TV status as well
@@ -271,9 +271,14 @@ class UpdateRating(object):
                 self._set_value('status', self.tmdb_tv_status)
 
         else:
-            year = result.get('release_date')
+            premiered = result.get('release_date')
 
-        self.year = year[:4] if year else ''
+        # update the year if not correct
+        if premiered and self.premiered != premiered:
+            self.year = premiered[:4]
+
+            if ADDON.getSettingBool('update_premiered') or not self.premiered:
+                self._set_value('premiered', year)
 
         if self.tmdb_rating:
             self._update_ratings_dict(key='themoviedb',

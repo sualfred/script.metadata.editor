@@ -230,6 +230,11 @@ msgid "MPAA region"
 msgstr ""
 
 #: /resources/settings.xml
+msgctxt "#32041"
+msgid "Update premiered/year if database value is different"
+msgstr ""
+
+#: /resources/settings.xml
 msgctxt "#32044"
 msgid "Skip updating of MPAA"
 msgstr ""

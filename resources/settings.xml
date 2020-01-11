@@ -14,6 +14,7 @@
 		<setting label="$ADDON[script.metadata.editor 32052]" type="bool" id="mpaa_fallback" default="true" enable="eq(-1,false) + !eq(-2,US)" />
 		<setting label="$ADDON[script.metadata.editor 32053]" type="bool" id="mpaa_skip_nr" default="false" enable="eq(-2,false) + !eq(-3,US)" />
 		<setting label="$ADDON[script.metadata.editor 32032]" type="bool" id="omdb_fallback_search" default="true"/>
+		<setting label="$ADDON[script.metadata.editor 32041]" type="bool" id="update_premiered" default="true"/>
 
 		<setting label="$ADDON[script.metadata.editor 32030]" type="lsep"/>
 		<setting label="$ADDON[script.metadata.editor 32031]" type="text" id="omdb_api_key"/>
