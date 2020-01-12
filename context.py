@@ -51,8 +51,8 @@ class ContextMenu(object):
             actions = [0]
 
         if ADDON.getSettingBool('nfo_updating') and self.dbtype in ['movie', 'tvshow', 'episode']:
-            menu.append(ADDON.getLocalizedString(32046))
-            actions.append(5)
+            menu.insert(-1, ADDON.getLocalizedString(32046))
+            actions.insert(-1, 5)
 
         return menu, actions
 
