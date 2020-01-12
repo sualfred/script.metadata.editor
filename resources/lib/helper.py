@@ -28,7 +28,8 @@ NOTICE = xbmc.LOGNOTICE
 WARNING = xbmc.LOGWARNING
 DEBUG = xbmc.LOGDEBUG
 ERROR = xbmc.LOGERROR
-LOG_JSON = ADDON.getSettingBool('LOG_JSON')
+LOG_JSON = ADDON.getSettingBool('json_log')
+KODI_VERSION = int(xbmc.getInfoLabel('System.BuildVersion')[:2])
 
 DIALOG = xbmcgui.Dialog()
 
@@ -67,6 +68,13 @@ def log(txt,loglevel=DEBUG,json=False,force=False):
         else:
             xbmc.log(msg=message, level=loglevel)
 
+def unicode_string(string):
+    if not PYTHON3 and isinstance(string, str):
+        string = string.decode('utf-8')
+
+    string = u'%s' % string
+
+    return string
 
 def remove_quotes(label):
     if not label:
@@ -92,6 +100,10 @@ def get_joined_items(item):
     return item
 
 
+def get_list_items(string):
+    return remove_empty(string.replace('; ',';').split(';'))
+
+
 def get_key_item(items,key):
     try:
         return items.get(key)
@@ -99,11 +111,17 @@ def get_key_item(items,key):
         return
 
 
-def get_rounded_value(item):
-    item = float(item)
-    item = round(item,1)
+def get_rounded_value(value):
+    try:
+        if not isinstance(value, str) and not isinstance(value, float):
+            value = str(value)
+        if not isinstance(value, float):
+            value = float(value)
 
-    return item
+        return round(value,1)
+
+    except Exception:
+        return
 
 
 def remove_empty(array):
@@ -136,11 +154,14 @@ def encode_string(string):
 
 
 def decode_string(string):
-    if not isinstance(string, str):
-        string = str(string)
+    if not string:
+        string = ''
 
     if not PYTHON3 and isinstance(string, str):
         string = string.decode('utf-8')
+
+    if not isinstance(string, str):
+        string = str(string)
 
     return string
 
@@ -259,8 +280,11 @@ def reload_widgets():
 
 
 @contextmanager
-def busy_dialog():
-    if not winprop('UpdatingRatings.bool'):
+def busy_dialog(force=False):
+    if force:
+        execute('ActivateWindow(busydialognocancel)')
+
+    elif not winprop('UpdatingRatings.bool'):
         # NFO writing usually only takes < 1s. Just show BusyDialog if it takes longer for whatever reason.
         execute('AlarmClock(BusyAlarmDelay,ActivateWindow(busydialognocancel),00:02,silent)')
 

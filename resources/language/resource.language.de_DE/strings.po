@@ -4,7 +4,7 @@
 # Addon Provider: sualfred
 # Translators:
 # sualfred <su4lfred@gmail.com>, 2019
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: Metadata Editor\n"
@@ -128,12 +128,12 @@ msgctxt "#32021"
 msgid "Enable .nfo updating for movies, TV shows and music videos"
 msgstr "Aktiviere .nfo Updating für Filme, Serien und Musikvideos"
 
-#: /resources/lib/dialog_metadata.py
+#: /resources/lib/editor.py
 msgctxt "#32022"
 msgid "value unkown (missing Kodi feature)"
 msgstr "Wert unbekannt (Kodi Feature fehlt)"
 
-#: /resources/lib/dialog_metadata.py
+#: /resources/lib/editor.py
 msgctxt "#32023"
 msgid "Record label"
 msgstr "Record Label"
@@ -232,7 +232,7 @@ msgctxt "#32039"
 msgid "Update ratings"
 msgstr "Aktualisiere Bewertungen"
 
-#: /resources/lib/dialog_metadata.py
+#: /resources/lib/editor.py
 msgctxt "#32040"
 msgid "Edit data for"
 msgstr "Bearbeite Daten für"
@@ -267,7 +267,7 @@ msgctxt "#32046"
 msgid "Updating episode ratings"
 msgstr "Aktualisiere Episodenbewertungen"
 
-#: /resources/lib/dialog_metadata.py
+#: /resources/lib/editor.py
 msgctxt "#32047"
 msgid "No default source defined"
 msgstr "Keine Standard-Quelle definiert"
