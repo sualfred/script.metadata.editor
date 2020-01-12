@@ -4,7 +4,8 @@
 		<setting label="$LOCALIZE[128]" type="lsep"/>
 		<setting label="$ADDON[script.metadata.editor 32021]" type="bool" id="nfo_updating" default="true"/>
 		<setting label="$ADDON[script.metadata.editor 32034]" type="bool" id="create_nfo" default="true" enable="eq(-1,true)" />
-		<setting label="$ADDON[script.metadata.editor 32055]" type="bool" id="playback_update_playcount" default="true" enable="eq(-2,true)" />
+		<setting label="$ADDON[script.metadata.editor 32057]" type="bool" id="write_watched_stated" default="true" enable="eq(-2,true)" />
+		<setting label="$ADDON[script.metadata.editor 32055]" type="bool" id="playback_update_playcount" default="true" enable="eq(-3,true) + eq(-1,true)" />
 		<setting label="$ADDON[script.metadata.editor 32056]" type="bool" id="playback_user_rating" default="false" />
 		<setting label="$ADDON[script.metadata.editor 32029]" type="bool" id="json_log" default="false"/>
 

@@ -139,11 +139,13 @@ class UpdateNFO():
               {'key': 'uniqueid', 'value': self.details.get('uniqueid')},
               {'key': 'status', 'value': self.details.get('status')},
               {'key': 'aired', 'value': self.details.get('firstaired')},
-              {'key': 'playcount', 'value': self.details.get('playcount')},
-              {'key': 'watched', 'value': 'true' if self.details.get('playcount', 0) > 0 else 'false'}, #emby
-              {'key': 'lastplayed', 'value': self.details.get('lastplayed')},
               {'key': 'dateadded', 'value': self.details.get('dateadded')}
               ]
+
+        if ADDON.getSettingBool('write_watched_stated'):
+            li.append({'key': 'playcount', 'value': self.details.get('playcount')})
+            li.append({'key': 'watched', 'value': 'true' if self.details.get('playcount', 0) > 0 else 'false'}) #emby
+            li.append({'key': 'lastplayed', 'value': self.details.get('lastplayed')})
 
         for item in li:
             key = item.get('key')

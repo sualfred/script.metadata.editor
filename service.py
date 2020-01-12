@@ -26,7 +26,7 @@ class Service(xbmc.Monitor):
 
             if dbid and (dbtype in ['movie', 'episode']):
 
-                if method == 'VideoLibrary.OnUpdate' and ADDON.getSettingBool('playback_update_playcount') and ADDON.getSettingBool('nfo_updating'):
+                if method == 'VideoLibrary.OnUpdate' and ADDON.getSettingBool('nfo_updating') and ADDON.getSettingBool('write_watched_stated') and ADDON.getSettingBool('playback_update_playcount'):
                     if data.get('playcount') is not None:
                         update_nfo(dbid=dbid, dbtype=dbtype)
 

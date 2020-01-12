@@ -298,3 +298,8 @@ msgstr ""
 msgctxt "#32056"
 msgid "Rate your media if playback has ended"
 msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32057"
+msgid "Write watched flag and playcount to .nfo"
+msgstr ""
