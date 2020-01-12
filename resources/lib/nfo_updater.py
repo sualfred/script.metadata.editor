@@ -56,6 +56,7 @@ class UpdateNFO():
         self.dbid = dbid
         self.details = details
         self.root = None
+        self.sortlist = []
         self.run()
 
     def run(self):
@@ -63,9 +64,11 @@ class UpdateNFO():
             try:
                 if xbmcvfs.exists(self.targetfile):
                     self.root = self.read_file()
+                    self.existing_nfo = True
 
                 elif ADDON.getSettingBool('create_nfo'):
                     self.root = ET.Element(self.dbtype.replace('episode', 'episodedetails'))
+                    self.existing_nfo = False
 
                 else:
                     raise Exception('File not found')
@@ -94,6 +97,15 @@ class UpdateNFO():
             return root
 
     def write_file(self):
+        # sort nfo
+        if self.existing_nfo:
+            index = 0
+            for key in self.sortlist:
+                for elem in self.root.findall(key):
+                    self.root.remove(elem)
+                    self.root.insert(index, elem)
+                    index += 1
+
         xml_prettyprint(self.root)
         content = ET.tostring(self.root, encoding='UTF-8')
 
@@ -122,6 +134,7 @@ class UpdateNFO():
               {'key': 'tag', 'value': self.details.get('tag')},
               {'key': 'isuserfavorite', 'value': 'true' if 'Favorite movies' in self.details.get('tag', []) or 'Favorite tvshows' in self.details.get('tag', []) else 'false'}, #emby
               {'key': 'genre', 'value': self.details.get('genre')},
+              {'key': 'top250', 'value': self.details.get('top250')},
               {'key': 'ratings', 'value': self.details.get('ratings')},
               {'key': 'uniqueid', 'value': self.details.get('uniqueid')},
               {'key': 'status', 'value': self.details.get('status')},
@@ -135,6 +148,7 @@ class UpdateNFO():
         for item in li:
             key = item.get('key')
             value = item.get('value')
+            self.sortlist.append(key)
 
             if key == 'ratings':
                 self.handle_ratings(value)
@@ -185,6 +199,8 @@ class UpdateNFO():
                     defaultelem = ET.SubElement(self.root, key)
                     defaultelem.text = eval(key)
 
+                    self.sortlist.append(key)
+
             else:
                 subelem.set('default', 'false')
 
@@ -205,6 +221,8 @@ class UpdateNFO():
 
                 emby_rotten = ET.SubElement(self.root, 'criticrating')
                 emby_rotten.text = str(normalized_rating)
+
+                self.sortlist.append('criticrating')
 
     def handle_uniqueid(self,uniqueids,episodeguide):
         # find default uniqueid
@@ -252,6 +270,8 @@ class UpdateNFO():
                     if self.dbtype == 'tvshow':
                         self._set_episodeguide(item, value)
 
+                self.sortlist.append(item)
+
         # Emby <imdbid>, <tmdbid>, etc.
         emby_uniqueids = {}
         for item in uniqueids:
@@ -274,6 +294,8 @@ class UpdateNFO():
             if value:
                 elem = ET.SubElement(self.root, item)
                 elem.text = value
+
+                self.sortlist.append(item)
 
     def _set_episodeguide(self,type,value):
         post = False
@@ -304,6 +326,8 @@ class UpdateNFO():
             url_elem.set('post', post)
         url_elem.set('cache', cache)
         url_elem.text = url
+
+        self.sortlist.append('episodeguide')
 
         json_call('VideoLibrary.SetTVShowDetails',
                   params={'episodeguide': json_value, 'tvshowid': int(self.dbid)},
