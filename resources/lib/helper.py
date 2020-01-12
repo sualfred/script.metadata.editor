@@ -68,6 +68,7 @@ def log(txt,loglevel=DEBUG,json=False,force=False):
         else:
             xbmc.log(msg=message, level=loglevel)
 
+
 def unicode_string(string):
     if not PYTHON3 and isinstance(string, str):
         string = string.decode('utf-8')
@@ -75,6 +76,7 @@ def unicode_string(string):
     string = u'%s' % string
 
     return string
+
 
 def remove_quotes(label):
     if not label:
@@ -141,29 +143,6 @@ def execute(cmd):
 
 def condition(condition):
     return xbmc.getCondVisibility(condition)
-
-
-def encode_string(string):
-    if not isinstance(string, str):
-        string = str(string)
-
-    if not PYTHON3:
-        string = string.encode('utf-8')
-
-    return string
-
-
-def decode_string(string):
-    if not string:
-        string = ''
-
-    if not PYTHON3 and isinstance(string, str):
-        string = string.decode('utf-8')
-
-    if not isinstance(string, str):
-        string = str(string)
-
-    return string
 
 
 def winprop(key, value=None, clear=False, window_id=10000):

@@ -107,7 +107,11 @@ class UpdateNFO():
                     index += 1
 
         xml_prettyprint(self.root)
-        content = ET.tostring(self.root, encoding='UTF-8')
+
+        if PYTHON3:
+            content = ET.tostring(self.root).decode()
+        else:
+            content = ET.tostring(self.root, encoding='utf-8')
 
         file = xbmcvfs.File(self.targetfile, 'w')
         file.write(content)
