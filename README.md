@@ -2,15 +2,6 @@
 
 Kodi script to edit basic metadata information of library items with support to automatically update the .nfo file.
 
-## Used scraper APIs
-The script is using TMDb (free) and OMDb.
-
-I already have included a TMDb API key (hardcoded).
-
-For OMDb please visit https://omdbapi.com/ and create your own API key and add it to the addon settings.
-Please note that the free available OMDb API key is limited to 1.000 calls a day. I highly recommend to become a patreon of the creator of OMDb.
-For $1 a month your daily limit gets increased to 100.000 calls / day. Support it and benefit.
-
 
 ## Supported .nfo types
 
@@ -22,18 +13,18 @@ Supported .nfo namings:
 * tvshow.nfo
 * movie.nfo
 
-## Creating of missing .nfo files
-
 By default the script is creating a .nfo if missing. This can be disabled in the settings.
 
 
-## MPAA and rating region handling
+## Scrapers
 
-You can configure the preferred MPAA rating in the addon settings.
-It's also possible to skip "not rated" or to enable/disable the fallback to US ratings
+The script is using TMDb (free) and OMDb.
 
+I already have included a TMDb API key (hardcoded).
 
-## Used scrapers
+For OMDb please visit https://omdbapi.com/ and create your own API key and add it to the addon settings.
+Please note that the free available OMDb API key is limited to 1.000 calls a day. I highly recommend to become a patreon of the creator of OMDb.
+For $1 a month your daily limit gets increased to 100.000 calls / day. Support it and benefit.
 
 TMDb scraper (not used for episodes, because of different global airing dates and episode orders):
 * Rating + votes
@@ -51,9 +42,21 @@ Note:
 There is a experimental setting available to use title + year for the OMDb call, if the IMDb ID is not available. It's disabled by default, because there is a high chance for false positive returnings and wrong fetched metadata. I do not recommend to enable it.
 
 
+## Running service
+
+* Updates the watched states in the .nfo automatically if item is played or marked/unmarked as watched (can be disabled)
+* Option to rate your movie/episode after it has been played 100% (can be disabled)
+
+
 ## Additional features of the rating updater
 
-The rating updater also updates MPAA, TV show status, missing uniqueid's (IMDb ID, TMDb ID, TVDb ID, etc.), missing original title
+* Updates MPAA (can be disabled)
+* Updates TV show status
+* Updates missing uniqueids
+* Updates original title
+
+You can configure the preferred MPAA rating in the addon settings.
+It's also possible to skip "not rated" or to enable/disable the fallback to US ratings
 
 
 ## Run the script / context menu
