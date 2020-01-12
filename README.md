@@ -66,11 +66,12 @@ A library updating task can be started by starting the addon itself.
 
 Context menu entries:
 
-* `Metadata Editor` / `Open Editor` = Editor dialog or sub menu if more options are available
-* `Add/remove available genres` = Quickly edit the genres which the item belongs to
-* `Add/remove available tags` = Quickly edit the tags which the item belongs to
-* `Add/remove favourite tag` = Shortcut to toggle the library tag `Watchlist`. Can be used to create custom splitted favourite widgets.
-* `Update ratings` = Will update ratings by using the OMDb and TMDb API
+* `Metadata Editor` / `Open Editor` = editor dialog or sub menu if more options are available
+* `Add/remove available genres` = quickly edit the genres which the item belongs to
+* `Add/remove available tags` = quickly edit the tags which the item belongs to
+* `Add/remove favourite tag` = shortcut to toggle the library tag `Watchlist`. Can be used to create custom splitted favourite widgets.
+* `Update .nfo` = updates the .nfo
+* `Update ratings` = will update ratings by using the OMDb and TMDb API
 
 
 RunScript calls:
