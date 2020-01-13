@@ -504,6 +504,10 @@ class UpdateRating(object):
         self.db.write(key=key, value=value)
 
     def _omdb(self):
+        if not OMDB_API:
+            log('No OMDb API key configured. Skip.', force=RATING_DEBUG)
+            return
+
         if self.imdb:
             url = 'http://www.omdbapi.com/?apikey=%s&i=%s&plot=short&r=xml&tomatoes=true' % (OMDB_API, self.imdb)
 
