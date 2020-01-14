@@ -3,6 +3,7 @@
 
 ########################
 
+import sys
 import xbmc
 import xbmcaddon
 import xbmcgui
@@ -12,28 +13,12 @@ import json
 import time
 import datetime
 import os
-import sys
 import hashlib
 import xml.etree.ElementTree as ET
 import requests
-
-''' Python 2<->3 compatibility
-'''
-try:
-    from urllib import urlencode
-except ImportError:
-    from urllib.parse import urlencode
-
-try:
-    import urllib2 as urllib
-except ImportError:
-    import urllib.request as urllib
-
 from contextlib import contextmanager
 
 ########################
-
-PYTHON3 = True if sys.version_info.major == 3 else False
 
 ADDON = xbmcaddon.Addon()
 ADDON_ID = ADDON.getAddonInfo('id')
@@ -43,11 +28,27 @@ NOTICE = xbmc.LOGNOTICE
 WARNING = xbmc.LOGWARNING
 DEBUG = xbmc.LOGDEBUG
 ERROR = xbmc.LOGERROR
-LOG_JSON = ADDON.getSettingBool('LOG_JSON')
+LOG_JSON = ADDON.getSettingBool('json_log')
+KODI_VERSION = int(xbmc.getInfoLabel('System.BuildVersion')[:2])
 
 DIALOG = xbmcgui.Dialog()
 
 ########################
+
+''' Python 2<->3 compatibility
+'''
+PYTHON3 = True if sys.version_info.major == 3 else False
+
+if not PYTHON3:
+    import urllib2 as urllib
+    from urllib import urlencode
+
+else:
+    import urllib.request as urllib
+    from urllib.parse import urlencode
+
+########################
+
 
 def log(txt,loglevel=DEBUG,json=False,force=False):
     if loglevel in [DEBUG, WARNING, ERROR] or force:
@@ -66,6 +67,15 @@ def log(txt,loglevel=DEBUG,json=False,force=False):
             xbmc.log(msg=message.encode('utf-8'), level=loglevel)
         else:
             xbmc.log(msg=message, level=loglevel)
+
+
+def unicode_string(string):
+    if not PYTHON3 and isinstance(string, str):
+        string = string.decode('utf-8')
+
+    string = u'%s' % string
+
+    return string
 
 
 def remove_quotes(label):
@@ -92,6 +102,10 @@ def get_joined_items(item):
     return item
 
 
+def get_list_items(string):
+    return remove_empty(string.replace('; ',';').split(';'))
+
+
 def get_key_item(items,key):
     try:
         return items.get(key)
@@ -99,11 +113,17 @@ def get_key_item(items,key):
         return
 
 
-def get_rounded_value(item):
-    item = float(item)
-    item = round(item,1)
+def get_rounded_value(value):
+    try:
+        if not isinstance(value, str) and not isinstance(value, float):
+            value = str(value)
+        if not isinstance(value, float):
+            value = float(value)
 
-    return item
+        return round(value,1)
+
+    except Exception:
+        return
 
 
 def remove_empty(array):
@@ -123,26 +143,6 @@ def execute(cmd):
 
 def condition(condition):
     return xbmc.getCondVisibility(condition)
-
-
-def encode_string(string):
-    if not isinstance(string, str):
-        string = str(string)
-
-    if not PYTHON3:
-        string = string.encode('utf-8')
-
-    return string
-
-
-def decode_string(string):
-    if not isinstance(string, str):
-        string = str(string)
-
-    if not PYTHON3 and isinstance(string, str):
-        string = string.decode('utf-8')
-
-    return string
 
 
 def winprop(key, value=None, clear=False, window_id=10000):
@@ -253,9 +253,17 @@ def notification(header=ADDON.getLocalizedString(32000),message=''):
     DIALOG.notification(header, message, icon='special://home/addons/script.metadata.editor/resources/icon.png')
 
 
+def reload_widgets():
+    # Notifies script.embuary.helper to reload widgets
+    execute('NotifyAll(%s,Finished)' % ADDON_ID)
+
+
 @contextmanager
-def busy_dialog():
-    if not winprop('UpdatingRatings.bool'):
+def busy_dialog(force=False):
+    if force:
+        execute('ActivateWindow(busydialognocancel)')
+
+    elif not winprop('UpdatingRatings.bool'):
         # NFO writing usually only takes < 1s. Just show BusyDialog if it takes longer for whatever reason.
         execute('AlarmClock(BusyAlarmDelay,ActivateWindow(busydialognocancel),00:02,silent)')
 

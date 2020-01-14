@@ -3,197 +3,197 @@
 # Addon id: script.metadata.editor
 # Addon Provider: sualfred
 # Translators:
-# Andrea Matesi <andreamatesi@gmail.com>, 2019
+# Эдуард Приутеса <eduardpriutesa@gmail.com>, 2019
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Metadata Editor\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: 2019-11-07 08:05+0000\n"
-"Last-Translator: Andrea Matesi <andreamatesi@gmail.com>, 2019\n"
-"Language-Team: Italian (Italy) (https://www.transifex.com/sualfred/teams/80018/it_IT/)\n"
+"Last-Translator: Эдуард Приутеса <eduardpriutesa@gmail.com>, 2019\n"
+"Language-Team: Russian (Russia) (https://www.transifex.com/sualfred/teams/80018/ru_RU/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: it_IT\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: ru_RU\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 
 #: /addon.xml
 msgctxt "#32000"
 msgid "Metadata Editor"
-msgstr "Editor Metadati"
+msgstr "Редактор метаданных"
 
 #: /resources/lib/dialog.py
 msgctxt "#32001"
 msgid "User rating"
-msgstr "Valutazione utente"
+msgstr "Рейтинг пользователей"
 
 #: /resources/lib/dialog_videogenres.py
 msgctxt "#32002"
 msgid "Available entries"
-msgstr "Voci disponibili"
+msgstr "Доступные записи"
 
 #: /addon.xml
 msgctxt "#32003"
 msgid "Add/remove available tags"
-msgstr "Aggiungi/rimuovi tag disponibili"
+msgstr "Добавить / удалить доступные теги"
 
 #: /addon.xml
 msgctxt "#32004"
 msgid "Add/remove available genres"
-msgstr "Aggiungi/rimuovi generi disponibili"
+msgstr "Добавить / удалить доступные жанры"
 
 #: /resources/lib/utils.py
 msgctxt "#32005"
 msgid "Add new item"
-msgstr "Aggiungi nuovo oggetto"
+msgstr "Добавление нового элемента"
 
 #: /resources/lib/utils.py
 msgctxt "#32006"
 msgid "Edit current list as string"
-msgstr "Modifica lista attuale come stringa"
+msgstr "Изменить текущий список как строку"
 
 #: /resources/lib/utils.py
 msgctxt "#32007"
 msgid "Select from available items"
-msgstr "Seleziona dagli oggetti disponibili"
+msgstr "Выберите из доступных предметов"
 
 #: /context.py
 msgctxt "#32008"
 msgid "Remove watchlist tag"
-msgstr "Rimuovi tag da vedere"
+msgstr "Удалить тег списка наблюдения"
 
 #: /context.py
 msgctxt "#32009"
 msgid "Add watchlist tag"
-msgstr "Aggiungi tag da vedere"
+msgstr "Добавить тег наблюдения"
 
 #: /context.py
 msgctxt "#32010"
 msgid "Open editor"
-msgstr "Apri editor"
+msgstr "Открыть редактор"
 
 #: /resources/lib/utils.py
 msgctxt "#32011"
 msgid "Enter floating number"
-msgstr "Inserisci numero decimale"
+msgstr "Введите плавающее число"
 
 #: /resources/lib/utils.py
 msgctxt "#32012"
 msgid "Select source"
-msgstr "Seleziona sorgente"
+msgstr "Выберите источник"
 
 #: /resources/lib/utils.py
 msgctxt "#32013"
 msgid "Available sources"
-msgstr "Sorgenti disponibili"
+msgstr "Доступные источники"
 
 #: /resources/lib/utils.py
 msgctxt "#32014"
 msgid "Default source"
-msgstr "Sorgente predefinita"
+msgstr "Источник по умолчанию"
 
 #: /resources/lib/utils.py
 msgctxt "#32015"
 msgid "Select default source"
-msgstr "Seleziona sorgente predefinita"
+msgstr "Выберите источник по умолчанию"
 
 #: /resources/lib/utils.py
 msgctxt "#32016"
 msgid "Edit ratings and votes"
-msgstr "Modifica voti e valutazioni"
+msgstr "Редактировать рейтинги и голоса"
 
 #: /resources/lib/utils.py
 msgctxt "#32017"
 msgid "Add source"
-msgstr "Aggiungi sorgente"
+msgstr "Добавить источник"
 
 #: /resources/lib/utils.py
 msgctxt "#32018"
 msgid "Only values between 1.0 and 10.0 are allowed."
-msgstr "Solo i valori compresi tra 1.0 e 10.0 sono consentiti"
+msgstr "Допустимы только значения от 1,0 до 10,0."
 
 #: /resources/lib/utils.py
 msgctxt "#32019"
 msgid "Attention"
-msgstr "Attenzione"
+msgstr "Внимание!"
 
 #: /resources/lib/utils.py
 msgctxt "#32020"
 msgid "Set as default?"
-msgstr "Imposta come predefinito?"
+msgstr "Установить по умолчанию?"
 
 #: /resources/settings.xml
 msgctxt "#32021"
 msgid "Enable .nfo updating for movies, TV shows and music videos"
-msgstr "Attiva aggiornamento .nfo per film, serie TV e video musicali"
+msgstr "Включить обновление .nfo для фильмов, сериалов и музыкальных клипов"
 
 #: /resources/lib/editor.py
 msgctxt "#32022"
 msgid "value unkown (missing Kodi feature)"
-msgstr "valore sconosciuto (funzionalità Kodi mancante)"
+msgstr "Значение неизвестно (отсутствует функция Kodi)"
 
 #: /resources/lib/editor.py
 msgctxt "#32023"
 msgid "Record label"
-msgstr "Casa discografica"
+msgstr "Запись метки"
 
 #: /default.py
 msgctxt "#32024"
 msgid "Please use the context menu on a library item to run this script."
 msgstr ""
-"Si prega di usare il menu contestuale su un oggetto libreria per eseguire "
-"questo script"
+"Пожалуйста, используйте контекстное меню элемента библиотеки, чтобы "
+"запустить этот скрипт."
 
 #: /resources/settings.xml
 msgctxt "#32025"
 msgid "Preferred TMDb language"
-msgstr "Lingua TMDb preferita"
+msgstr "Предпочитаемый язык TMDb"
 
 #: /resources/settings.xml
 msgctxt "#32026"
 msgid "TV show scraper related settings"
-msgstr "Impostazioni relative a scraper Serie TV "
+msgstr "Настройки скрепера для сериалов"
 
 #: /resources/settings.xml
 msgctxt "#32027"
 msgid "Library is based on informations of"
-msgstr "Libreria basata su informazioni relative a "
+msgstr "Библиотека основана на информации"
 
 #: /resources/settings.xml
 msgctxt "#32029"
 msgid "Enable JSON logging"
-msgstr "Attiva logging JSON"
+msgstr "Включить ведение журнала JSON"
 
 #: /resources/settings.xml
 msgctxt "#32030"
 msgid "Rating updater"
-msgstr "Updater valutazioni"
+msgstr "Обновление рейтинга"
 
 #: /resources/settings.xml
 msgctxt "#32028"
 msgid "Run updating process in the background"
-msgstr "Esegui processo di aggiornamento nel sottofondo"
+msgstr "Запустите процесс обновления в фоновом режиме"
 
 #: /resources/settings.xml
 msgctxt "#32031"
 msgid "Your personal OMDb API key (www.omdbapi.com)"
-msgstr "Chiave personale OMDb API (www.obdbapi.com)"
+msgstr "Ваш личный ключ API OMDb (www.omdbapi.com)"
 
 #: /resources/settings.xml
 msgctxt "#32032"
 msgid "Search OMDb with title/year if IMDb is missing"
-msgstr "Ricerca OMDB in base al titolo/anno se IMDb non esiste"
+msgstr "Поиск OMDb с названием / годом, если IMDb отсутствует"
 
 #: /resources/lib/rating_updater.py
 msgctxt "#32033"
 msgid "Updating movie ratings"
-msgstr "Aggiornamento valutazioni film"
+msgstr "Обновление рейтингов фильмов"
 
 #: /resources/lib/rating_updater.py
 msgctxt "#32034"
 msgid "Updating TV show ratings"
-msgstr "Aggiornamento valutazioni Serie TV"
+msgstr "Обновление рейтингов сериалов"
 
 #: /default.py
 msgctxt "#32035"
@@ -205,70 +205,70 @@ msgid ""
 "100.000.[CR][CR]Do you want to proceed updating The Movie DB ratings? This "
 "only works if you have a TMDb ID stored."
 msgstr ""
-"Nessuna chiave OMDb API configurata, ciò è richiesto per aggiornare "
-"valutazioni IMDb, Rotten Tomatoes e Metacritic. Si prega di visitare "
-"www.omdbapi.com per generare la propria chiave API.[CR][CR]Nota: chiave "
-"gratuita limitata a 1000 aggiornamenti al giorno. Al fine di incrementare il"
-" limite a 100,000, si raccomanda diventare patreon di OMDB.[CR][CR] Desideri"
-" procedere con l'aggiornamento delle valutazioni The Movie DB? Funzione "
-"disponibile solo se hai un ID TMDb salvato."
+"Не настроен ключ API OMDb, который необходим для обновления рейтингов IMDb, "
+"Rotten Tomatoes и Metacritic . Пожалуйста, посетите www.omdbapi.com и "
+"создайте свой собственный ключ API. [CR] [CR] Примечание: бесплатный ключ "
+"ограничен 1000 звонками в день. Пожалуйста, предложите стать партнёром OMDb,"
+" чтобы увеличить лимит до 100.000. [CR] [CR] Хотите продолжить обновление "
+"рейтинга The Movie DB? Это работает, только если у вас есть идентификатор "
+"TMDb."
 
 #: /default.py
 msgctxt "#32036"
 msgid "Update TV show ratings"
-msgstr "Aggiorna valutazioni Serie TV"
+msgstr "Обновление рейтингов сериалов"
 
 #: /default.py
 msgctxt "#32037"
 msgid "Update movie ratings"
-msgstr "Aggiorna valutazioni film"
+msgstr "Обновить рейтинги фильмов"
 
 #: /default.py
 msgctxt "#32038"
 msgid "Update all ratings"
-msgstr "Aggiorna tutte le valutazioni"
+msgstr "Обновить все рейтинги"
 
 #: /context.py
 msgctxt "#32039"
 msgid "Update ratings"
-msgstr "Aggiorna valutazioni"
+msgstr "Обновить рейтинги"
 
 #: /resources/lib/editor.py
 msgctxt "#32040"
 msgid "Edit data for"
-msgstr "Modifica dati per"
+msgstr "Изменить данные для"
 
 #: /default.py
 msgctxt "#32041"
 msgid "Cancel updating"
-msgstr "Annulla aggiornamento"
+msgstr "Отменить обновление"
 
 #: /resources/lib/rating_updater.py
 msgctxt "#32042"
 msgid "Canceled"
-msgstr "Annullato"
+msgstr "Отменен"
 
 #: /resources/settings.xml
 msgctxt "#32043"
 msgid "MPAA region"
-msgstr "Regione MPAA"
+msgstr "MPAA регион"
 
 #: /resources/settings.xml
 msgctxt "#32044"
 msgid "Skip updating of MPAA"
-msgstr "Salta aggiornamento MPAA"
+msgstr "Пропустить обновление MPAA"
 
 #: /default.py
 msgctxt "#32045"
 msgid "Update episode ratings"
-msgstr "Aggiorna valutazione episodi"
+msgstr "Обновление рейтингов эпизодов"
 
 #: /resources/lib/rating_updater.py
 msgctxt "#32046"
 msgid "Updating episode ratings"
-msgstr "Aggiornamento valutazione episodi"
+msgstr "Обновление рейтингов эпизодов"
 
 #: /resources/lib/editor.py
 msgctxt "#32047"
 msgid "No default source defined"
-msgstr "Nessuna sorgente definita"
+msgstr "Источник по умолчанию не определен"

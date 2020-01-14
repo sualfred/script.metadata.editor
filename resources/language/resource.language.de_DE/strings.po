@@ -4,7 +4,6 @@
 # Addon Provider: sualfred
 # Translators:
 # sualfred <su4lfred@gmail.com>, 2020
-# 
 msgid ""
 msgstr ""
 "Project-Id-Version: Metadata Editor\n"
