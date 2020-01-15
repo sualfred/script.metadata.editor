@@ -387,7 +387,7 @@ class UpdateRating(object):
                                           )
 
             # regular rotten rating
-            tomatometerallcritics = child.get('tomatometerallcritics', '').replace('N/A', '')
+            tomatometerallcritics = child.get('tomatoMeter', '').replace('N/A', '')
             tomatometerallcritics_avg = child.get('tomatoRating', '').replace('N/A', '')
             tomatometerallcritics_votes = child.get('tomatoReviews', '0').replace('N/A', '0').replace(',', '')
 
