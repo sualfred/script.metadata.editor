@@ -161,7 +161,7 @@ class UpdateRating(object):
         self.original_title = self.details.get('originaltitle') or self.title
         self.tags = self.details.get('tag')
 
-        if ('thetvdb' or 'themoviedb') in self.details.get('episodeguide', ''):
+        if any(string in self.details.get('episodeguide', '') for string in ['tvdb', 'tmdb']):
             self.episodeguide = self.details.get('episodeguide')
         else:
             self.episodeguide = None
@@ -551,11 +551,11 @@ class UpdateRating(object):
                 winprop('CancelRatingUpdater.bool', True)
             return
 
-        elif request.status_code != requests.codes.ok:
+        elif not request.ok:
             log(error_msg + str(request.status_code), WARNING)
             return
 
-        result = request.content
+        result = request.text
 
         if not result or '<root response="False">' in result:
             log(error_msg + 'Result = ' + str(result), WARNING)
@@ -593,7 +593,7 @@ class UpdateRating(object):
                     log('TMDb connection error', force=RATING_DEBUG)
                     return result
 
-        if request.status_code == requests.codes.ok:
+        if request.ok:
             result = request.json()
         else:
             log('TMDb returned nothing', force=RATING_DEBUG)
