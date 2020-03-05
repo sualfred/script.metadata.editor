@@ -16,6 +16,8 @@ import os
 import hashlib
 import xml.etree.ElementTree as ET
 import requests
+import urllib.request as urllib
+from urllib.parse import urlencode
 from contextlib import contextmanager
 
 ########################
@@ -35,20 +37,6 @@ DIALOG = xbmcgui.Dialog()
 
 ########################
 
-''' Python 2<->3 compatibility
-'''
-PYTHON3 = True if sys.version_info.major == 3 else False
-
-if not PYTHON3:
-    import urllib2 as urllib
-    from urllib import urlencode
-
-else:
-    import urllib.request as urllib
-    from urllib.parse import urlencode
-
-########################
-
 
 def log(txt,loglevel=DEBUG,json=False,force=False):
     if loglevel in [DEBUG, WARNING, ERROR] or force:
@@ -58,23 +46,12 @@ def log(txt,loglevel=DEBUG,json=False,force=False):
         if json:
             txt = json_prettyprint(txt)
 
-        if not PYTHON3 and isinstance(txt, str):
-            txt = txt.decode('utf-8')
-
         message = u'[ %s ] %s' % (ADDON_ID,txt)
-
-        if not PYTHON3:
-            xbmc.log(msg=message.encode('utf-8'), level=loglevel)
-        else:
-            xbmc.log(msg=message, level=loglevel)
+        xbmc.log(msg=message, level=loglevel)
 
 
 def unicode_string(string):
-    if not PYTHON3 and isinstance(string, str):
-        string = string.decode('utf-8')
-
     string = u'%s' % string
-
     return string
 
 
@@ -211,10 +188,8 @@ def json_call(method,properties=None,sort=None,query_filter=None,limit=None,para
         json_string['params'].update(params)
 
     jsonrpc_call = json.dumps(json_string)
-    result = xbmc.executeJSONRPC(jsonrpc_call)
 
-    if not PYTHON3:
-        result = unicode(result, 'utf-8', errors='ignore')
+    result = xbmc.executeJSONRPC(jsonrpc_call)
     result = json.loads(result)
 
     if debug:
