@@ -1,0 +1,331 @@
+# Metadata Editor language file
+# Addon Name: Metadata Editor
+# Addon id: script.metadata.editor
+# Addon Provider: sualfred
+# Translators:
+# Oskari Lavinto <oskari.lavinto@gmail.com>, 2020
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: Metadata Editor\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2019-11-07 08:05+0000\n"
+"Last-Translator: Oskari Lavinto <oskari.lavinto@gmail.com>, 2020\n"
+"Language-Team: Finnish (Finland) (https://www.transifex.com/sualfred/teams/80018/fi_FI/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fi_FI\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: /addon.xml
+msgctxt "#32000"
+msgid "Metadata Editor"
+msgstr "Metatietoeditori"
+
+#: /resources/lib/dialog.py
+msgctxt "#32001"
+msgid "User rating"
+msgstr "Käyttäjän luokitus"
+
+#: /resources/lib/dialog_videogenres.py
+msgctxt "#32002"
+msgid "Available entries"
+msgstr "Käytettävissä olevat kohteet"
+
+#: /addon.xml
+msgctxt "#32003"
+msgid "Add/remove available tags"
+msgstr "Lisää/poista käytettävissä olevia tunnisteita"
+
+#: /addon.xml
+msgctxt "#32004"
+msgid "Add/remove available genres"
+msgstr "Lisää/poista käytössä olevia lajityyppejä"
+
+#: /resources/lib/utils.py
+msgctxt "#32005"
+msgid "Add new item"
+msgstr "Lisää uusi kohde"
+
+#: /resources/lib/utils.py
+msgctxt "#32006"
+msgid "Edit current list as string"
+msgstr "Muokkaa nykyistä listaa merkkijonona"
+
+#: /resources/lib/utils.py
+msgctxt "#32007"
+msgid "Select from available items"
+msgstr "Valitse käytettävissä olevista kohteista"
+
+#: /context.py
+msgctxt "#32008"
+msgid "Remove watchlist tag"
+msgstr "Poista katselulista-tunniste"
+
+#: /context.py
+msgctxt "#32009"
+msgid "Add watchlist tag"
+msgstr "Lisää katselulista-tunniste"
+
+#: /context.py
+msgctxt "#32010"
+msgid "Open editor"
+msgstr "Avaa editori"
+
+#: /resources/lib/utils.py
+msgctxt "#32011"
+msgid "Enter floating number"
+msgstr "Syötä kelluva numero"
+
+#: /resources/lib/utils.py
+msgctxt "#32012"
+msgid "Select source"
+msgstr "Valitse lähde"
+
+#: /resources/lib/utils.py
+msgctxt "#32013"
+msgid "Available sources"
+msgstr "Käytettävissä olevat lähteet"
+
+#: /resources/lib/utils.py
+msgctxt "#32014"
+msgid "Default source"
+msgstr "Oletuslähde"
+
+#: /resources/lib/utils.py
+msgctxt "#32015"
+msgid "Select default source"
+msgstr "Valitse oletuslähde"
+
+#: /resources/lib/utils.py
+msgctxt "#32016"
+msgid "Edit ratings and votes"
+msgstr "Muokkaa luokituksia ja ääniä"
+
+#: /resources/lib/utils.py
+msgctxt "#32017"
+msgid "Add source"
+msgstr "Lisää lähde"
+
+#: /resources/lib/utils.py
+msgctxt "#32018"
+msgid "Only values between 1.0 and 10.0 are allowed."
+msgstr "Vain arvot väliltä 1.0 ja 10.0 sallitaan."
+
+#: /resources/lib/utils.py
+msgctxt "#32019"
+msgid "Attention"
+msgstr "Huomio"
+
+#: /resources/lib/utils.py
+msgctxt "#32020"
+msgid "Set as default?"
+msgstr "Aseta oletukseksi?"
+
+#: /resources/settings.xml
+msgctxt "#32021"
+msgid "Enable .nfo updating for movies, TV shows and music videos"
+msgstr ""
+"Ota .nfo-tiedoston päivitys käyttöön elokuville, sarjoille ja "
+"musiikkivideoille"
+
+#: /resources/lib/editor.py
+msgctxt "#32022"
+msgid "value unkown (missing Kodi feature)"
+msgstr "tuntematon arvo (puuttuva Kodin ominaisuus)"
+
+#: /resources/lib/editor.py
+msgctxt "#32023"
+msgid "Record label"
+msgstr "Levy-yhtiö"
+
+#: /resources/settings.xml
+msgctxt "#32025"
+msgid "Preferred language"
+msgstr "Ensisijainen kieli"
+
+#: /resources/settings.xml
+msgctxt "#32026"
+msgid "Scraper settings"
+msgstr "Tietojen hakijan asetukset"
+
+#: /resources/lib/rating_updater.py
+msgctxt "#32024"
+msgid "Heavy server load. Please wait."
+msgstr "Raskas palvelinkuormitus. Odota."
+
+#: /resources/settings.xml
+msgctxt "#32027"
+msgid "TV show library is based on informations of"
+msgstr "Televisiosarjakirjasto perustuu tietoihin lähteestä"
+
+#: /resources/settings.xml
+msgctxt "#32029"
+msgid "Enable JSON logging"
+msgstr "Käytä JSON-lokitietoja"
+
+#: /resources/settings.xml
+msgctxt "#32030"
+msgid "Rating updater"
+msgstr "Luokitusten päivittäjä"
+
+#: /resources/settings.xml
+msgctxt "#32028"
+msgid "Run updating process in the background"
+msgstr "Suorita päivitysprosessi taustalla"
+
+#: /resources/settings.xml
+msgctxt "#32031"
+msgid "Your personal OMDb API key (www.omdbapi.com)"
+msgstr "Henkilökohtainen OMDb API -avaimesi (www.omdbapi.com)"
+
+#: /resources/settings.xml
+msgctxt "#32032"
+msgid "Search by title/year if IMDb ID is missing (not recommended)"
+msgstr "Etsi nimellä/vuodella, jos IMDb ID puuttuu (ei suositella)"
+
+#: /default.py
+msgctxt "#32035"
+msgid ""
+"No OMDb API key is configured, which is required to update IMDb, Rotten "
+"Tomatoes and Metacritic ratings. Please visit www.omdbapi.com and create "
+"your own API key.[CR][CR]Note: The free key is limited to 1000 calls a day. "
+"Please suggest to become a patreon of OMDb to increase the limit to "
+"100.000.[CR][CR]Do you want to proceed updating The Movie DB ratings? This "
+"only works if you have a TMDb ID stored."
+msgstr ""
+"OMDb API:n avainta ei ole määritetty ja se tarvitaan IMDb, Rotten Tomatoes "
+"ja Metacritic -arvosanojen päivitykseen. Vieraile www.omdbapi.com "
+"-sivustolla ja luo oma API-avaimesi.[CR][CR]Huomioi: Ilmainen avain on "
+"rajoitettu 1 000 päivittäiseen kyselyyn. Harkitse OMDb:n tukemista "
+"Patreonissa nostaaksesi rajoituksen 100 000 kyselyyn.[CR][CR]Tahdotko jatkaa"
+" päivitystä The Movie Database -arvosanoilla? Tämä toimii vain, jos TMDb ID "
+"on tallennettu."
+
+#: /default.py
+msgctxt "#32036"
+msgid "Update TV show ratings"
+msgstr "Päivitä sarjojen luokitukset"
+
+#: /resources/lib/rating_updater.py
+msgctxt "#32033"
+msgid ""
+"OMDB API limit reached. Please consider to become a Patreon to increase your"
+" daily call limitation. Proceed by only using The Movie DB?"
+msgstr ""
+"OMDb API:n rajoitus saavutettu. Pyydämme, että harkitset OMDb:n tukemista "
+"Patreonissa nostaaksesi päivittäisten kyselyiden rajoitusta. Jatketaanko "
+"käyttäen vain The Movie Databasea?"
+
+#: /resources/settings.xml
+msgctxt "#32034"
+msgid "Create .nfo file if missing"
+msgstr "Luo .nfo-tiedosto, jos se puuttuu"
+
+#: /default.py
+msgctxt "#32037"
+msgid "Update movie ratings"
+msgstr "Päivitä elokuvien luokitukset"
+
+#: /default.py
+msgctxt "#32038"
+msgid "Update all ratings"
+msgstr "Päivitä kaikki luokitukset"
+
+#: /context.py
+msgctxt "#32039"
+msgid "Update ratings"
+msgstr "Päivitä luokitukset"
+
+#: /resources/lib/editor.py
+msgctxt "#32040"
+msgid "Edit data for"
+msgstr "Muokka kohdetta"
+
+#: /resources/lib/rating_updater.py
+msgctxt "#32042"
+msgid "Canceled"
+msgstr "Peruttu"
+
+#: /resources/settings.xml
+msgctxt "#32043"
+msgid "MPAA region"
+msgstr "MPAA-alue"
+
+#: /resources/settings.xml
+msgctxt "#32041"
+msgid "Update premiered/year if database value is different"
+msgstr "Päivitä ensiesitys/vuosi, jos tietokannan arvo on eri"
+
+#: /resources/settings.xml
+msgctxt "#32044"
+msgid "Skip updating of MPAA"
+msgstr "Ohita MPAA-päivitys"
+
+#: /default.py
+msgctxt "#32045"
+msgid "Update episode ratings"
+msgstr "Päivitä jaksojen luokitukset"
+
+#: /resources/lib/editor.py
+msgctxt "#32047"
+msgid "No default source defined"
+msgstr "Oletuslähdettä ei ole määritetty"
+
+#: /resources/lib/rating_updater.py
+msgctxt "#32048"
+msgid "No items found"
+msgstr "Kohteita ei löytynyt"
+
+#: /context.py
+msgctxt "#32046"
+msgid "Update .nfo"
+msgstr "Päivitä .nfo-tiedosto"
+
+#: /default.py
+msgctxt "#32049"
+msgid "Incomplete arguments or content type not supported"
+msgstr "Puutteellisia argumentteja tai sisältötyyppiä ei tueta"
+
+#: /default.py
+msgctxt "#32050"
+msgid "Do you want to cancel the update?"
+msgstr "Tahdotko perua päivityksen?"
+
+#: /default.py
+msgctxt "#32051"
+msgid "Content"
+msgstr "Sisältö"
+
+#: /resources/settings.xml
+msgctxt "#32052"
+msgid "Fallback to US MPAA if configured country has no certification stored"
+msgstr ""
+"Käytä Yhdysvaltojen MPAA-luokitusta, jos määritetylle maalle ei ole "
+"tallennettua luokitusta"
+
+#: /resources/settings.xml
+msgctxt "#32053"
+msgid "Don't store \"NR\" (Not rated) MPAA rating"
+msgstr "Älä tallenna \"NR\" (ei luokiteltu) MPAA-luokitusta"
+
+#: /service.py
+msgctxt "#32054"
+msgid "Do you want to rate the following item?"
+msgstr "Tahdotko arvioida seuraavan kohteen?"
+
+#: /resources/settings.xml
+msgctxt "#32055"
+msgid "Automatically update changed watched states to .nfo"
+msgstr "Päivitä muuttunut katsontatila automaattisesti .nfo-tiedostoon"
+
+#: /resources/settings.xml
+msgctxt "#32056"
+msgid "Rate your media if playback has ended"
+msgstr "Arvioi media toiston päätyttyä"
+
+#: /resources/settings.xml
+msgctxt "#32057"
+msgid "Write watched flag and playcount to .nfo"
+msgstr "Tallenna katsottu-tieto ja toistomäärä .nfo-tiedostoon"
