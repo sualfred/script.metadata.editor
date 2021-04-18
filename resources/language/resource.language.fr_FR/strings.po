@@ -1,0 +1,335 @@
+# Metadata Editor language file
+# Addon Name: Metadata Editor
+# Addon id: script.metadata.editor
+# Addon Provider: sualfred
+# Translators:
+# Nanomani <nicolas.pouliquen@gmail.com>, 2021
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: Metadata Editor\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2019-11-07 08:05+0000\n"
+"Last-Translator: Nanomani <nicolas.pouliquen@gmail.com>, 2021\n"
+"Language-Team: French (France) (https://www.transifex.com/sualfred/teams/80018/fr_FR/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr_FR\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: /addon.xml
+msgctxt "#32000"
+msgid "Metadata Editor"
+msgstr "Editeur Metadata"
+
+#: /resources/lib/dialog.py
+msgctxt "#32001"
+msgid "User rating"
+msgstr "Note de l'utilisateur"
+
+#: /resources/lib/dialog_videogenres.py
+msgctxt "#32002"
+msgid "Available entries"
+msgstr "Entrées disponibles"
+
+#: /addon.xml
+msgctxt "#32003"
+msgid "Add/remove available tags"
+msgstr "Ajouter / supprimer des balises "
+
+#: /addon.xml
+msgctxt "#32004"
+msgid "Add/remove available genres"
+msgstr "Ajouter / supprimer des genres"
+
+#: /resources/lib/utils.py
+msgctxt "#32005"
+msgid "Add new item"
+msgstr "Ajouter un nouvel élément"
+
+#: /resources/lib/utils.py
+msgctxt "#32006"
+msgid "Edit current list as string"
+msgstr "Modifier la liste actuelle"
+
+#: /resources/lib/utils.py
+msgctxt "#32007"
+msgid "Select from available items"
+msgstr "Sélectionner parmi les éléments disponibles"
+
+#: /context.py
+msgctxt "#32008"
+msgid "Remove watchlist tag"
+msgstr "Supprimer la balise Watchlist"
+
+#: /context.py
+msgctxt "#32009"
+msgid "Add watchlist tag"
+msgstr "Ajouter la balise Watchlist"
+
+#: /context.py
+msgctxt "#32010"
+msgid "Open editor"
+msgstr "Ouvrir l'éditeur"
+
+#: /resources/lib/utils.py
+msgctxt "#32011"
+msgid "Enter floating number"
+msgstr "Entrer un nombre flottant"
+
+#: /resources/lib/utils.py
+msgctxt "#32012"
+msgid "Select source"
+msgstr "Sélectionner la source"
+
+#: /resources/lib/utils.py
+msgctxt "#32013"
+msgid "Available sources"
+msgstr "Sources disponibles"
+
+#: /resources/lib/utils.py
+msgctxt "#32014"
+msgid "Default source"
+msgstr "Source par défaut"
+
+#: /resources/lib/utils.py
+msgctxt "#32015"
+msgid "Select default source"
+msgstr "Sélectionner la source par défaut"
+
+#: /resources/lib/utils.py
+msgctxt "#32016"
+msgid "Edit ratings and votes"
+msgstr "Editer les notes et les votes"
+
+#: /resources/lib/utils.py
+msgctxt "#32017"
+msgid "Add source"
+msgstr "Ajouter une source"
+
+#: /resources/lib/utils.py
+msgctxt "#32018"
+msgid "Only values between 1.0 and 10.0 are allowed."
+msgstr "Seules les valeurs comprises entre 1,0 et 10,0 sont autorisées"
+
+#: /resources/lib/utils.py
+msgctxt "#32019"
+msgid "Attention"
+msgstr "Attention"
+
+#: /resources/lib/utils.py
+msgctxt "#32020"
+msgid "Set as default?"
+msgstr "Définir par défaut ?"
+
+#: /resources/settings.xml
+msgctxt "#32021"
+msgid "Enable .nfo updating for movies, TV shows and music videos"
+msgstr ""
+"Activer la mise à jour .nfo pour les films, les émissions de TV et les clips"
+" vidéo"
+
+#: /resources/lib/editor.py
+msgctxt "#32022"
+msgid "value unkown (missing Kodi feature)"
+msgstr "Valeur inconnue (fonctionnalité Kodi manquante)"
+
+#: /resources/lib/editor.py
+msgctxt "#32023"
+msgid "Record label"
+msgstr "Maison de disque"
+
+#: /resources/settings.xml
+msgctxt "#32025"
+msgid "Preferred language"
+msgstr "Langue préférée"
+
+#: /resources/settings.xml
+msgctxt "#32026"
+msgid "Scraper settings"
+msgstr "Paramètres du scrapper"
+
+#: /resources/lib/rating_updater.py
+msgctxt "#32024"
+msgid "Heavy server load. Please wait."
+msgstr "Le serveur est occupé. S'il vous plaît, attendez."
+
+#: /resources/settings.xml
+msgctxt "#32027"
+msgid "TV show library is based on informations of"
+msgstr "La bibliothèque des émissions de TV est basée sur les informations de"
+
+#: /resources/settings.xml
+msgctxt "#32029"
+msgid "Enable JSON logging"
+msgstr "Activer la journalisation JSON"
+
+#: /resources/settings.xml
+msgctxt "#32030"
+msgid "Rating updater"
+msgstr "Outil de mise à jour des notes"
+
+#: /resources/settings.xml
+msgctxt "#32028"
+msgid "Run updating process in the background"
+msgstr "Exécuter la mise à jour en arrière-plan"
+
+#: /resources/settings.xml
+msgctxt "#32031"
+msgid "Your personal OMDb API key (www.omdbapi.com)"
+msgstr "Votre clé API OMDb personnelle (www.omdbapi.com)"
+
+#: /resources/settings.xml
+msgctxt "#32032"
+msgid "Search by title/year if IMDb ID is missing (not recommended)"
+msgstr ""
+"Recherche par titre / année si l'ID IMDb est manquant (non recommandé)"
+
+#: /default.py
+msgctxt "#32035"
+msgid ""
+"No OMDb API key is configured, which is required to update IMDb, Rotten "
+"Tomatoes and Metacritic ratings. Please visit www.omdbapi.com and create "
+"your own API key.[CR][CR]Note: The free key is limited to 1000 calls a day. "
+"Please suggest to become a patreon of OMDb to increase the limit to "
+"100.000.[CR][CR]Do you want to proceed updating The Movie DB ratings? This "
+"only works if you have a TMDb ID stored."
+msgstr ""
+"Aucune clé API OMDb n'est configurée, ce qui est nécessaire pour mettre à "
+"jour les classifications IMDb, Rotten Tomatoes et Metacritic. Veuillez "
+"visiter www.omdbapi.com et créer votre propre clé API. [CR] [CR] Remarque: "
+"La clé gratuite est limitée à 1000 requêtes par jour. Devenez membre d'OMDb "
+"pour augmenter la limite à 100 000. [CR] [CR] Voulez-vous continuer à mettre"
+" à jour les évaluations de The Movie DB ? Cela ne fonctionne que si vous "
+"avez un ID TMDb enregistré."
+
+#: /default.py
+msgctxt "#32036"
+msgid "Update TV show ratings"
+msgstr "Mettre à jour les notes des émissions de TV"
+
+#: /resources/lib/rating_updater.py
+msgctxt "#32033"
+msgid ""
+"OMDB API limit reached. Please consider to become a Patreon to increase your"
+" daily call limitation. Proceed by only using The Movie DB?"
+msgstr ""
+"Limite de l'API OMDB atteinte. Veuillez envisager de devenir un Patreon pour"
+" augmenter votre limite quotidienne d'appels. Continuer en utilisant "
+"uniquement The Movie DB ?"
+
+#: /resources/settings.xml
+msgctxt "#32034"
+msgid "Create .nfo file if missing"
+msgstr "Créer un fichier .nfo s'il est manquant"
+
+#: /default.py
+msgctxt "#32037"
+msgid "Update movie ratings"
+msgstr "Mettre à jour les notes des films"
+
+#: /default.py
+msgctxt "#32038"
+msgid "Update all ratings"
+msgstr "Mettre à jour toutes les notes"
+
+#: /context.py
+msgctxt "#32039"
+msgid "Update ratings"
+msgstr "Mettre à jour les notes"
+
+#: /resources/lib/editor.py
+msgctxt "#32040"
+msgid "Edit data for"
+msgstr "Modifier les données pour"
+
+#: /resources/lib/rating_updater.py
+msgctxt "#32042"
+msgid "Canceled"
+msgstr "Annulé"
+
+#: /resources/settings.xml
+msgctxt "#32043"
+msgid "MPAA region"
+msgstr "Région MPAA"
+
+#: /resources/settings.xml
+msgctxt "#32041"
+msgid "Update premiered/year if database value is different"
+msgstr ""
+"Mettre à jour la date de la première diffusion si la valeur de la base de "
+"données est différente"
+
+#: /resources/settings.xml
+msgctxt "#32044"
+msgid "Skip updating of MPAA"
+msgstr "Ignorer la mise à jour de MPAA"
+
+#: /default.py
+msgctxt "#32045"
+msgid "Update episode ratings"
+msgstr "Mettre à jour les notes des épisodes"
+
+#: /resources/lib/editor.py
+msgctxt "#32047"
+msgid "No default source defined"
+msgstr "Aucune source par défaut définie"
+
+#: /resources/lib/rating_updater.py
+msgctxt "#32048"
+msgid "No items found"
+msgstr "Aucun élément trouvé"
+
+#: /context.py
+msgctxt "#32046"
+msgid "Update .nfo"
+msgstr "Mettre à jour le .nfo"
+
+#: /default.py
+msgctxt "#32049"
+msgid "Incomplete arguments or content type not supported"
+msgstr "Arguments incomplets ou type de contenu non pris en charge"
+
+#: /default.py
+msgctxt "#32050"
+msgid "Do you want to cancel the update?"
+msgstr "Voulez-vous annuler la mise à jour ?"
+
+#: /default.py
+msgctxt "#32051"
+msgid "Content"
+msgstr "Contenu"
+
+#: /resources/settings.xml
+msgctxt "#32052"
+msgid "Fallback to US MPAA if configured country has no certification stored"
+msgstr ""
+"Revenir à US MPAA si le pays configuré n'a pas de certification enregistrée"
+
+#: /resources/settings.xml
+msgctxt "#32053"
+msgid "Don't store \"NR\" (Not rated) MPAA rating"
+msgstr "Ne pas stocker la classification MPAA \"NR\" (non évalué)"
+
+#: /service.py
+msgctxt "#32054"
+msgid "Do you want to rate the following item?"
+msgstr "Souhaitez-vous noter l'élément suivant?"
+
+#: /resources/settings.xml
+msgctxt "#32055"
+msgid "Automatically update changed watched states to .nfo"
+msgstr ""
+"Mettre à jour automatiquement les changement d'états  vu / non vu dans le "
+".nfo"
+
+#: /resources/settings.xml
+msgctxt "#32056"
+msgid "Rate your media if playback has ended"
+msgstr "Evaluer votre média quand la lecture est terminée"
+
+#: /resources/settings.xml
+msgctxt "#32057"
+msgid "Write watched flag and playcount to .nfo"
+msgstr "Enregistrer l'état vu / non vu et le nombre de lecture dans le .nfo"
