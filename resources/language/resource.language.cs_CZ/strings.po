@@ -1,0 +1,326 @@
+# Metadata Editor language file
+# Addon Name: Metadata Editor
+# Addon id: script.metadata.editor
+# Addon Provider: sualfred
+# Translators:
+# JR Zee <jirzee@gmail.com>, 2021
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: Metadata Editor\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2019-11-07 08:05+0000\n"
+"Last-Translator: JR Zee <jirzee@gmail.com>, 2021\n"
+"Language-Team: Czech (Czech Republic) (https://www.transifex.com/sualfred/teams/80018/cs_CZ/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: cs_CZ\n"
+"Plural-Forms: nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;\n"
+
+#: /addon.xml
+msgctxt "#32000"
+msgid "Metadata Editor"
+msgstr "Editor metadat"
+
+#: /resources/lib/dialog.py
+msgctxt "#32001"
+msgid "User rating"
+msgstr "Uživatelské hodnocení"
+
+#: /resources/lib/dialog_videogenres.py
+msgctxt "#32002"
+msgid "Available entries"
+msgstr "Dostupné záznamy"
+
+#: /addon.xml
+msgctxt "#32003"
+msgid "Add/remove available tags"
+msgstr "Vložit/Odebrat dostupné značky"
+
+#: /addon.xml
+msgctxt "#32004"
+msgid "Add/remove available genres"
+msgstr "Vložit/Odebrat dostupné žánry"
+
+#: /resources/lib/utils.py
+msgctxt "#32005"
+msgid "Add new item"
+msgstr "Vložit novou položku"
+
+#: /resources/lib/utils.py
+msgctxt "#32006"
+msgid "Edit current list as string"
+msgstr "Upravit aktuální list jako řetězec"
+
+#: /resources/lib/utils.py
+msgctxt "#32007"
+msgid "Select from available items"
+msgstr "Vybrat z dostupných položek"
+
+#: /context.py
+msgctxt "#32008"
+msgid "Remove watchlist tag"
+msgstr "Odebrat značku seznamu sledovaných"
+
+#: /context.py
+msgctxt "#32009"
+msgid "Add watchlist tag"
+msgstr "Vložit značku seznamu sledovaných"
+
+#: /context.py
+msgctxt "#32010"
+msgid "Open editor"
+msgstr "Otevřít editor"
+
+#: /resources/lib/utils.py
+msgctxt "#32011"
+msgid "Enter floating number"
+msgstr "Vložit plovoucí číslo"
+
+#: /resources/lib/utils.py
+msgctxt "#32012"
+msgid "Select source"
+msgstr "Vybrat zdroj"
+
+#: /resources/lib/utils.py
+msgctxt "#32013"
+msgid "Available sources"
+msgstr "Dostupné zdroje"
+
+#: /resources/lib/utils.py
+msgctxt "#32014"
+msgid "Default source"
+msgstr "Výchozí zdroj"
+
+#: /resources/lib/utils.py
+msgctxt "#32015"
+msgid "Select default source"
+msgstr "Vybrat výchozí zdroj"
+
+#: /resources/lib/utils.py
+msgctxt "#32016"
+msgid "Edit ratings and votes"
+msgstr "Upravit hodnocení a hlasy"
+
+#: /resources/lib/utils.py
+msgctxt "#32017"
+msgid "Add source"
+msgstr "Vložit zdroj"
+
+#: /resources/lib/utils.py
+msgctxt "#32018"
+msgid "Only values between 1.0 and 10.0 are allowed."
+msgstr "Povolené jsou pouze hodnoty mezi 1.0 a 10.0."
+
+#: /resources/lib/utils.py
+msgctxt "#32019"
+msgid "Attention"
+msgstr "Pozor"
+
+#: /resources/lib/utils.py
+msgctxt "#32020"
+msgid "Set as default?"
+msgstr "Nastavit jako výchozí?"
+
+#: /resources/settings.xml
+msgctxt "#32021"
+msgid "Enable .nfo updating for movies, TV shows and music videos"
+msgstr ""
+"Povolit aktualizaci na základě .nfo pro filmy, seriály a hudební klipy"
+
+#: /resources/lib/editor.py
+msgctxt "#32022"
+msgid "value unkown (missing Kodi feature)"
+msgstr "neznámá hodnota (chybějící vlastnost Kodi)"
+
+#: /resources/lib/editor.py
+msgctxt "#32023"
+msgid "Record label"
+msgstr "Nahrávací společnost"
+
+#: /resources/settings.xml
+msgctxt "#32025"
+msgid "Preferred language"
+msgstr "Upřednostňovaný jazyk"
+
+#: /resources/settings.xml
+msgctxt "#32026"
+msgid "Scraper settings"
+msgstr "Nastavení scraperu"
+
+#: /resources/lib/rating_updater.py
+msgctxt "#32024"
+msgid "Heavy server load. Please wait."
+msgstr "Vysoké zatížení serveru. Čekejte prosím."
+
+#: /resources/settings.xml
+msgctxt "#32027"
+msgid "TV show library is based on informations of"
+msgstr "Knihovna seriálů je založena na informacích z"
+
+#: /resources/settings.xml
+msgctxt "#32029"
+msgid "Enable JSON logging"
+msgstr "Povolit logování JSON"
+
+#: /resources/settings.xml
+msgctxt "#32030"
+msgid "Rating updater"
+msgstr "Hodnocení aktualizuje"
+
+#: /resources/settings.xml
+msgctxt "#32028"
+msgid "Run updating process in the background"
+msgstr "Spouštět aktualizaci na pozadí"
+
+#: /resources/settings.xml
+msgctxt "#32031"
+msgid "Your personal OMDb API key (www.omdbapi.com)"
+msgstr "Váš osobní OMDb API klíč (www.omdbapi.com)"
+
+#: /resources/settings.xml
+msgctxt "#32032"
+msgid "Search by title/year if IMDb ID is missing (not recommended)"
+msgstr "Hledat podle názvu/roku pokud IMDb ID chybí (nedoporučujeme)"
+
+#: /default.py
+msgctxt "#32035"
+msgid ""
+"No OMDb API key is configured, which is required to update IMDb, Rotten "
+"Tomatoes and Metacritic ratings. Please visit www.omdbapi.com and create "
+"your own API key.[CR][CR]Note: The free key is limited to 1000 calls a day. "
+"Please suggest to become a patreon of OMDb to increase the limit to "
+"100.000.[CR][CR]Do you want to proceed updating The Movie DB ratings? This "
+"only works if you have a TMDb ID stored."
+msgstr ""
+"Žádný OMDb API klíč není nakonfigurován - je nutné pro aktualizaci hodnocení"
+" IMDb, Rotten Tomatoes a Metacritic. Navštivte prosím www.omdbapi.com a "
+"vytvořte vlastní API klíč.[CR][CR]Poznámka: Klíč zdarma je omezen na 1000 "
+"dotazů denně. Na zvýšení limitu 100.000 se staňte přispěvatelem "
+"OMDb.[CR][CR]Přejete si aktualizovat hodnocení The Movie DB? Toto je funkční"
+" pouze pokud máte uložené TMDb ID."
+
+#: /default.py
+msgctxt "#32036"
+msgid "Update TV show ratings"
+msgstr "Aktualizovat hodnocení seriálů"
+
+#: /resources/lib/rating_updater.py
+msgctxt "#32033"
+msgid ""
+"OMDB API limit reached. Please consider to become a Patreon to increase your"
+" daily call limitation. Proceed by only using The Movie DB?"
+msgstr ""
+"Limit OMDB API dosažen. Pro zvýšení limitu dotazů se staňte přispěvatelem. "
+"Pokračovat používáním pouze The Movie DB?"
+
+#: /resources/settings.xml
+msgctxt "#32034"
+msgid "Create .nfo file if missing"
+msgstr "Vytvořit soubor .nfo pokud chybí"
+
+#: /default.py
+msgctxt "#32037"
+msgid "Update movie ratings"
+msgstr "Aktualizovat hodnocení filmů"
+
+#: /default.py
+msgctxt "#32038"
+msgid "Update all ratings"
+msgstr "Aktualizovat všechna hodnocení"
+
+#: /context.py
+msgctxt "#32039"
+msgid "Update ratings"
+msgstr "Aktualizovat hodnocení"
+
+#: /resources/lib/editor.py
+msgctxt "#32040"
+msgid "Edit data for"
+msgstr "Upravit data pro"
+
+#: /resources/lib/rating_updater.py
+msgctxt "#32042"
+msgid "Canceled"
+msgstr "Zrušené"
+
+#: /resources/settings.xml
+msgctxt "#32043"
+msgid "MPAA region"
+msgstr "MPAA region"
+
+#: /resources/settings.xml
+msgctxt "#32041"
+msgid "Update premiered/year if database value is different"
+msgstr "Aktualizovat premiéru/rok, pokud se liší od databáze"
+
+#: /resources/settings.xml
+msgctxt "#32044"
+msgid "Skip updating of MPAA"
+msgstr "Přeskočit aktualizaci MPAA"
+
+#: /default.py
+msgctxt "#32045"
+msgid "Update episode ratings"
+msgstr "Aktualizovat hodnocení epizod"
+
+#: /resources/lib/editor.py
+msgctxt "#32047"
+msgid "No default source defined"
+msgstr "Není nadefinován výchozí zdroj"
+
+#: /resources/lib/rating_updater.py
+msgctxt "#32048"
+msgid "No items found"
+msgstr "Nenalezeny žádné položky"
+
+#: /context.py
+msgctxt "#32046"
+msgid "Update .nfo"
+msgstr "Aktualizovat .nfo"
+
+#: /default.py
+msgctxt "#32049"
+msgid "Incomplete arguments or content type not supported"
+msgstr "Nejsou podporovány nekompletní hodnoty nebo obsah"
+
+#: /default.py
+msgctxt "#32050"
+msgid "Do you want to cancel the update?"
+msgstr "Přejete si přerušit aktualizaci?"
+
+#: /default.py
+msgctxt "#32051"
+msgid "Content"
+msgstr "Obsah"
+
+#: /resources/settings.xml
+msgctxt "#32052"
+msgid "Fallback to US MPAA if configured country has no certification stored"
+msgstr "Použít US MPAA pokud zvolená země nemá certifikaci"
+
+#: /resources/settings.xml
+msgctxt "#32053"
+msgid "Don't store \"NR\" (Not rated) MPAA rating"
+msgstr "Neukládat \"NR\" (nehodnoceno) MPAA hodnocení"
+
+#: /service.py
+msgctxt "#32054"
+msgid "Do you want to rate the following item?"
+msgstr "Přejete si hodnotit následující položku?"
+
+#: /resources/settings.xml
+msgctxt "#32055"
+msgid "Automatically update changed watched states to .nfo"
+msgstr "Automaticky aktualizovat změny stavu shlédnutí do .nfo"
+
+#: /resources/settings.xml
+msgctxt "#32056"
+msgid "Rate your media if playback has ended"
+msgstr "Hodnotit položky po skončení přehrávání"
+
+#: /resources/settings.xml
+msgctxt "#32057"
+msgid "Write watched flag and playcount to .nfo"
+msgstr "Zapisovat označení shlédnutí a počet shlédnutí do .nfo"
