@@ -1,0 +1,320 @@
+# Metadata Editor language file
+# Addon Name: Metadata Editor
+# Addon id: script.metadata.editor
+# Addon Provider: sualfred
+# Translators:
+# 复予, 2023
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: Metadata Editor\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2019-11-07 08:05+0000\n"
+"Last-Translator: 复予, 2023\n"
+"Language-Team: Chinese (China) (https://app.transifex.com/sualfred/teams/80018/zh_CN/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: zh_CN\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: /addon.xml
+msgctxt "#32000"
+msgid "Metadata Editor"
+msgstr "元数据编辑器"
+
+#: /resources/lib/dialog.py
+msgctxt "#32001"
+msgid "User rating"
+msgstr "用户评分"
+
+#: /resources/lib/dialog_videogenres.py
+msgctxt "#32002"
+msgid "Available entries"
+msgstr "可用字段"
+
+#: /addon.xml
+msgctxt "#32003"
+msgid "Add/remove available tags"
+msgstr "添加/删除可用标签"
+
+#: /addon.xml
+msgctxt "#32004"
+msgid "Add/remove available genres"
+msgstr "添加/删除可用流派"
+
+#: /resources/lib/utils.py
+msgctxt "#32005"
+msgid "Add new item"
+msgstr "添加新项目"
+
+#: /resources/lib/utils.py
+msgctxt "#32006"
+msgid "Edit current list as string"
+msgstr "作为字符串编辑当前列表"
+
+#: /resources/lib/utils.py
+msgctxt "#32007"
+msgid "Select from available items"
+msgstr "选择可选项"
+
+#: /context.py
+msgctxt "#32008"
+msgid "Remove watchlist tag"
+msgstr "删除观看列表标签"
+
+#: /context.py
+msgctxt "#32009"
+msgid "Add watchlist tag"
+msgstr "添加观看列表标签"
+
+#: /context.py
+msgctxt "#32010"
+msgid "Open editor"
+msgstr "打开编辑器"
+
+#: /resources/lib/utils.py
+msgctxt "#32011"
+msgid "Enter floating number"
+msgstr "输入小数"
+
+#: /resources/lib/utils.py
+msgctxt "#32012"
+msgid "Select source"
+msgstr "选择来源"
+
+#: /resources/lib/utils.py
+msgctxt "#32013"
+msgid "Available sources"
+msgstr "可用来源"
+
+#: /resources/lib/utils.py
+msgctxt "#32014"
+msgid "Default source"
+msgstr "默认来源"
+
+#: /resources/lib/utils.py
+msgctxt "#32015"
+msgid "Select default source"
+msgstr "选择默认来源"
+
+#: /resources/lib/utils.py
+msgctxt "#32016"
+msgid "Edit ratings and votes"
+msgstr "编辑评分和票数"
+
+#: /resources/lib/utils.py
+msgctxt "#32017"
+msgid "Add source"
+msgstr "添加来源"
+
+#: /resources/lib/utils.py
+msgctxt "#32018"
+msgid "Only values between 1.0 and 10.0 are allowed."
+msgstr "只允许 1.0 与 10.0 间的值。"
+
+#: /resources/lib/utils.py
+msgctxt "#32019"
+msgid "Attention"
+msgstr "注意"
+
+#: /resources/lib/utils.py
+msgctxt "#32020"
+msgid "Set as default?"
+msgstr "设置为默认吗？"
+
+#: /resources/settings.xml
+msgctxt "#32021"
+msgid "Enable .nfo updating for movies, TV shows and music videos"
+msgstr "启用电影、电视节目和音乐视频的 .nfo 更新"
+
+#: /resources/lib/editor.py
+msgctxt "#32022"
+msgid "value unkown (missing Kodi feature)"
+msgstr "未知值（Kodi 功能缺失）"
+
+#: /resources/lib/editor.py
+msgctxt "#32023"
+msgid "Record label"
+msgstr "录制标签"
+
+#: /resources/settings.xml
+msgctxt "#32025"
+msgid "Preferred language"
+msgstr "偏好语言"
+
+#: /resources/settings.xml
+msgctxt "#32026"
+msgid "Scraper settings"
+msgstr "刮削器设置"
+
+#: /resources/lib/rating_updater.py
+msgctxt "#32024"
+msgid "Heavy server load. Please wait."
+msgstr "服务器繁忙中，请稍候。"
+
+#: /resources/settings.xml
+msgctxt "#32027"
+msgid "TV show library is based on informations of"
+msgstr "电视节目库的信息来源："
+
+#: /resources/settings.xml
+msgctxt "#32029"
+msgid "Enable JSON logging"
+msgstr "启用 JSON 日志记录"
+
+#: /resources/settings.xml
+msgctxt "#32030"
+msgid "Rating updater"
+msgstr "评分更新器"
+
+#: /resources/settings.xml
+msgctxt "#32028"
+msgid "Run updating process in the background"
+msgstr "在后台进行更新"
+
+#: /resources/settings.xml
+msgctxt "#32031"
+msgid "Your personal OMDb API key (www.omdbapi.com)"
+msgstr "个人 OMDb API 密钥 (www.omdbapi.com)"
+
+#: /resources/settings.xml
+msgctxt "#32032"
+msgid "Search by title/year if IMDb ID is missing (not recommended)"
+msgstr "若 IMDb ID 缺失，则用标题/年份搜索（不推荐）"
+
+#: /default.py
+msgctxt "#32035"
+msgid ""
+"No OMDb API key is configured, which is required to update IMDb, Rotten "
+"Tomatoes and Metacritic ratings. Please visit www.omdbapi.com and create "
+"your own API key.[CR][CR]Note: The free key is limited to 1000 calls a day. "
+"Please suggest to become a patreon of OMDb to increase the limit to "
+"100.000.[CR][CR]Do you want to proceed updating The Movie DB ratings? This "
+"only works if you have a TMDb ID stored."
+msgstr ""
+"没有配置 OMDb API 密钥，更新 IMDb、Rotten Tomatoes 和 Metacritic 评分需要使用此密钥。请访问 "
+"www.omdbapi.com 创建自己的 API 密钥。[CR][CR]注意：免费密钥有每天调用 1000 次的限制。建议成为 OMDb "
+"赞助者，将调用限制提高到 100,000 次。[CR][CR]想继续更新 The Movie DB 评分吗？仅在保存了 TMDb ID 时才有用。"
+
+#: /default.py
+msgctxt "#32036"
+msgid "Update TV show ratings"
+msgstr "更新电视节目评分"
+
+#: /resources/lib/rating_updater.py
+msgctxt "#32033"
+msgid ""
+"OMDB API limit reached. Please consider to become a Patreon to increase your"
+" daily call limitation. Proceed by only using The Movie DB?"
+msgstr "已达到 OMDb API 限制。请考虑成为赞助者，以提高每日调用次数限制。要只用 The Movie DB 继续吗？"
+
+#: /resources/settings.xml
+msgctxt "#32034"
+msgid "Create .nfo file if missing"
+msgstr "如果 .nfo 文件不存在则创建它"
+
+#: /default.py
+msgctxt "#32037"
+msgid "Update movie ratings"
+msgstr "更新电影评分"
+
+#: /default.py
+msgctxt "#32038"
+msgid "Update all ratings"
+msgstr "更新所有评分"
+
+#: /context.py
+msgctxt "#32039"
+msgid "Update ratings"
+msgstr "更新评分"
+
+#: /resources/lib/editor.py
+msgctxt "#32040"
+msgid "Edit data for"
+msgstr "编辑数据："
+
+#: /resources/lib/rating_updater.py
+msgctxt "#32042"
+msgid "Canceled"
+msgstr "已取消"
+
+#: /resources/settings.xml
+msgctxt "#32043"
+msgid "MPAA region"
+msgstr "MPAA 区域"
+
+#: /resources/settings.xml
+msgctxt "#32041"
+msgid "Update premiered/year if database value is different"
+msgstr "若数据库中的值不一致，则更新首演/年份信息"
+
+#: /resources/settings.xml
+msgctxt "#32044"
+msgid "Skip updating of MPAA"
+msgstr "跳过 MPAA 更新"
+
+#: /default.py
+msgctxt "#32045"
+msgid "Update episode ratings"
+msgstr "更新剧集评分"
+
+#: /resources/lib/editor.py
+msgctxt "#32047"
+msgid "No default source defined"
+msgstr "未定义默认来源"
+
+#: /resources/lib/rating_updater.py
+msgctxt "#32048"
+msgid "No items found"
+msgstr "找不到项目"
+
+#: /context.py
+msgctxt "#32046"
+msgid "Update .nfo"
+msgstr "更新 .nfo"
+
+#: /default.py
+msgctxt "#32049"
+msgid "Incomplete arguments or content type not supported"
+msgstr "参数不完整，或内容类型不支持"
+
+#: /default.py
+msgctxt "#32050"
+msgid "Do you want to cancel the update?"
+msgstr "要取消更新吗？"
+
+#: /default.py
+msgctxt "#32051"
+msgid "Content"
+msgstr "内容"
+
+#: /resources/settings.xml
+msgctxt "#32052"
+msgid "Fallback to US MPAA if configured country has no certification stored"
+msgstr "若配置的国家没有保存证书，则回退使用 US MPAA"
+
+#: /resources/settings.xml
+msgctxt "#32053"
+msgid "Don't store \"NR\" (Not rated) MPAA rating"
+msgstr "不保存 “NR”（无评分）MPAA 评分"
+
+#: /service.py
+msgctxt "#32054"
+msgid "Do you want to rate the following item?"
+msgstr "要给以下项目评分吗？"
+
+#: /resources/settings.xml
+msgctxt "#32055"
+msgid "Automatically update changed watched states to .nfo"
+msgstr "观看状态改变时自动保存到 .nfo"
+
+#: /resources/settings.xml
+msgctxt "#32056"
+msgid "Rate your media if playback has ended"
+msgstr "在播放结束时进行评分"
+
+#: /resources/settings.xml
+msgctxt "#32057"
+msgid "Write watched flag and playcount to .nfo"
+msgstr "将已观看标记与播放次数保存到 .nfo"
