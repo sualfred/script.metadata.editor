@@ -1,0 +1,307 @@
+# Metadata Editor Swedish language file
+# Addon Name: Metadata Editor
+# Addon id: script.metadata.editor
+# Addon Provider: sualfred
+msgid ""
+msgstr ""
+"Project-Id-Version: Metadata Editor\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2025-04-16 08:10+0200\n"
+"Last-Translator: Daniel Nylander <github@danielnylander.se>\n"
+"Language-Team: sv\n"
+"Language: sv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.6\n"
+
+#: /addon.xml
+msgctxt "#32000"
+msgid "Metadata Editor"
+msgstr "Metadataredigerare"
+
+#: /resources/lib/dialog.py
+msgctxt "#32001"
+msgid "User rating"
+msgstr "Användarbetyg"
+
+#: /resources/lib/dialog_videogenres.py
+msgctxt "#32002"
+msgid "Available entries"
+msgstr "Tillgängliga poster"
+
+#: /addon.xml
+msgctxt "#32003"
+msgid "Add/remove available tags"
+msgstr "Lägg till/ta bort tillgängliga taggar"
+
+#: /addon.xml
+msgctxt "#32004"
+msgid "Add/remove available genres"
+msgstr "Lägg till/ta bort tillgängliga genrer"
+
+#: /resources/lib/utils.py
+msgctxt "#32005"
+msgid "Add new item"
+msgstr "Lägg till ny post"
+
+#: /resources/lib/utils.py
+msgctxt "#32006"
+msgid "Edit current list as string"
+msgstr "Redigera aktuell lista som sträng"
+
+#: /resources/lib/utils.py
+msgctxt "#32007"
+msgid "Select from available items"
+msgstr "Välj bland tillgängliga poster"
+
+#: /context.py
+msgctxt "#32008"
+msgid "Remove watchlist tag"
+msgstr "Ta bort tagg för bevakningslista"
+
+#: /context.py
+msgctxt "#32009"
+msgid "Add watchlist tag"
+msgstr "Lägg till tagg för bevakningslista"
+
+#: /context.py
+msgctxt "#32010"
+msgid "Open editor"
+msgstr "Öppen redigerare"
+
+#: /resources/lib/utils.py
+msgctxt "#32011"
+msgid "Enter floating number"
+msgstr "Ange flyttal"
+
+#: /resources/lib/utils.py
+msgctxt "#32012"
+msgid "Select source"
+msgstr "Välj källa"
+
+#: /resources/lib/utils.py
+msgctxt "#32013"
+msgid "Available sources"
+msgstr "Tillgängliga källor"
+
+#: /resources/lib/utils.py
+msgctxt "#32014"
+msgid "Default source"
+msgstr "Standardkälla"
+
+#: /resources/lib/utils.py
+msgctxt "#32015"
+msgid "Select default source"
+msgstr "Välj standardkälla"
+
+#: /resources/lib/utils.py
+msgctxt "#32016"
+msgid "Edit ratings and votes"
+msgstr "Redigera betyg och röster"
+
+#: /resources/lib/utils.py
+msgctxt "#32017"
+msgid "Add source"
+msgstr "Lägg till källa"
+
+#: /resources/lib/utils.py
+msgctxt "#32018"
+msgid "Only values between 1.0 and 10.0 are allowed."
+msgstr "Endast värden mellan 1.0 och 10.0 är tillåtna."
+
+#: /resources/lib/utils.py
+msgctxt "#32019"
+msgid "Attention"
+msgstr "Observera"
+
+#: /resources/lib/utils.py
+msgctxt "#32020"
+msgid "Set as default?"
+msgstr "Ställ in som standard?"
+
+#: /resources/settings.xml
+msgctxt "#32021"
+msgid "Enable .nfo updating for movies, TV shows and music videos"
+msgstr "Aktivera .nfo-uppdatering för filmer, TV-serier och musikvideor"
+
+#: /resources/lib/editor.py
+msgctxt "#32022"
+msgid "value unkown (missing Kodi feature)"
+msgstr "värde okänt (Kodi-funktion saknas)"
+
+#: /resources/lib/editor.py
+msgctxt "#32023"
+msgid "Record label"
+msgstr "Skivbolag"
+
+#: /resources/settings.xml
+msgctxt "#32025"
+msgid "Preferred language"
+msgstr "Föredraget språk"
+
+#: /resources/settings.xml
+msgctxt "#32026"
+msgid "Scraper settings"
+msgstr "Inställningar för skrapa"
+
+#: /resources/lib/rating_updater.py
+msgctxt "#32024"
+msgid "Heavy server load. Please wait."
+msgstr "Tung serverbelastning. Vänta."
+
+#: /resources/settings.xml
+msgctxt "#32027"
+msgid "TV show library is based on informations of"
+msgstr "TV-seriebiblioteket är baserat på information från"
+
+#: /resources/settings.xml
+msgctxt "#32029"
+msgid "Enable JSON logging"
+msgstr "Aktivera JSON-loggning"
+
+#: /resources/settings.xml
+msgctxt "#32030"
+msgid "Rating updater"
+msgstr "Uppdatering av betyg"
+
+#: /resources/settings.xml
+msgctxt "#32028"
+msgid "Run updating process in the background"
+msgstr "Kör uppdateringsprocessen i bakgrunden"
+
+#: /resources/settings.xml
+msgctxt "#32031"
+msgid "Your personal OMDb API key (www.omdbapi.com)"
+msgstr "Din personliga OMDb API-nyckel (www.omdbapi.com)"
+
+#: /resources/settings.xml
+msgctxt "#32032"
+msgid "Search by title/year if IMDb ID is missing (not recommended)"
+msgstr "Sök efter titel/år om IMDb-ID saknas (rekommenderas inte)"
+
+#: /default.py
+msgctxt "#32035"
+msgid "No OMDb API key is configured, which is required to update IMDb, Rotten Tomatoes and Metacritic ratings. Please visit www.omdbapi.com and create your own API key.[CR][CR]Note: The free key is limited to 1000 calls a day. Please suggest to become a patreon of OMDb to increase the limit to 100.000.[CR][CR]Do you want to proceed updating The Movie DB ratings? This only works if you have a TMDb ID stored."
+msgstr "Ingen OMDb API-nyckel är konfigurerad, vilket krävs för att uppdatera IMDb-, Rotten Tomatoes- och Metacritic-betyg. Besök www.omdbapi.com och skapa din egen API-nyckel.[CR][CR]Obs: Den kostnadsfria nyckeln är begränsad till 1000 samtal per dag. Föreslå att du blir en patreon av OMDb för att öka gränsen till 100.000.[CR][CR]Vill du fortsätta uppdatera The Movie DB-betyg? Detta fungerar bara om du har ett TMDb-ID lagrat."
+
+#: /default.py
+msgctxt "#32036"
+msgid "Update TV show ratings"
+msgstr "Uppdatera TV-seriers tittarsiffror"
+
+#: /resources/lib/rating_updater.py
+msgctxt "#32033"
+msgid "OMDB API limit reached. Please consider to become a Patreon to increase your daily call limitation. Proceed by only using The Movie DB?"
+msgstr "OMDB API-gränsen har nåtts. Överväg att bli en Patreon för att öka din dagliga anropsbegränsning. Fortsätt genom att bara använda The Movie DB?"
+
+#: /resources/settings.xml
+msgctxt "#32034"
+msgid "Create .nfo file if missing"
+msgstr "Skapa .nfo-fil om den saknas"
+
+#: /default.py
+msgctxt "#32037"
+msgid "Update movie ratings"
+msgstr "Uppdatera filmbetyg"
+
+#: /default.py
+msgctxt "#32038"
+msgid "Update all ratings"
+msgstr "Uppdatera alla betyg"
+
+#: /context.py
+msgctxt "#32039"
+msgid "Update ratings"
+msgstr "Uppdatera betyg"
+
+#: /resources/lib/editor.py
+msgctxt "#32040"
+msgid "Edit data for"
+msgstr "Redigera data för"
+
+#: /resources/lib/rating_updater.py
+msgctxt "#32042"
+msgid "Canceled"
+msgstr "Avbruten"
+
+#: /resources/settings.xml
+msgctxt "#32043"
+msgid "MPAA region"
+msgstr "MPAA-region"
+
+#: /resources/settings.xml
+msgctxt "#32041"
+msgid "Update premiered/year if database value is different"
+msgstr "Uppdatera premiär/år om databasvärdet är annorlunda"
+
+#: /resources/settings.xml
+msgctxt "#32044"
+msgid "Skip updating of MPAA"
+msgstr "Hoppa över uppdatering av MPAA"
+
+#: /default.py
+msgctxt "#32045"
+msgid "Update episode ratings"
+msgstr "Uppdatera avsnittets betyg"
+
+#: /resources/lib/editor.py
+msgctxt "#32047"
+msgid "No default source defined"
+msgstr "Ingen standardkälla definierad"
+
+#: /resources/lib/rating_updater.py
+msgctxt "#32048"
+msgid "No items found"
+msgstr "Inga poster hittades"
+
+#: /context.py
+msgctxt "#32046"
+msgid "Update .nfo"
+msgstr "Uppdatera .nfo"
+
+#: /default.py
+msgctxt "#32049"
+msgid "Incomplete arguments or content type not supported"
+msgstr "Ofullständiga argument eller innehållstyp som inte stöds"
+
+#: /default.py
+msgctxt "#32050"
+msgid "Do you want to cancel the update?"
+msgstr "Vill du avbryta uppdateringen?"
+
+#: /default.py
+msgctxt "#32051"
+msgid "Content"
+msgstr "Innehåll"
+
+#: /resources/settings.xml
+msgctxt "#32052"
+msgid "Fallback to US MPAA if configured country has no certification stored"
+msgstr "Fall tillbaka på US MPAA om det konfigurerade landet inte har någon lagrad certifiering"
+
+#: /resources/settings.xml
+msgctxt "#32053"
+msgid "Don't store \"NR\" (Not rated) MPAA rating"
+msgstr "Lagra inte \"NR\" (Inte betygsatt) MPAA-klassificering"
+
+#: /service.py
+msgctxt "#32054"
+msgid "Do you want to rate the following item?"
+msgstr "Vill du betygsätta följande post?"
+
+#: /resources/settings.xml
+msgctxt "#32055"
+msgid "Automatically update changed watched states to .nfo"
+msgstr "Uppdatera automatiskt ändrade sedda/osedda-statusar till .nfo"
+
+#: /resources/settings.xml
+msgctxt "#32056"
+msgid "Rate your media if playback has ended"
+msgstr "Betygsätt din media om uppspelningen har avslutats"
+
+#: /resources/settings.xml
+msgctxt "#32057"
+msgid "Write watched flag and playcount to .nfo"
+msgstr "Skriv bevakad flagga och spelantal till .nfo"

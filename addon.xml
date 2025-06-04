@@ -19,8 +19,10 @@
 	<extension point="xbmc.addon.metadata">
 		<summary lang="en_GB">Metadata Editor Script</summary>
 		<summary lang="es_ES">Metadata Editor Script</summary>
+		<summary lang="sv_SE">Redigeringsskript för metadata</summary>
 		<description lang="en_GB">Helper script to edit basic metadata information of library items with support to automatically update the .nfo file of movies, TV shows, episodes and music videos.</description>
 		<description lang="es_ES">Script de ayuda para editar información básica de metadatos de elementos de la biblioteca con soporte para actualizar automáticamente el archivo .nfo de películas, programas de televisión, episodios y vídeos musicales.</description>
+		<description lang="sv_SE">Hjälpskript för att redigera grundläggande metadata för biblioteksobjekt med stöd för automatisk uppdatering av .nfo-filen för filmer, TV-serier, avsnitt och musikvideor.</description>
 		<platform>all</platform>
 		<license>GPL-2.0-only</license>
 		<forum>https://forum.kodi.tv/showthread.php?tid=349035</forum>
