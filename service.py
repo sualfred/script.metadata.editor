@@ -4,6 +4,7 @@
 ########################
 
 import xbmc
+import json
 
 from resources.lib.helper import *
 from resources.lib.database import *
@@ -19,7 +20,7 @@ class Service(xbmc.Monitor):
 
     def onNotification(self, sender, method, data):
         if method in ['VideoLibrary.OnUpdate', 'Player.OnStop']:
-            data = eval(data.replace(':true', ': True').replace(':false', ': False'))
+            data = json.loads(data)
             item = data.get('item', {})
             dbid = item.get('id')
             dbtype = item.get('type', '')
